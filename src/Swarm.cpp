@@ -7,20 +7,33 @@
 
 using namespace std;
 
-Swarm::Swarm()
+Swarm::Swarm(int mAmountOfParticles, int mVectorDim)
 {
+    amountOfParticles = mAmountOfParticles;
+    vectorDim = mVectorDim;
+    makeSwarm(amountOfParticles, vectorDim);
 }
 
 Swarm::~Swarm()
 {
 }
 
-void Swarm::computePbestVector()
+void Swarm::makeSwarm(int amountOfParticles, int vectorDim)
 {
-
+    for (int i = 0; i < amountOfParticles; i++)
+    {
+        Particle particle(vectorDim,this);
+        swarm.push_back(particle);
+    }
+    Gbest = &swarm.front();
 }
 
-void Swarm::computeLbestVector()
+void Swarm::computeGbest(Particle *particle)
 {
-
+    if (Gbest->getCostFunctionValuePbest() > particle->getCostFunctionValuePbest())
+    {
+        Gbest = particle;
+    }
 }
+
+

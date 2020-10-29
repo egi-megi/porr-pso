@@ -7,12 +7,16 @@
 #include <iostream>
 #include <vector>
 
+
 using namespace std;
+
+class Swarm;
 
 class Particle
 {
 public:
-    Particle(int vectorDim);
+    //Particle();
+    Particle(int vectorDim,Swarm* s);
     virtual ~Particle();
 
     void setVectorDim(int mVectorDim);
@@ -20,8 +24,15 @@ public:
     void setStartPosition();
     void computePosition();
     void computeSpeed(float w, float speedConstant1, float speedConstant2);
-    //void computePbest();
-    //void computeLbest();
+    void computeCostFunctionValueZad1();
+    void computeCostFunctionValueZad2();
+    void computeParticlePbest();
+    void computeParticleLbest();
+    double getParticlePbest();
+    double getCostFunctionValuePbest();
+
+    double costFunctionValuePbest;
+    vector <double > positionVectorsParticlePbest;
 
 protected:
 
@@ -29,9 +40,12 @@ private:
     int vectorDim;
     vector <double > positionVectors;
     vector <double > speedVectors;
-    double Pbest;
-    double Lbest;
-
+    double costFunctionValue;
+    double particlePbest;
+    Swarm* swarm;
+    //vector <double > speedVectorsParticlePbest;
 
 };
+
+
 #endif //ROJCZASTEK_SZCZEPANSKI_JURKIEWICZ_PIKULINSKI_PARTICLE_H

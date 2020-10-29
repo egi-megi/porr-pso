@@ -5,26 +5,31 @@
 #ifndef ROJCZASTEK_SZCZEPANSKI_JURKIEWICZ_PIKULINSKI_SWARM_H
 #define ROJCZASTEK_SZCZEPANSKI_JURKIEWICZ_PIKULINSKI_SWARM_H
 
+#include "Particle.h"
 #include <iostream>
+#include <vector>
 
 using namespace std;
 
 class Swarm
 {
 public:
-    Swarm();
+    Swarm(int mAmountOfParticles, int mVectorDim);
     virtual ~Swarm();
 
-    void computePbestVector();
-    void computeLbestVector();
+    void makeSwarm(int amountOfParticles, int vectorDim);
+    void computeGbest(Particle *particle);
+
+    Particle *Gbest;
 
 protected:
 
+
 private:
-    double PbestVector;
-    double LbestVector;
 
-
+    int amountOfParticles;
+    int vectorDim;
+    vector <Particle> swarm;
 
 };
 

@@ -3,15 +3,18 @@
 //
 
 #include "../include/Particle.h"
+#include "../include/Swarm.h"
 #include <iostream>
 
 using namespace std;
 
-Particle::Particle(int mVectorsDim)
+Particle::Particle(int mVectorsDim,Swarm* s)
 {
     vectorDim = mVectorsDim;
-    Particle::setStartPosition();
+    setStartPosition();
     speedVectors[vectorDim] = {0};
+    computeCostFunctionValueZad1();
+    swarm=s;
 }
 
 /*Particle::Particle(const Particle &particle)
@@ -42,6 +45,7 @@ void Particle::setStartPosition()
     for (int i = 0; i < vectorDim; i++) {
         positionVectors.push_back(rand() % 80 - 40);
     }
+    positionVectorsParticlePbest = positionVectors;
 }
 
 void Particle::computeSpeed(float w, float speedConstant1, float speedConstant2)
@@ -49,8 +53,8 @@ void Particle::computeSpeed(float w, float speedConstant1, float speedConstant2)
     for (int i = 0; i < vectorDim; i++) {
         double rand_1 = ((double) rand() / (RAND_MAX)) + 1;
         double rand_2 = ((double) rand() / (RAND_MAX)) + 1;
-        double newSpeedValue = w * positionVectors[i] + speedConstant1 * rand_1 * (Pbest - positionVectors[i]) + speedConstant2 + rand_2 * (Lbest - positionVectors[i]);
-        positionVectors.push_back(newSpeedValue);
+        double newSpeedValue = w * positionVectors[i] + speedConstant1 * rand_1 * (positionVectorsParticlePbest[i] - positionVectors[i]) + speedConstant2 + rand_2 * (swarm->Gbest->positionVectorsParticlePbest[i] - positionVectors[i]);
+        speedVectors.push_back(newSpeedValue);
     }
 }
 
@@ -60,4 +64,28 @@ void Particle::computePosition()
         double newPosition = positionVectors[i] + speedVectors[i];
         positionVectors.push_back(newPosition);
     }
+}
+
+void Particle::computeCostFunctionValueZad1()
+{
+    double costFunctionValue = 10;
+    double costFunctionValuePbest = 10;
+}
+
+void Particle::computeParticlePbest()
+{
+    if (costFunctionValue < costFunctionValuePbest) {
+        costFunctionValuePbest = costFunctionValue;
+        positionVectorsParticlePbest = positionVectors;
+    }
+}
+
+double Particle::getParticlePbest()
+{
+    return particlePbest;
+}
+
+double Particle::getCostFunctionValuePbest()
+{
+    return costFunctionValuePbest;
 }
