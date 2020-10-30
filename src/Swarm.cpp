@@ -7,32 +7,28 @@
 
 using namespace std;
 
-Swarm::Swarm(int mAmountOfParticles, int mVectorDim, int mExerciseNumber)
+Swarm::Swarm(int mAmountOfParticles, int mVectorDim, std::function<double(vector<double>)> mfunctionToOptimize )
 {
     amountOfParticles = mAmountOfParticles;
     vectorDim = mVectorDim;
-    exerciseNumber = mExerciseNumber;
-    makeSwarm(amountOfParticles, vectorDim);
+
+    makeSwarm(amountOfParticles, vectorDim,mfunctionToOptimize);
 }
 
 Swarm::~Swarm()
 {
 }
 
-void Swarm::makeSwarm(int amountOfParticles, int vectorDim)
+void Swarm::makeSwarm(int amountOfParticles, int vectorDim, std::function<double(vector<double>)> mfunctionToOptimize )
 {
     for (int i = 0; i < amountOfParticles; i++)
     {
-        Particle particle(vectorDim,this);
+        Particle particle(vectorDim,this,mfunctionToOptimize);
         swarm.push_back(particle);
     }
     Gbest = &swarm.front();
 }
 
-int Swarm::getExercisseNumber()
-{
-    return exerciseNumber;
-}
 
 void Swarm::computeGbest(Particle *particle)
 {
@@ -40,6 +36,25 @@ void Swarm::computeGbest(Particle *particle)
     {
         Gbest = particle;
     }
+}
+
+Particle Swarm::findTheBestParticle(float academicCondition, float w, float speedConstant1, float speedConstant2)
+{
+    double modelValueOfCostFunction = 0;
+    while (Gbest->getCostFunctionValuePbest() - modelValueOfCostFunction > academicCondition)
+    {
+        for (auto &singleParticle : swarm) // access by reference to avoid copying
+        {
+            singleParticle.computeSpeed(w, speedConstant1, speedConstant2);
+            singleParticle.computePosition();
+            singleParticle.computeCostFunctionValue();
+            singleParticle.computeParticlePbest();
+            Swarm::computeGbest(&singleParticle);
+            std::cout << Gbest->costFunctionValuePbest << std::endl;
+        }
+    }
+    return *Gbest;
+
 }
 
 

@@ -8,13 +8,16 @@
 #include <math.h>
 
 using namespace std;
+Particle::Particle() {}
 
-Particle::Particle(int mVectorsDim, Swarm* s)
+Particle::Particle(int mVectorsDim, Swarm* s,std::function<double(vector<double>)> mfunctionToOptimize )
 {
     vectorDim = mVectorsDim;
+    functionToOptimize=mfunctionToOptimize;
     setStartPosition();
-    computeCostFunctionValueZad2();
+    computeCostFunctionValue();
     swarm = s;
+    costFunctionValuePbest = costFunctionValue;
 }
 
 /*Particle::Particle(const Particle &particle)
@@ -30,15 +33,6 @@ Particle::~Particle()
 {
 }
 
-void Particle::setVectorDim(int mVectorDim)
-{
-    vectorDim = mVectorDim;
-}
-
-int Particle::getVectorDim()
-{
-    return vectorDim;
-}
 
 void Particle::setStartPosition()
 {
@@ -63,41 +57,16 @@ void Particle::computePosition()
 {
     for (int i = 0; i < vectorDim; i++) {
         double newPosition = positionVectors[i] + speedVectors[i];
-        positionVectors.push_back(newPosition);
+        positionVectors[i] = newPosition;
     }
 }
 
-void Particle::computeCostFunctionValueZad()
+void Particle::computeCostFunctionValue()
 {
-    if (swarm->getExercisseNumber() == 1)
-    {
-        computeCostFunctionValueZad1();
-    } else {
-        computeCostFunctionValueZad2();
-    }
+    costFunctionValue = functionToOptimize(positionVectors);
+
 }
 
-void Particle::computeCostFunctionValueZad1()
-{
-    double suma = 0;
-    double product = 1;
-    for (int i = 0; i < vectorDim; i++) {
-        suma = suma + pow(positionVectors[i], 2);
-        product = product * cos(positionVectors[i]/i);
-    }
-    costFunctionValue = 1/40 * suma + 1 - product;
-
-    costFunctionValuePbest = 10;
-}
-
-void Particle::computeCostFunctionValueZad2()
-{
-    costFunctionValue = 0.0;
-    for (int i = 0; i < vectorDim - 1; i++) {
-        costFunctionValue = costFunctionValue + (100 * pow((positionVectors[i + 1] - pow(positionVectors[i], 2)), 2) + (1 - pow(positionVectors[i], 2)));
-    }
-    costFunctionValuePbest = 10.0;
-}
 
 void Particle::computeParticlePbest()
 {

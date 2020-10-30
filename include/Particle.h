@@ -6,7 +6,7 @@
 #define ROJCZASTEK_SZCZEPANSKI_JURKIEWICZ_PIKULINSKI_PARTICLE_H
 #include <iostream>
 #include <vector>
-
+#include <functional>
 
 using namespace std;
 
@@ -15,20 +15,15 @@ class Swarm;
 class Particle
 {
 public:
-    //Particle();
-    Particle(int vectorDim,Swarm* s);
+    Particle();
+    Particle(int vectorDim,Swarm* s, std::function<double(vector<double>)> functionToOptimize );
     virtual ~Particle();
 
-    void setVectorDim(int mVectorDim);
-    int getVectorDim();
     void setStartPosition();
     void computePosition();
     void computeSpeed(float w, float speedConstant1, float speedConstant2);
-    void computeCostFunctionValueZad();
-    void computeCostFunctionValueZad1();
-    void computeCostFunctionValueZad2();
+    void computeCostFunctionValue();
     void computeParticlePbest();
-    void computeParticleLbest();
     double getParticlePbest();
     double getCostFunctionValuePbest();
 
@@ -44,6 +39,7 @@ private:
     double costFunctionValue;
     double particlePbest;
     Swarm* swarm;
+    std::function<double(vector<double>)> functionToOptimize;
     //vector <double > speedVectorsParticlePbest;
 
 };
