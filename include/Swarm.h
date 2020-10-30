@@ -14,11 +14,12 @@ using namespace std;
 class Swarm
 {
 public:
-    Swarm(int mAmountOfParticles, int mVectorDim);
+    Swarm(int mAmountOfParticles, int mVectorDim, int exerciseNumber);
     virtual ~Swarm();
 
     void makeSwarm(int amountOfParticles, int vectorDim);
     void computeGbest(Particle *particle);
+    int getExercisseNumber();
 
     Particle *Gbest;
 
@@ -30,6 +31,7 @@ private:
     int amountOfParticles;
     int vectorDim;
     vector <Particle> swarm;
+    int exerciseNumber;
 
 };
 

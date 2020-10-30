@@ -7,10 +7,11 @@
 
 using namespace std;
 
-Swarm::Swarm(int mAmountOfParticles, int mVectorDim)
+Swarm::Swarm(int mAmountOfParticles, int mVectorDim, int mExerciseNumber)
 {
     amountOfParticles = mAmountOfParticles;
     vectorDim = mVectorDim;
+    exerciseNumber = mExerciseNumber;
     makeSwarm(amountOfParticles, vectorDim);
 }
 
@@ -26,6 +27,11 @@ void Swarm::makeSwarm(int amountOfParticles, int vectorDim)
         swarm.push_back(particle);
     }
     Gbest = &swarm.front();
+}
+
+int Swarm::getExercisseNumber()
+{
+    return exerciseNumber;
 }
 
 void Swarm::computeGbest(Particle *particle)

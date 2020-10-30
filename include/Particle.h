@@ -24,6 +24,7 @@ public:
     void setStartPosition();
     void computePosition();
     void computeSpeed(float w, float speedConstant1, float speedConstant2);
+    void computeCostFunctionValueZad();
     void computeCostFunctionValueZad1();
     void computeCostFunctionValueZad2();
     void computeParticlePbest();

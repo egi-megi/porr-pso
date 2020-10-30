@@ -5,16 +5,16 @@
 #include "../include/Particle.h"
 #include "../include/Swarm.h"
 #include <iostream>
+#include <math.h>
 
 using namespace std;
 
-Particle::Particle(int mVectorsDim,Swarm* s)
+Particle::Particle(int mVectorsDim, Swarm* s)
 {
     vectorDim = mVectorsDim;
     setStartPosition();
-    speedVectors[vectorDim] = {0};
-    computeCostFunctionValueZad1();
-    swarm=s;
+    computeCostFunctionValueZad2();
+    swarm = s;
 }
 
 /*Particle::Particle(const Particle &particle)
@@ -44,6 +44,7 @@ void Particle::setStartPosition()
 {
     for (int i = 0; i < vectorDim; i++) {
         positionVectors.push_back(rand() % 80 - 40);
+        speedVectors.push_back(rand() % 100);
     }
     positionVectorsParticlePbest = positionVectors;
 }
@@ -66,10 +67,36 @@ void Particle::computePosition()
     }
 }
 
+void Particle::computeCostFunctionValueZad()
+{
+    if (swarm->getExercisseNumber() == 1)
+    {
+        computeCostFunctionValueZad1();
+    } else {
+        computeCostFunctionValueZad2();
+    }
+}
+
 void Particle::computeCostFunctionValueZad1()
 {
-    double costFunctionValue = 10;
-    double costFunctionValuePbest = 10;
+    double suma = 0;
+    double product = 1;
+    for (int i = 0; i < vectorDim; i++) {
+        suma = suma + pow(positionVectors[i], 2);
+        product = product * cos(positionVectors[i]/i);
+    }
+    costFunctionValue = 1/40 * suma + 1 - product;
+
+    costFunctionValuePbest = 10;
+}
+
+void Particle::computeCostFunctionValueZad2()
+{
+    costFunctionValue = 0.0;
+    for (int i = 0; i < vectorDim - 1; i++) {
+        costFunctionValue = costFunctionValue + (100 * pow((positionVectors[i + 1] - pow(positionVectors[i], 2)), 2) + (1 - pow(positionVectors[i], 2)));
+    }
+    costFunctionValuePbest = 10.0;
 }
 
 void Particle::computeParticlePbest()
