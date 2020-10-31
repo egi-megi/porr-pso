@@ -26,9 +26,11 @@ public:
     void computeParticlePbest();
     double getParticlePbest();
     double getCostFunctionValuePbest();
+    vector <double > getPositionVector();
 
     double costFunctionValuePbest;
     vector <double > positionVectorsParticlePbest;
+    function<double(vector<double>)> getFunctionToOptimize();
 
 protected:
 

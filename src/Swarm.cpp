@@ -4,22 +4,24 @@
 #include "../include/Swarm.h"
 #include "../include/Particle.h"
 #include <iostream>
+#include <math.h>
 
 using namespace std;
 
-Swarm::Swarm(int mAmountOfParticles, int mVectorDim, std::function<double(vector<double>)> mfunctionToOptimize )
+Swarm::Swarm(int mAmountOfParticles, int mVectorDim, std::function<double(vector<double>)> mfunctionToOptimize, int mExerciseNumber)
 {
+    exerciseNumber = mExerciseNumber;
     amountOfParticles = mAmountOfParticles;
     vectorDim = mVectorDim;
 
-    makeSwarm(amountOfParticles, vectorDim,mfunctionToOptimize);
+    makeSwarm(amountOfParticles, vectorDim, mfunctionToOptimize);
 }
 
 Swarm::~Swarm()
 {
 }
 
-void Swarm::makeSwarm(int amountOfParticles, int vectorDim, std::function<double(vector<double>)> mfunctionToOptimize )
+void Swarm::makeSwarm(int amountOfParticles, int vectorDim, std::function<double(vector<double>)> mfunctionToOptimize)
 {
     for (int i = 0; i < amountOfParticles; i++)
     {
@@ -47,6 +49,22 @@ Particle Swarm::findTheBestParticle(float academicCondition, float w, float spee
         {
             singleParticle.computeSpeed(w, speedConstant1, speedConstant2);
             singleParticle.computePosition();
+            if (exerciseNumber == 2) {
+                double positionSum = 0;
+                for (int i = 0; i < vectorDim; i++) // access by reference to avoid copying
+                {
+                    positionSum = pow((singleParticle.getPositionVector()[i] - i + 1), 2);
+                }
+                while (positionSum > 1000 * vectorDim) {
+                    singleParticle.computeSpeed(w, speedConstant1, speedConstant2);
+                    singleParticle.computePosition();
+                    positionSum = 0;
+                    for (int i = 0; i < vectorDim; i++) // access by reference to avoid copying
+                    {
+                        positionSum = pow((singleParticle.getPositionVector()[i] - i + 1), 2);
+                    }
+                }
+            }
             singleParticle.computeCostFunctionValue();
             singleParticle.computeParticlePbest();
             Swarm::computeGbest(&singleParticle);
