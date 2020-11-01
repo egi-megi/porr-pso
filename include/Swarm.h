@@ -14,7 +14,7 @@ using namespace std;
 class Swarm
 {
 public:
-    Swarm(int mAmountOfParticles, int mVectorDim, OptimizationConfig* config, int mExerciseNumber);
+    Swarm(int mAmountOfParticles, int mVectorDim, OptimizationConfig* config);
     virtual ~Swarm();
 
     void makeSwarm(int amountOfParticles, int vectorDim,OptimizationConfig* config);

@@ -21,8 +21,9 @@ public:
     virtual ~Particle();
 
     void setStartPosition();
-    void computePosition();
-    void computeSpeed(float w, float speedConstant1, float speedConstant2);
+    void setStartSpeed();
+    void computePosition(float w, float speedConstant1, float speedConstant2);
+    void computeSpeed(float w, float speedConstant1, float speedConstant2, int i);
     void computeCostFunctionValue();
     void computeParticlePbest();
     double getParticlePbest();
@@ -38,10 +39,12 @@ private:
     int vectorDim;
     vector <double > positionVectors;
     vector <double > speedVectors;
+    vector <double > tempSpeedVectors;
     double costFunctionValue;
     double particlePbest;
     Swarm* swarm;
     OptimizationConfig* config;
+    //double speedVectors[];
     //vector <double > speedVectorsParticlePbest;
 
 };

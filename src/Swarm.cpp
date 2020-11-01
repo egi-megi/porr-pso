@@ -8,9 +8,8 @@
 
 using namespace std;
 
-Swarm::Swarm(int mAmountOfParticles, int mVectorDim, OptimizationConfig* config, int mExerciseNumber)
+Swarm::Swarm(int mAmountOfParticles, int mVectorDim, OptimizationConfig* config)
 {
-    exerciseNumber = mExerciseNumber;
     amountOfParticles = mAmountOfParticles;
     vectorDim = mVectorDim;
 
@@ -47,24 +46,7 @@ Particle Swarm::findTheBestParticle(float academicCondition, float w, float spee
     {
         for (auto &singleParticle : swarm) // access by reference to avoid copying
         {
-            singleParticle.computeSpeed(w, speedConstant1, speedConstant2);
-            singleParticle.computePosition();
-            if (exerciseNumber == 2) {
-                double positionSum = 0;
-                for (int i = 0; i < vectorDim; i++) // access by reference to avoid copying
-                {
-                    positionSum = pow((singleParticle.getPositionVector()[i] - i + 1), 2);
-                }
-                while (positionSum > 1000 * vectorDim) {
-                    singleParticle.computeSpeed(w, speedConstant1, speedConstant2);
-                    singleParticle.computePosition();
-                    positionSum = 0;
-                    for (int i = 0; i < vectorDim; i++) // access by reference to avoid copying
-                    {
-                        positionSum = pow((singleParticle.getPositionVector()[i] - i + 1), 2);
-                    }
-                }
-            }
+            singleParticle.computePosition(w, speedConstant1, speedConstant2);
             singleParticle.computeCostFunctionValue();
             singleParticle.computeParticlePbest();
             Swarm::computeGbest(&singleParticle);
