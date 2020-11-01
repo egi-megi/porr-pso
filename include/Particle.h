@@ -7,6 +7,7 @@
 #include <iostream>
 #include <vector>
 #include <functional>
+#include "OptimizationConfig.h"
 
 using namespace std;
 
@@ -16,7 +17,7 @@ class Particle
 {
 public:
     Particle();
-    Particle(int vectorDim,Swarm* s, std::function<double(vector<double>)> functionToOptimize );
+    Particle(int vectorDim,Swarm* s, OptimizationConfig* config );
     virtual ~Particle();
 
     void setStartPosition();
@@ -30,7 +31,6 @@ public:
 
     double costFunctionValuePbest;
     vector <double > positionVectorsParticlePbest;
-    function<double(vector<double>)> getFunctionToOptimize();
 
 protected:
 
@@ -41,7 +41,7 @@ private:
     double costFunctionValue;
     double particlePbest;
     Swarm* swarm;
-    std::function<double(vector<double>)> functionToOptimize;
+    OptimizationConfig* config;
     //vector <double > speedVectorsParticlePbest;
 
 };

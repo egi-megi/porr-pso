@@ -14,10 +14,10 @@ using namespace std;
 class Swarm
 {
 public:
-    Swarm(int mAmountOfParticles, int mVectorDim, std::function<double(vector<double>)> mfunctionToOptimize, int mExerciseNumber);
+    Swarm(int mAmountOfParticles, int mVectorDim, OptimizationConfig* config, int mExerciseNumber);
     virtual ~Swarm();
 
-    void makeSwarm(int amountOfParticles, int vectorDim,std::function<double(vector<double>)> mfunctionToOptimize);
+    void makeSwarm(int amountOfParticles, int vectorDim,OptimizationConfig* config);
     void computeGbest(Particle *particle);
     Particle findTheBestParticle(float academicCondition, float w, float speedConstant1, float speedConstant2);
 

@@ -10,10 +10,10 @@
 using namespace std;
 Particle::Particle() {}
 
-Particle::Particle(int mVectorsDim, Swarm* s,std::function<double(vector<double>)> mfunctionToOptimize )
+Particle::Particle(int mVectorsDim, Swarm* s,OptimizationConfig* mconfig )
 {
     vectorDim = mVectorsDim;
-    functionToOptimize=mfunctionToOptimize;
+    config=mconfig;
     setStartPosition();
     computeCostFunctionValue();
     swarm = s;
@@ -86,7 +86,7 @@ void Particle::computePosition()
 
 void Particle::computeCostFunctionValue()
 {
-    costFunctionValue = functionToOptimize(positionVectors);
+    costFunctionValue = config->computeCostFunctionValue(positionVectors);
 
 }
 
@@ -112,9 +112,4 @@ double Particle::getCostFunctionValuePbest()
 vector <double > Particle::getPositionVector()
 {
     return positionVectors;
-}
-
-function<double(vector<double>)> Particle::getFunctionToOptimize()
-{
-    return functionToOptimize;
 }

@@ -8,24 +8,24 @@
 
 using namespace std;
 
-Swarm::Swarm(int mAmountOfParticles, int mVectorDim, std::function<double(vector<double>)> mfunctionToOptimize, int mExerciseNumber)
+Swarm::Swarm(int mAmountOfParticles, int mVectorDim, OptimizationConfig* config, int mExerciseNumber)
 {
     exerciseNumber = mExerciseNumber;
     amountOfParticles = mAmountOfParticles;
     vectorDim = mVectorDim;
 
-    makeSwarm(amountOfParticles, vectorDim, mfunctionToOptimize);
+    makeSwarm(amountOfParticles, vectorDim, config);
 }
 
 Swarm::~Swarm()
 {
 }
 
-void Swarm::makeSwarm(int amountOfParticles, int vectorDim, std::function<double(vector<double>)> mfunctionToOptimize)
+void Swarm::makeSwarm(int amountOfParticles, int vectorDim, OptimizationConfig* config)
 {
     for (int i = 0; i < amountOfParticles; i++)
     {
-        Particle particle(vectorDim,this,mfunctionToOptimize);
+        Particle particle(vectorDim,this,config);
         swarm.push_back(particle);
     }
     Gbest = &swarm.front();
