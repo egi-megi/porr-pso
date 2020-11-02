@@ -6,11 +6,15 @@
 #include "../include/Swarm.h"
 #include <iostream>
 #include <math.h>
+#include <random>
 
 using namespace std;
+
+std::default_random_engine Particle::generator;
+
 Particle::Particle() {}
 
-Particle::Particle(const int mVectorsDim, Swarm* s,OptimizationConfig* mconfig )
+Particle::Particle(const int mVectorsDim, Swarm* s, OptimizationExercisesConfig* mconfig )
 {
     vectorDim = mVectorsDim;
     speedVectors.resize(mVectorsDim,0.0);
@@ -40,10 +44,10 @@ Particle::~Particle()
 
 void Particle::setStartPosition()
 {
+    std::uniform_real_distribution<double> unif(config->lowerLimit,config->upperLimit);
     do {
     for (int i = 0; i < vectorDim; i++) {
-        long t=rand();
-        positionVectors[i] = t% 6- 3;
+        positionVectors[i] = unif(generator);
     }
     } while (! config->isPositionOK(positionVectors));
 
@@ -51,17 +55,18 @@ void Particle::setStartPosition()
 }
 
 void Particle::setStartSpeed() {
+    std::uniform_real_distribution<double> unif(-10.0,10.0);
     for (int i = 0; i < vectorDim; i++) {
-        long t = rand();
-        speedVectors[i] = t % 100;
+        speedVectors[i] = unif(generator);
     }
 }
 
 void Particle::computeSpeed(float w, float speedConstant1, float speedConstant2, int i)
 {
+    std::uniform_real_distribution<double> unif(0.0,1.0);
     for (int i = 0; i < vectorDim; i++) {
-        double rand_1 = ((double) rand() / (RAND_MAX)) + 1;
-        double rand_2 = ((double) rand() / (RAND_MAX)) + 1;
+        double rand_1 = unif(generator);
+        double rand_2 = unif(generator);
         double tempSpeedValue =
                 w * speedVectors[i] + speedConstant1 * rand_1 * (positionVectorsParticlePbest[i] - positionVectors[i]) +
                 speedConstant2 + rand_2 * (swarm->Gbest->positionVectorsParticlePbest[i] - positionVectors[i]);

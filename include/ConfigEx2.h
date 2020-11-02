@@ -7,10 +7,13 @@
 
 #include <iostream>
 #include <vector>
-#include "OptimizationConfig.h"
+#include "OptimizationExercisesConfig.h"
 
-class ConfigEx2 : public OptimizationConfig{
+class ConfigEx2 : public OptimizationExercisesConfig{
+
 public:
+    ConfigEx2();
+    virtual ~ConfigEx2();
     double computeCostFunctionValue(std::vector<double> positionVector);
     bool isPositionOK(std::vector<double> positionVector);
 };

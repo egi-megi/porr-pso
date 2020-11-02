@@ -7,8 +7,8 @@
 #include <iostream>
 #include <vector>
 #include <functional>
-#include "OptimizationConfig.h"
-
+#include "OptimizationExercisesConfig.h"
+#include <random>
 using namespace std;
 
 class Swarm;
@@ -17,7 +17,7 @@ class Particle
 {
 public:
     Particle();
-    Particle(int vectorDim,Swarm* s, OptimizationConfig* config );
+    Particle(int vectorDim, Swarm* s, OptimizationExercisesConfig* config );
     virtual ~Particle();
 
     void setStartPosition();
@@ -43,10 +43,10 @@ private:
     double costFunctionValue;
     double particlePbest;
     Swarm* swarm;
-    OptimizationConfig* config;
+    OptimizationExercisesConfig* config;
     //double speedVectors[];
     //vector <double > speedVectorsParticlePbest;
-
+    static std::default_random_engine generator;
 };
 
 

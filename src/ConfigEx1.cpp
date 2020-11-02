@@ -2,8 +2,17 @@
 // Created by Agnieszka Jurkiewicz on 01/11/2020.
 //
 
+#include "../include/OptimizationExercisesConfig.h"
 #include "../include/ConfigEx1.h"
 #include <math.h>
+
+ConfigEx1::ConfigEx1() :OptimizationExercisesConfig()
+{
+    lowerLimit = -40.0;
+    upperLimit = 40.0;
+}
+
+ConfigEx1::~ConfigEx1() {}
 
 double ConfigEx1::computeCostFunctionValue(std::vector<double> positionVector)
 {
@@ -17,6 +26,7 @@ double ConfigEx1::computeCostFunctionValue(std::vector<double> positionVector)
 }
 
 bool ConfigEx1::isPositionOK(std::vector<double> positionVector){
+
     return true;
 }
 

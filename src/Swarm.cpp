@@ -8,7 +8,7 @@
 
 using namespace std;
 
-Swarm::Swarm(int mAmountOfParticles, int mVectorDim, OptimizationConfig* config)
+Swarm::Swarm(int mAmountOfParticles, int mVectorDim, OptimizationExercisesConfig* config)
 {
     amountOfParticles = mAmountOfParticles;
     vectorDim = mVectorDim;
@@ -20,7 +20,7 @@ Swarm::~Swarm()
 {
 }
 
-void Swarm::makeSwarm(int amountOfParticles, int vectorDim, OptimizationConfig* config)
+void Swarm::makeSwarm(int amountOfParticles, int vectorDim, OptimizationExercisesConfig* config)
 {
     for (int i = 0; i < amountOfParticles; i++)
     {

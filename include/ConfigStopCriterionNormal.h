@@ -1,0 +1,14 @@
+//
+// Created by Agnieszka Jurkiewicz on 02/11/2020.
+//
+
+#ifndef ROJCZASTEK_SZCZEPANSKI_JURKIEWICZ_PIKULINSKI_CONFIGSTOPCRITERIONNORMAL_H
+#define ROJCZASTEK_SZCZEPANSKI_JURKIEWICZ_PIKULINSKI_CONFIGSTOPCRITERIONNORMAL_H
+#include "StopCriterionConfig.h"
+
+class ConfigStopCriterionNormal {
+    double computeStopCriterion(double criterionValue);
+};
+
+
+#endif //ROJCZASTEK_SZCZEPANSKI_JURKIEWICZ_PIKULINSKI_CONFIGSTOPCRITERIONNORMAL_H

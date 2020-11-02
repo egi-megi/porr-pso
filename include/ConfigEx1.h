@@ -6,10 +6,13 @@
 #define ROJCZASTEK_SZCZEPANSKI_JURKIEWICZ_PIKULINSKI_CONFIGEX1_H
 
 
-#include "OptimizationConfig.h"
+#include "OptimizationExercisesConfig.h"
 
-class ConfigEx1 : public OptimizationConfig{
+class ConfigEx1 : public OptimizationExercisesConfig{
+
 public:
+    ConfigEx1();
+    virtual ~ConfigEx1();
     double computeCostFunctionValue(std::vector<double> positionVector);
     bool isPositionOK(std::vector<double> positionVector);
 };

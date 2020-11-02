@@ -14,7 +14,7 @@ int main() {
     srand (time(NULL));
     std::cout << "Hello, World!" << std::endl;
 
-    Swarm s(2, 2, new ConfigEx2());
+    Swarm s(4, 4, new ConfigEx1());
     Particle theBestParticle = s.findTheBestParticle(0.2, 1.0, 0.1, 0.1);
 
     std::cout << "Po obliczeniu f. kosztu" << std::endl;

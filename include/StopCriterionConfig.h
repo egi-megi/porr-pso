@@ -9,9 +9,7 @@
 
 class StopCriterionConfig {
 public:
-    virtual double computeCostFunctionValue(std::vector<double> positionVector)=0;
-    virtual bool isPositionOK(std::vector<double> positionVector)=0;
-    virtual bool isXInRange(double position);
+    virtual double computeStopCriterion(double criterionValue)=0;
 };
 
 
