@@ -6,6 +6,9 @@
 #define ROJCZASTEK_SZCZEPANSKI_JURKIEWICZ_PIKULINSKI_SWARM_H
 
 #include "Particle.h"
+#include "ConfigStopCriterionAcademic.h"
+#include "ConfigStopCriterionNormal.h"
+#include "StopCriterionConfig.h"
 #include <iostream>
 #include <vector>
 
@@ -19,10 +22,10 @@ public:
 
     void makeSwarm(int amountOfParticles, int vectorDim, OptimizationExercisesConfig* config);
     void computeGbest(Particle *particle);
-    Particle findTheBestParticle(float academicCondition, float w, float speedConstant1, float speedConstant2);
+    Particle findTheBestParticle(float criterionStopValue, float w, float speedConstant1, float speedConstant2, StopCriterionConfig *configStop);
 
     Particle *Gbest;
-    int exerciseNumber;
+    Particle *GbestOld;
 
 protected:
 
@@ -32,7 +35,7 @@ private:
     int amountOfParticles;
     int vectorDim;
     vector <Particle> swarm;
-    float epsilon;
+    float criterionStopValue;
 
 
 };

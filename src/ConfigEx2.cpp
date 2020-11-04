@@ -8,8 +8,8 @@
 
 ConfigEx2::ConfigEx2() :OptimizationExercisesConfig()
 {
-    lowerLimit = -3.0;
-    upperLimit = 3.0;
+    lowerLimit = -1.0;
+    upperLimit = 1.0;
 }
 
 ConfigEx2::~ConfigEx2() {}
@@ -37,7 +37,4 @@ bool ConfigEx2::isPositionOK(std::vector<double> positionVector){
 }
 
 
-/*
-bool ConfigEx2::isPositionOK(std::vector<double> positionVector){
-    return true;
-}*/
+

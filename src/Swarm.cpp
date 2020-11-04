@@ -28,6 +28,7 @@ void Swarm::makeSwarm(int amountOfParticles, int vectorDim, OptimizationExercise
         swarm.push_back(particle);
     }
     Gbest = &swarm.front();
+    GbestOld = &swarm.front();
 }
 
 
@@ -35,14 +36,14 @@ void Swarm::computeGbest(Particle *particle)
 {
     if (Gbest->getCostFunctionValuePbest() > particle->getCostFunctionValuePbest())
     {
+        GbestOld = Gbest;
         Gbest = particle;
     }
 }
 
-Particle Swarm::findTheBestParticle(float academicCondition, float w, float speedConstant1, float speedConstant2)
+Particle Swarm::findTheBestParticle(float criterionStopValue, float w, float speedConstant1, float speedConstant2, StopCriterionConfig *configStop)
 {
-    double modelValueOfCostFunction = 0;
-    while (Gbest->getCostFunctionValuePbest() - modelValueOfCostFunction > academicCondition)
+    while (configStop->computeStopCriterion(criterionStopValue, Gbest, GbestOld))
     {
         for (auto &singleParticle : swarm) // access by reference to avoid copying
         {

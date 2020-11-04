@@ -6,9 +6,11 @@
 #define ROJCZASTEK_SZCZEPANSKI_JURKIEWICZ_PIKULINSKI_CONFIGSTOPCRITERIONACADEMIC_H
 
 #include "StopCriterionConfig.h"
+#include "Particle.h"
 
 class ConfigStopCriterionAcademic : public StopCriterionConfig {
-    double computeStopCriterion(double criterionValue);
+public:
+    bool computeStopCriterion(float criterionStopValue, Particle *Gbest, Particle *GbestOld);
 };
 
 

@@ -4,9 +4,15 @@
 
 #include "../include/ConfigStopCriterionAcademic.h"
 #include "../include/StopCriterionConfig.h"
+#include "../include/Particle.h"
 #include <math.h>
 
-double ConfigStopCriterionAcademic::computeStopCriterion(double criterionValue){
 
-    return criterionValue;
+bool ConfigStopCriterionAcademic::computeStopCriterion(float criterionStopValue, Particle *Gbest, Particle *GbestOld){
+    double modelValueOfCostFunction = 0;
+    if (Gbest->getCostFunctionValuePbest() - modelValueOfCostFunction > criterionStopValue) {
+      return true;
+    } else {
+        return false;
+    }
 }

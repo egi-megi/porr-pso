@@ -5,9 +5,11 @@
 #ifndef ROJCZASTEK_SZCZEPANSKI_JURKIEWICZ_PIKULINSKI_CONFIGSTOPCRITERIONNORMAL_H
 #define ROJCZASTEK_SZCZEPANSKI_JURKIEWICZ_PIKULINSKI_CONFIGSTOPCRITERIONNORMAL_H
 #include "StopCriterionConfig.h"
+#include "Particle.h"
 
-class ConfigStopCriterionNormal {
-    double computeStopCriterion(double criterionValue);
+class ConfigStopCriterionNormal : public StopCriterionConfig {
+public:
+    bool computeStopCriterion(float criterionStopValue, Particle *Gbest, Particle *GbestOld);
 };
 
 

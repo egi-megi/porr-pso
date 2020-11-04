@@ -6,10 +6,11 @@
 #define ROJCZASTEK_SZCZEPANSKI_JURKIEWICZ_PIKULINSKI_STOPCRITERIONCONFIG_H
 #include <vector>
 #include <istream>
+#include "Particle.h"
 
 class StopCriterionConfig {
 public:
-    virtual double computeStopCriterion(double criterionValue)=0;
+    virtual bool computeStopCriterion(float criterionStopValue, Particle *Gbest, Particle *GbestOld)=0;
 };
 
 
