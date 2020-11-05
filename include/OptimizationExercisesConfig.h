@@ -10,13 +10,13 @@
 class OptimizationExercisesConfig {
 
 public:
-    OptimizationExercisesConfig();
+    OptimizationExercisesConfig(double lowerLimit, double upperLimit);
     virtual ~OptimizationExercisesConfig();
     virtual double computeCostFunctionValue(std::vector<double> positionVector)=0;
     virtual bool isPositionOK(std::vector<double> positionVector)=0;
     virtual bool isXInRange(double position);
-    double lowerLimit;
-    double upperLimit;
+    double lowerLimitPositionVector;
+    double upperLimitPositionVector;
 };
 
 

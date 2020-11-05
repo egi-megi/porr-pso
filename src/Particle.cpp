@@ -44,7 +44,7 @@ Particle::~Particle()
 
 void Particle::setStartPosition()
 {
-    std::uniform_real_distribution<double> unif(config->lowerLimit,config->upperLimit);
+    std::uniform_real_distribution<double> unif(config->lowerLimitPositionVector, config->upperLimitPositionVector);
     do {
     for (int i = 0; i < vectorDim; i++) {
         positionVectors[i] = unif(generator);

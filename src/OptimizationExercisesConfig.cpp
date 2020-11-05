@@ -4,14 +4,12 @@
 
 #include "../include/OptimizationExercisesConfig.h"
 
-OptimizationExercisesConfig::OptimizationExercisesConfig()
-{
-}
+OptimizationExercisesConfig::OptimizationExercisesConfig(double lowerLimit, double upperLimit) : lowerLimitPositionVector( lowerLimit ), upperLimitPositionVector (upperLimit) {};
 
 OptimizationExercisesConfig::~OptimizationExercisesConfig() {};
 
 bool OptimizationExercisesConfig::isXInRange(double position) {
-    if (position > lowerLimit || position < upperLimit) {
+    if (position > lowerLimitPositionVector || position < upperLimitPositionVector) {
         return true;
     } else {
         return false;

@@ -6,11 +6,7 @@
 #include "../include/ConfigEx2.h"
 #include <math.h>
 
-ConfigEx2::ConfigEx2() :OptimizationExercisesConfig()
-{
-    lowerLimit = -1.0;
-    upperLimit = 1.0;
-}
+ConfigEx2::ConfigEx2(double lowerLimit, double upperLimit) : OptimizationExercisesConfig(lowerLimit, upperLimit) { }
 
 ConfigEx2::~ConfigEx2() {}
 
