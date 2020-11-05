@@ -10,7 +10,7 @@
 
 class StopCriterionConfig {
 public:
-    virtual bool computeStopCriterion(float criterionStopValue, Particle *Gbest, Particle *GbestOld)=0;
+    virtual bool computeStopCriterion(float criterionStopValue, vector <Particle> GbestVector)=0;
 };
 
 

@@ -26,7 +26,8 @@ public:
     void computeSpeed(float w, float speedConstant1, float speedConstant2, int i);
     void computeCostFunctionValue();
     void computeParticlePbest();
-    double getParticlePbest();
+    double getCostFunctionValue();
+    void setCostFunctionValue(double costFunVal);
     double getCostFunctionValuePbest();
     vector <double > getPositionVector();
 

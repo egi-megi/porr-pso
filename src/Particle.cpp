@@ -69,7 +69,7 @@ void Particle::computeSpeed(float w, float speedConstant1, float speedConstant2,
         double rand_2 = unif(generator);
         double tempSpeedValue =
                 w * speedVectors[i] + speedConstant1 * rand_1 * (positionVectorsParticlePbest[i] - positionVectors[i]) +
-                speedConstant2 + rand_2 * (swarm->Gbest->positionVectorsParticlePbest[i] - positionVectors[i]);
+                speedConstant2 + rand_2 * (swarm->GbestVector[0].positionVectorsParticlePbest[i] - positionVectors[i]);
         tempSpeedVectors[i] = tempSpeedValue;
     }
 }
@@ -104,9 +104,14 @@ void Particle::computeParticlePbest()
     }
 }
 
-double Particle::getParticlePbest()
+double Particle::getCostFunctionValue()
 {
-    return particlePbest;
+    return costFunctionValue;
+}
+
+void Particle::setCostFunctionValue(double costFunVal)
+{
+    costFunctionValue = costFunVal;
 }
 
 double Particle::getCostFunctionValuePbest()

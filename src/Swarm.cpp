@@ -26,24 +26,27 @@ void Swarm::makeSwarm(int amountOfParticles, int vectorDim, OptimizationExercise
     {
         Particle particle(vectorDim,this,config);
         swarm.push_back(particle);
+        if (i < 10) {
+            GbestVector.push_back(particle);
+        }
     }
-    Gbest = &swarm.front();
-    GbestOld = &swarm.front();
 }
 
 
 void Swarm::computeGbest(Particle *particle)
 {
-    if (Gbest->getCostFunctionValuePbest() > particle->getCostFunctionValuePbest())
+    if (GbestVector[0].getCostFunctionValuePbest() > particle->getCostFunctionValuePbest())
     {
-        GbestOld = Gbest;
-        Gbest = particle;
+        for (int i = GbestVector.size() - 1; i < 0; i--) {
+            GbestVector[i] = GbestVector[i -1];
+        }
+        GbestVector[0] = *particle;
     }
 }
 
 Particle Swarm::findTheBestParticle(float criterionStopValue, float w, float speedConstant1, float speedConstant2, StopCriterionConfig *configStop)
 {
-    while (configStop->computeStopCriterion(criterionStopValue, Gbest, GbestOld))
+    while (configStop->computeStopCriterion(criterionStopValue, GbestVector))
     {
         for (auto &singleParticle : swarm) // access by reference to avoid copying
         {
@@ -51,10 +54,10 @@ Particle Swarm::findTheBestParticle(float criterionStopValue, float w, float spe
             singleParticle.computeCostFunctionValue();
             singleParticle.computeParticlePbest();
             Swarm::computeGbest(&singleParticle);
-            std::cout << Gbest->costFunctionValuePbest << std::endl;
+            std::cout << GbestVector[0].costFunctionValuePbest << std::endl;
         }
     }
-    return *Gbest;
+    return GbestVector[0];
 
 }
 

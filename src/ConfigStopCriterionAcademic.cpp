@@ -8,9 +8,9 @@
 #include <math.h>
 
 
-bool ConfigStopCriterionAcademic::computeStopCriterion(float criterionStopValue, Particle *Gbest, Particle *GbestOld){
+bool ConfigStopCriterionAcademic::computeStopCriterion(float criterionStopValue, vector <Particle> GbestVector){
     double modelValueOfCostFunction = 0;
-    if (Gbest->getCostFunctionValuePbest() - modelValueOfCostFunction > criterionStopValue) {
+    if (GbestVector[0].getCostFunctionValuePbest() - modelValueOfCostFunction > criterionStopValue) {
       return true;
     } else {
         return false;

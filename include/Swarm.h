@@ -25,8 +25,6 @@ public:
     Particle findTheBestParticle(float criterionStopValue, float w, float speedConstant1, float speedConstant2, StopCriterionConfig *configStop);
 
     vector <Particle> GbestVector;
-    Particle *Gbest;
-    Particle *GbestOld;
 
 protected:
 
@@ -36,8 +34,7 @@ private:
     int amountOfParticles;
     int vectorDim;
     vector <Particle> swarm;
-    float criterionStopValue;
-
+    int GbestVectorSize = 10;
 
 };
 
