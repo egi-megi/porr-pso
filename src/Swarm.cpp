@@ -26,7 +26,7 @@ void Swarm::makeSwarm(int amountOfParticles, int vectorDim, OptimizationExercise
     {
         Particle particle(vectorDim,this,config);
         swarm.push_back(particle);
-        if (i < 10) {
+        if (i < GbestVectorSize) {
             GbestVector.push_back(particle);
         }
     }

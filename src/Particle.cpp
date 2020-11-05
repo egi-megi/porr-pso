@@ -28,15 +28,6 @@ Particle::Particle(const int mVectorsDim, Swarm* s, OptimizationExercisesConfig*
     costFunctionValuePbest = costFunctionValue;
 }
 
-/*Particle::Particle(const Particle &particle)
-{
-    vectorDim = particle.vectorDim;
-    positionVectors[vectorDim] = particle.positionVectors[vectorDim];
-    speedVectors[vectorDim] = particle.speedVectors[vectorDim];
-    Pbest[vectorDim] = particle.Pbest[vectorDim];
-    Lbest[vectorDim] = particle.Lbest[vectorDim];
-}*/
-
 Particle::~Particle()
 {
 }
