@@ -7,25 +7,28 @@
 #include <iostream>
 #include <math.h>
 #include <random>
+//#include <omp.h>
 
 using namespace std;
 
-std::default_random_engine Particle::generator;
+
 
 Particle::Particle() {}
 
-Particle::Particle(const int mVectorsDim, Swarm* s, OptimizationExercisesConfig* mconfig )
+Particle::Particle(const int mVectorsDim, Swarm* s, OptimizationExercisesConfig* mconfig, std::default_random_engine* gen)
 {
     vectorDim = mVectorsDim;
     speedVectors.resize(mVectorsDim,0.0);
     tempSpeedVectors.resize(mVectorsDim, 0.0);
     positionVectors.resize(mVectorsDim,0.0);
     config=mconfig;
+    generator=gen;
     setStartPosition();
     setStartSpeed();
     computeCostFunctionValue();
     swarm = s;
     costFunctionValuePbest = costFunctionValue;
+
 }
 
 Particle::~Particle()
@@ -37,8 +40,9 @@ void Particle::setStartPosition()
 {
     std::uniform_real_distribution<double> unif(config->lowerLimitPositionVector, config->upperLimitPositionVector);
     do {
+
     for (int i = 0; i < vectorDim; i++) {
-        positionVectors[i] = unif(generator);
+        positionVectors[i] = unif(*generator);
     }
     } while (! config->isPositionOK(positionVectors));
 
@@ -46,21 +50,26 @@ void Particle::setStartPosition()
 }
 
 void Particle::setStartSpeed() {
-    std::uniform_real_distribution<double> unif(-10.0,10.0);
+    std::uniform_real_distribution<double> unif(
+            (config->lowerLimitPositionVector- config->upperLimitPositionVector)/(vectorDim*vectorDim),
+            (config->upperLimitPositionVector-config->lowerLimitPositionVector)/(vectorDim*vectorDim)
+    );
     for (int i = 0; i < vectorDim; i++) {
-        speedVectors[i] = unif(generator);
+        speedVectors[i] = unif(*generator);
     }
 }
 
 void Particle::computeSpeed(float w, float speedConstant1, float speedConstant2, int i)
 {
     std::uniform_real_distribution<double> unif(0.0,1.0);
+    double m=sqrt(vectorDim);
     for (int i = 0; i < vectorDim; i++) {
-        double rand_1 = unif(generator);
-        double rand_2 = unif(generator);
+        double rand_1 = unif(*generator)/m;
+        double rand_2 = unif(*generator)/m;
         double tempSpeedValue =
                 w * speedVectors[i] + speedConstant1 * rand_1 * (positionVectorsParticlePbest[i] - positionVectors[i]) +
                 speedConstant2 + rand_2 * (swarm->GbestVector[0].positionVectorsParticlePbest[i] - positionVectors[i]);
+      //  cout<<"ts: "<<tempSpeedValue<<"\n";
         tempSpeedVectors[i] = tempSpeedValue;
     }
 }
