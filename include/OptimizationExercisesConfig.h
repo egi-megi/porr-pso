@@ -10,7 +10,7 @@
 class OptimizationExercisesConfig {
 
 public:
-    OptimizationExercisesConfig(double lowerLimit, double upperLimit);
+    OptimizationExercisesConfig();
     virtual ~OptimizationExercisesConfig();
     virtual double computeCostFunctionValue(std::vector<double> positionVector)=0;
     virtual bool isPositionOK(std::vector<double> positionVector)=0;

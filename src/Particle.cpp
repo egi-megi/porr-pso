@@ -15,14 +15,13 @@ using namespace std;
 
 Particle::Particle() {}
 
-Particle::Particle(const int mVectorsDim, Swarm* s, OptimizationExercisesConfig* mconfig, std::default_random_engine* gen)
+Particle::Particle(const int mVectorsDim, Swarm* s, OptimizationExercisesConfig* mconfig)
 {
     vectorDim = mVectorsDim;
     speedVectors.resize(mVectorsDim,0.0);
     tempSpeedVectors.resize(mVectorsDim, 0.0);
     positionVectors.resize(mVectorsDim,0.0);
     config=mconfig;
-    generator=gen;
     setStartPosition();
     setStartSpeed();
     computeCostFunctionValue();
@@ -39,13 +38,9 @@ Particle::~Particle()
 void Particle::setStartPosition()
 {
     std::uniform_real_distribution<double> unif(config->lowerLimitPositionVector, config->upperLimitPositionVector);
-    do {
-
     for (int i = 0; i < vectorDim; i++) {
         positionVectors[i] = unif(*generator);
     }
-    } while (! config->isPositionOK(positionVectors));
-
     positionVectorsParticlePbest = positionVectors;
 }
 
@@ -59,13 +54,13 @@ void Particle::setStartSpeed() {
     }
 }
 
-void Particle::computeSpeed(float w, float speedConstant1, float speedConstant2, int i)
+void Particle::computeSpeed(float w, float speedConstant1, float speedConstant2, int i, std::default_random_engine* gen)
 {
     std::uniform_real_distribution<double> unif(0.0,1.0);
     double m=sqrt(vectorDim);
     for (int i = 0; i < vectorDim; i++) {
-        double rand_1 = unif(*generator)/m;
-        double rand_2 = unif(*generator)/m;
+        double rand_1 = unif(*gen)/m;
+        double rand_2 = unif(*gen)/m;
         double tempSpeedValue =
                 w * speedVectors[i] + speedConstant1 * rand_1 * (positionVectorsParticlePbest[i] - positionVectors[i]) +
                 speedConstant2 + rand_2 * (swarm->GbestVector[0].positionVectorsParticlePbest[i] - positionVectors[i]);
@@ -74,14 +69,14 @@ void Particle::computeSpeed(float w, float speedConstant1, float speedConstant2,
     }
 }
 
-void Particle::computePosition(float w, float speedConstant1, float speedConstant2)
+void Particle::computePosition(float w, float speedConstant1, float speedConstant2, std::default_random_engine* gen)
 {
     vector <double> newPositionVector;
     newPositionVector.resize(vectorDim,0.0);
     do {
         for (int i = 0; i < vectorDim; i++) {
             do {
-                computeSpeed(w, speedConstant1, speedConstant2, i);
+                computeSpeed(w, speedConstant1, speedConstant2, i, gen);
                 newPositionVector[i] = positionVectors[i] + tempSpeedVectors[i];
             }  while (! config->isXInRange(newPositionVector[i]));
         }
