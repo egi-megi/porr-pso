@@ -21,8 +21,5 @@ double ConfigEx1::computeCostFunctionValue(std::vector<double> positionVector)
     return 1/40 * suma + 1 - product;
 }
 
-bool ConfigEx1::isPositionOK(std::vector<double> positionVector){
 
-    return true;
-}
 

@@ -5,8 +5,8 @@
 #include "../include/OptimizationExercisesConfig.h"
 
 OptimizationExercisesConfig::OptimizationExercisesConfig(){
-    lowerLimitPositionVector=-40;
-    upperLimitPositionVector=40;
+    lowerLimitPositionVector = -40;
+    upperLimitPositionVector = 40;
 };
 
 OptimizationExercisesConfig::~OptimizationExercisesConfig() {};

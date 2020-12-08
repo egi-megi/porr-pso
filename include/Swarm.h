@@ -24,7 +24,6 @@ public:
     void makeSwarm(OptimizationExercisesConfig* config);
     void computeGbest(Particle *particle);
     Particle findTheBestParticle(float criterionStopValue, float w, float speedConstant1, float speedConstant2, StopCriterionConfig *configStop);
-
     vector <Particle> GbestVector;
 
 protected:

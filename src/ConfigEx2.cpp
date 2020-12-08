@@ -19,9 +19,7 @@ double ConfigEx2::computeCostFunctionValue(std::vector<double> positionVector)
     return costFunctionValue;
 }
 
-bool ConfigEx2::isPositionOK(std::vector<double> positionVector){
-        return true;
-}
+
 
 
 

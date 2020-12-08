@@ -14,7 +14,6 @@ public:
     ConfigEx1();
     virtual ~ConfigEx1();
     double computeCostFunctionValue(std::vector<double> positionVector);
-    bool isPositionOK(std::vector<double> positionVector);
 };
 
 

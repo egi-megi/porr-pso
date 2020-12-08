@@ -9,7 +9,7 @@
 
 class ConfigStopCriterionNormal : public StopCriterionConfig {
 public:
-    bool computeStopCriterion(float criterionStopValue, vector <Particle> GbestVector);
+    bool computeStopCriterion(float criterionStopValue, vector <Particle>* GbestVector);
 };
 
 

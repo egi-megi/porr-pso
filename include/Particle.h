@@ -18,12 +18,15 @@ class Particle
 {
 public:
     Particle();
+    Particle(int vectorDim, Swarm* s, OptimizationExercisesConfig* config, std::default_random_engine* generator);
     Particle(int vectorDim, Swarm* s, OptimizationExercisesConfig* config);
     virtual ~Particle();
 
     void setStartPosition();
     void setStartSpeed();
     void computePosition(float w, float speedConstant1, float speedConstant2, std::default_random_engine* gen);
+    void computePosition(float w, float speedConstant1, float speedConstant2);
+    void computeSpeed(float w, float speedConstant1, float speedConstant2, int i);
     void computeSpeed(float w, float speedConstant1, float speedConstant2, int i, std::default_random_engine* gen);
     void computeCostFunctionValue();
     void computeParticlePbest();
@@ -42,6 +45,7 @@ private:
     vector <double > positionVectors;
     vector <double > speedVectors;
     vector <double > tempSpeedVectors;
+    double tempSpeedValue;
     double costFunctionValue;
     double particlePbest;
     Swarm* swarm;

@@ -8,8 +8,8 @@
 #include <math.h>
 
 
-bool ConfigStopCriterionNormal::computeStopCriterion(float criterionStopValue, vector <Particle> GbestVector){
-    if (GbestVector[0].getCostFunctionValuePbest() - GbestVector[GbestVector.size() - 1].getCostFunctionValuePbest() > criterionStopValue) {
+bool ConfigStopCriterionNormal::computeStopCriterion(float criterionStopValue, vector <Particle> * GbestVector){
+    if ((*GbestVector)[0].getCostFunctionValuePbest() - (*GbestVector)[(*GbestVector).size() - 1].getCostFunctionValuePbest() > criterionStopValue) {
         return true;
     } else {
         return false;
