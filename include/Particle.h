@@ -24,7 +24,7 @@ public:
 
     void setStartPosition();
     void setStartSpeed();
-#ifdef OPEN_MP
+#ifdef OPEN_MP_SWARM
     void computePosition(float w, float speedConstant1, float speedConstant2, std::default_random_engine* gen);
     void computeSpeed(float w, float speedConstant1, float speedConstant2, int i, std::default_random_engine* gen);
 #else

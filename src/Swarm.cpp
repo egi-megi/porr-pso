@@ -6,13 +6,13 @@
 #include <iostream>
 #include <math.h>
 
-#ifdef OPEN_MP
+#ifdef OPEN_MP_SWARM
 #include <omp.h>
 #endif
 
 using namespace std;
 
-#ifdef OPEN_MP
+#ifdef OPEN_MP_SWARM
 Swarm::Swarm(int mAmountOfParticles, int mVectorDim, OptimizationExercisesConfig* config)
 {
     amountOfParticles = mAmountOfParticles;
@@ -40,7 +40,7 @@ bool gbestSort(Particle p1, Particle p2) {
     return (p1.getCostFunctionValuePbest() < p2.getCostFunctionValuePbest());
 }
 
-#ifdef OPEN_MP
+#ifdef OPEN_MP_SWARM
 void Swarm::makeSwarm(OptimizationExercisesConfig* config)
 {
     int i;
@@ -100,7 +100,7 @@ void Swarm::computeGbest(Particle *particle) {
     }
 }
 
-#ifdef OPEN_MP
+#ifdef OPEN_MP_SWARM
 Particle Swarm::findTheBestParticle(float criterionStopValue, float w, float speedConstant1, float speedConstant2, StopCriterionConfig *configStop)
 {
     std::default_random_engine* rand_engines[omp_get_num_procs()];

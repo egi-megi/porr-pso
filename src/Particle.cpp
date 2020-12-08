@@ -51,7 +51,7 @@ void Particle::setStartSpeed() {
     }
 }
 
-#ifdef OPEN_MP
+#ifdef OPEN_MP_SWARM
 void Particle::computeSpeed(float w, float speedConstant1, float speedConstant2, int i, std::default_random_engine* gen)
 {
     std::uniform_real_distribution<double> unif(0.0,1.0);
@@ -79,7 +79,7 @@ void Particle::computeSpeed(float w, float speedConstant1, float speedConstant2,
 }
 #endif
 
-#ifdef OPEN_MP
+#ifdef OPEN_MP_SWARM
 void Particle::computePosition(float w, float speedConstant1, float speedConstant2, std::default_random_engine* gen)
 #else
 void Particle::computePosition(float w, float speedConstant1, float speedConstant2)
@@ -91,7 +91,7 @@ void Particle::computePosition(float w, float speedConstant1, float speedConstan
 
     for (int i = 0; i < vectorDim; i++) {
         do {
-#ifdef OPEN_MP
+#ifdef OPEN_MP_SWARM
             computeSpeed(w, speedConstant1, speedConstant2, i, gen);
 #else
             computeSpeed(w, speedConstant1, speedConstant2, i);
