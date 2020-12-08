@@ -5,6 +5,7 @@
 #include "../include/Particle.h"
 #include <iostream>
 #include <math.h>
+
 #ifdef OPEN_MP
 #include <omp.h>
 #endif
@@ -22,21 +23,22 @@ Swarm::Swarm(int mAmountOfParticles, int mVectorDim, OptimizationExercisesConfig
     std::cout << "Num proc" << omp_get_num_procs()<<"\n";
 }
 #else
-Swarm::Swarm(int mAmountOfParticles, int mVectorDim, OptimizationExercisesConfig* config)
-{
+
+Swarm::Swarm(int mAmountOfParticles, int mVectorDim, OptimizationExercisesConfig *config) {
     amountOfParticles = mAmountOfParticles;
     vectorDim = mVectorDim;
 
     makeSwarm(config);
 }
+
 #endif
 
-Swarm::~Swarm()
-{
+Swarm::~Swarm() {
 }
 
-bool gbestSort (Particle p1, Particle p2) {
-    return (p1.getCostFunctionValue()<p2.getCostFunctionValue()); }
+bool gbestSort(Particle p1, Particle p2) {
+    return (p1.getCostFunctionValuePbest() < p2.getCostFunctionValuePbest());
+}
 
 #ifdef OPEN_MP
 void Swarm::makeSwarm(OptimizationExercisesConfig* config)
@@ -67,33 +69,32 @@ void Swarm::makeSwarm(OptimizationExercisesConfig* config)
 }
 
 #else
-void Swarm::makeSwarm(OptimizationExercisesConfig* config)
-{
-    std::default_random_engine *random=new std::default_random_engine();
+
+void Swarm::makeSwarm(OptimizationExercisesConfig *config) {
+    std::default_random_engine *random = new std::default_random_engine();
     (*random).seed(rand());
-    for (int i = 0; i < amountOfParticles; i++)
-    {
-        Particle particle(vectorDim,this, config,random);
+    for (int i = 0; i < amountOfParticles; i++) {
+        Particle particle(vectorDim, this, config, random);
         swarm.push_back(particle);
-        if (i < GbestVectorSize) {
-            GbestVector.push_back(particle);
-        }
     }
-    std::sort (GbestVector.begin(), GbestVector.end(), gbestSort);
+    for (int j = 0; j < GbestVectorSize; j++) {
+        GbestVector.push_back(swarm[j]);
+    }
+    std::sort(GbestVector.begin(), GbestVector.end(), gbestSort);
 }
+
 #endif
 
 
-
-void Swarm::computeGbest(Particle *particle)
-{
-int j = 0;
-    while ( j < GbestVector.size() && GbestVector[j].getCostFunctionValuePbest() < particle->getCostFunctionValuePbest()) {
+void Swarm::computeGbest(Particle *particle) {
+    int j = 0;
+    while (j < GbestVector.size() &&
+           GbestVector[j].getCostFunctionValuePbest() < particle->getCostFunctionValuePbest()) {
         j++;
     }
     if (j < GbestVector.size()) {
         for (int i = GbestVector.size() - 1; i > j; i--) {
-            GbestVector[i] = GbestVector[i -1];
+            GbestVector[i] = GbestVector[i - 1];
         }
         GbestVector[j] = *particle;
     }
@@ -117,7 +118,6 @@ Particle Swarm::findTheBestParticle(float criterionStopValue, float w, float spe
                 swarm[i].computePosition(w, speedConstant1, speedConstant2, (rand_engines[omp_get_thread_num ()]));
                 swarm[i].computeCostFunctionValue();
                 swarm[i].computeParticlePbest();
-
             }
         }
         std::cout <<" looking for pbest"<< std::endl;
@@ -129,17 +129,17 @@ Particle Swarm::findTheBestParticle(float criterionStopValue, float w, float spe
     }
     return GbestVector[0];
 }
+
 #else
-Particle Swarm::findTheBestParticle(float criterionStopValue, float w, float speedConstant1, float speedConstant2, StopCriterionConfig *configStop)
-{
-    while (configStop->computeStopCriterion(criterionStopValue, &GbestVector))
-    {
+
+Particle Swarm::findTheBestParticle(float criterionStopValue, float w, float speedConstant1, float speedConstant2,
+                                    StopCriterionConfig *configStop) {
+    while (configStop->computeStopCriterion(criterionStopValue, &GbestVector)) {
         for (auto &singleParticle : swarm) // access by reference to avoid copying
         {
             singleParticle.computePosition(w, speedConstant1, speedConstant2);
             singleParticle.computeCostFunctionValue();
             singleParticle.computeParticlePbest();
-
         }
         for (auto &singleParticle : swarm) // access by reference to avoid copying
         {
@@ -149,5 +149,6 @@ Particle Swarm::findTheBestParticle(float criterionStopValue, float w, float spe
     }
     return GbestVector[0];
 }
+
 #endif
 
