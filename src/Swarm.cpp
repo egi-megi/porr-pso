@@ -56,14 +56,12 @@ void Swarm::makeSwarm(OptimizationExercisesConfig* config)
         for (i = 0; i < n; i++) {
             Particle particle(vectorDim, this, config, (rand_engines[omp_get_thread_num ()]));
             swarm[s+i]=particle;
-            //if (i < GbestVectorSize) {
-              //  GbestVector.push_back(particle);
-            //}
         }
     }
     for (int j = 0; j < GbestVectorSize; j++) {
         GbestVector.push_back(swarm[j]);
     }
+    std::sort (GbestVector.begin(), GbestVector.end(), gbestSort);
 
     cout<<"particles omp done\n";
 }
@@ -71,9 +69,11 @@ void Swarm::makeSwarm(OptimizationExercisesConfig* config)
 #else
 void Swarm::makeSwarm(OptimizationExercisesConfig* config)
 {
+    std::default_random_engine *random=new std::default_random_engine();
+    (*random).seed(rand());
     for (int i = 0; i < amountOfParticles; i++)
     {
-        Particle particle(vectorDim,this, config);
+        Particle particle(vectorDim,this, config,random);
         swarm.push_back(particle);
         if (i < GbestVectorSize) {
             GbestVector.push_back(particle);
@@ -139,9 +139,12 @@ Particle Swarm::findTheBestParticle(float criterionStopValue, float w, float spe
             singleParticle.computePosition(w, speedConstant1, speedConstant2);
             singleParticle.computeCostFunctionValue();
             singleParticle.computeParticlePbest();
+
+        }
+        for (auto &singleParticle : swarm) // access by reference to avoid copying
+        {
             computeGbest(&singleParticle);
         }
-
         std::cout << GbestVector[0].costFunctionValuePbest << std::endl;
     }
     return GbestVector[0];

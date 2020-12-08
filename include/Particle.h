@@ -24,10 +24,13 @@ public:
 
     void setStartPosition();
     void setStartSpeed();
+#ifdef OPEN_MP
     void computePosition(float w, float speedConstant1, float speedConstant2, std::default_random_engine* gen);
+    void computeSpeed(float w, float speedConstant1, float speedConstant2, int i, std::default_random_engine* gen);
+#else
     void computePosition(float w, float speedConstant1, float speedConstant2);
     void computeSpeed(float w, float speedConstant1, float speedConstant2, int i);
-    void computeSpeed(float w, float speedConstant1, float speedConstant2, int i, std::default_random_engine* gen);
+#endif
     void computeCostFunctionValue();
     void computeParticlePbest();
     double getCostFunctionValue();
@@ -45,9 +48,9 @@ private:
     vector <double > positionVectors;
     vector <double > speedVectors;
     vector <double > tempSpeedVectors;
-    double tempSpeedValue;
+    //double tempSpeedValue;
     double costFunctionValue;
-    double particlePbest;
+    //double particlePbest;
     Swarm* swarm;
     OptimizationExercisesConfig* config;
     //double speedVectors[];

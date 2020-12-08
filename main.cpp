@@ -16,7 +16,7 @@ int main() {
     srand (time(NULL));
     std::cout << "Początek obliczeń" << std::endl;
     for (int i=0 ;i<1; i++) {
-    Swarm s1a(1000, 10, new ConfigEx1());
+    Swarm s1a(200000, 50, new ConfigEx1());
     Particle theBestParticle1a = s1a.findTheBestParticle(0.1, 0.00001, 0.00001, 0.00001, new ConfigStopCriterionAcademic());
 
     //Swarm s1n(100, 10, new ConfigEx1());

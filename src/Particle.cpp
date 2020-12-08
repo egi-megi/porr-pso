@@ -30,20 +30,6 @@ Particle::Particle(const int mVectorsDim, Swarm* s, OptimizationExercisesConfig*
     costFunctionValuePbest = costFunctionValue;
 }
 
-Particle::Particle(const int mVectorsDim, Swarm* s, OptimizationExercisesConfig* mconfig)
-{
-    vectorDim = mVectorsDim;
-    speedVectors.resize(mVectorsDim,0.0);
-    tempSpeedVectors.resize(mVectorsDim, 0.0);
-    positionVectors.resize(mVectorsDim,0.0);
-    config=mconfig;
-    setStartPosition();
-    setStartSpeed();
-    computeCostFunctionValue();
-    swarm = s;
-    costFunctionValuePbest = costFunctionValue;
-}
-
 Particle::~Particle()
 {
 }
