@@ -9,7 +9,7 @@ OptimizationExercisesConfig::OptimizationExercisesConfig(double lowerLimit, doub
 OptimizationExercisesConfig::~OptimizationExercisesConfig() {};
 
 bool OptimizationExercisesConfig::isXInRange(double position) {
-    if (position > lowerLimitPositionVector || position < upperLimitPositionVector) {
+    if (position > lowerLimitPositionVector && position < upperLimitPositionVector) {
         return true;
     } else {
         return false;
