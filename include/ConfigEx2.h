@@ -12,10 +12,9 @@
 class ConfigEx2 : public OptimizationExercisesConfig{
 
 public:
-    ConfigEx2(double lowerLimit, double upperLimit);
+    ConfigEx2();
     virtual ~ConfigEx2();
     double computeCostFunctionValue(std::vector<double> positionVector);
-    bool isPositionOK(std::vector<double> positionVector);
 };
 
 

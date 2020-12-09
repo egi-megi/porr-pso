@@ -5,6 +5,7 @@
 #ifndef ROJCZASTEK_SZCZEPANSKI_JURKIEWICZ_PIKULINSKI_SWARM_H
 #define ROJCZASTEK_SZCZEPANSKI_JURKIEWICZ_PIKULINSKI_SWARM_H
 
+
 #include "Particle.h"
 #include "ConfigStopCriterionAcademic.h"
 #include "ConfigStopCriterionNormal.h"
@@ -20,10 +21,9 @@ public:
     Swarm(int mAmountOfParticles, int mVectorDim, OptimizationExercisesConfig* config);
     virtual ~Swarm();
 
-    void makeSwarm(int amountOfParticles, int vectorDim, OptimizationExercisesConfig* config);
+    void makeSwarm(OptimizationExercisesConfig* config);
     void computeGbest(Particle *particle);
     Particle findTheBestParticle(float criterionStopValue, float w, float speedConstant1, float speedConstant2, StopCriterionConfig *configStop);
-
     vector <Particle> GbestVector;
 
 protected:

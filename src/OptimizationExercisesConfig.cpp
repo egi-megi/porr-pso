@@ -4,7 +4,10 @@
 
 #include "../include/OptimizationExercisesConfig.h"
 
-OptimizationExercisesConfig::OptimizationExercisesConfig(double lowerLimit, double upperLimit) : lowerLimitPositionVector( lowerLimit ), upperLimitPositionVector (upperLimit) {};
+OptimizationExercisesConfig::OptimizationExercisesConfig(){
+    lowerLimitPositionVector = -40;
+    upperLimitPositionVector = 40;
+};
 
 OptimizationExercisesConfig::~OptimizationExercisesConfig() {};
 

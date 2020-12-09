@@ -7,20 +7,21 @@
 #include <iostream>
 #include <math.h>
 #include <random>
+//#include <omp.h>
 
 using namespace std;
 
-std::default_random_engine Particle::generator;
 
 Particle::Particle() {}
 
-Particle::Particle(const int mVectorsDim, Swarm* s, OptimizationExercisesConfig* mconfig )
-{
+Particle::Particle(const int mVectorsDim, Swarm *s, OptimizationExercisesConfig *mconfig,
+                   std::default_random_engine *gen) {
     vectorDim = mVectorsDim;
-    speedVectors.resize(mVectorsDim,0.0);
+    generator = gen;
+    speedVectors.resize(mVectorsDim, 0.0);
     tempSpeedVectors.resize(mVectorsDim, 0.0);
-    positionVectors.resize(mVectorsDim,0.0);
-    config=mconfig;
+    positionVectors.resize(mVectorsDim, 0.0);
+    config = mconfig;
     setStartPosition();
     setStartSpeed();
     computeCostFunctionValue();
@@ -28,89 +29,109 @@ Particle::Particle(const int mVectorsDim, Swarm* s, OptimizationExercisesConfig*
     costFunctionValuePbest = costFunctionValue;
 }
 
-Particle::~Particle()
-{
+Particle::~Particle() {
 }
 
 
-void Particle::setStartPosition()
-{
+void Particle::setStartPosition() {
     std::uniform_real_distribution<double> unif(config->lowerLimitPositionVector, config->upperLimitPositionVector);
-    do {
     for (int i = 0; i < vectorDim; i++) {
-        positionVectors[i] = unif(generator);
+        positionVectors[i] = unif(*generator);
     }
-    } while (! config->isPositionOK(positionVectors));
-
     positionVectorsParticlePbest = positionVectors;
 }
 
 void Particle::setStartSpeed() {
-    std::uniform_real_distribution<double> unif(-10.0,10.0);
+    std::uniform_real_distribution<double> unif(
+            (config->lowerLimitPositionVector - config->upperLimitPositionVector) / (vectorDim * vectorDim),
+            (config->upperLimitPositionVector - config->lowerLimitPositionVector) / (vectorDim * vectorDim)
+    );
     for (int i = 0; i < vectorDim; i++) {
-        speedVectors[i] = unif(generator);
+        speedVectors[i] = unif(*generator);
     }
 }
 
-void Particle::computeSpeed(float w, float speedConstant1, float speedConstant2, int i)
+#ifdef OPEN_MP_SWARM
+void Particle::computeSpeed(float w, float speedConstant1, float speedConstant2, int i, std::default_random_engine* gen)
 {
     std::uniform_real_distribution<double> unif(0.0,1.0);
-    for (int i = 0; i < vectorDim; i++) {
-        double rand_1 = unif(generator);
-        double rand_2 = unif(generator);
+    double m=sqrt(vectorDim);
+        double rand_1 = unif(*gen)/m;
+        double rand_2 = unif(*gen)/m;
         double tempSpeedValue =
                 w * speedVectors[i] + speedConstant1 * rand_1 * (positionVectorsParticlePbest[i] - positionVectors[i]) +
                 speedConstant2 + rand_2 * (swarm->GbestVector[0].positionVectorsParticlePbest[i] - positionVectors[i]);
+      //  cout<<"ts: "<<tempSpeedValue<<"\n";
         tempSpeedVectors[i] = tempSpeedValue;
-    }
 }
+#else
 
+void Particle::computeSpeed(float w, float speedConstant1, float speedConstant2, int i) {
+    std::uniform_real_distribution<double> unif(0.0, 1.0);
+    double m = sqrt(vectorDim);
+    double rand_1 = unif(*generator) / m;
+    double rand_2 = unif(*generator) / m;
+    double tempSpeedValue =
+            w * speedVectors[i] + speedConstant1 * rand_1 * (positionVectorsParticlePbest[i] - positionVectors[i]) +
+            speedConstant2 + rand_2 * (swarm->GbestVector[0].positionVectorsParticlePbest[i] - positionVectors[i]);
+    //  cout<<"ts: "<<tempSpeedValue<<"\n";
+    tempSpeedVectors[i] = tempSpeedValue;
+}
+#endif
+
+#ifdef OPEN_MP_SWARM
+void Particle::computePosition(float w, float speedConstant1, float speedConstant2, std::default_random_engine* gen)
+{
+	vector<double> newPositionVector;
+	newPositionVector.resize(vectorDim, 0.0);
+
+	for (int i = 0; i < vectorDim; i++) {
+		do {
+			computeSpeed(w, speedConstant1, speedConstant2, i, gen);
+			newPositionVector[i] = positionVectors[i] + tempSpeedVectors[i];
+		} while (!config->isXInRange(newPositionVector[i]));
+	}
+
+	speedVectors = tempSpeedVectors;
+	positionVectors = newPositionVector;
+}
+#else
 void Particle::computePosition(float w, float speedConstant1, float speedConstant2)
 {
-    vector <double> newPositionVector;
-    newPositionVector.resize(vectorDim,0.0);
-    do {
-        for (int i = 0; i < vectorDim; i++) {
-            do {
-                computeSpeed(w, speedConstant1, speedConstant2, i);
-                newPositionVector[i] = positionVectors[i] + tempSpeedVectors[i];
-            }  while (! config->isXInRange(newPositionVector[i]));
-        }
-    } while (! config->isPositionOK(newPositionVector));
+    vector<double> newPositionVector;
+    newPositionVector.resize(vectorDim, 0.0);
+
+    for (int i = 0; i < vectorDim; i++) {
+        do {
+            computeSpeed(w, speedConstant1, speedConstant2, i);
+            newPositionVector[i] = positionVectors[i] + tempSpeedVectors[i];
+        } while (!config->isXInRange(newPositionVector[i]));
+    }
+
     speedVectors = tempSpeedVectors;
     positionVectors = newPositionVector;
 }
+#endif
 
-void Particle::computeCostFunctionValue()
-{
+void Particle::computeCostFunctionValue() {
     costFunctionValue = config->computeCostFunctionValue(positionVectors);
 }
 
-
-void Particle::computeParticlePbest()
-{
+void Particle::computeParticlePbest() {
     if (costFunctionValue < costFunctionValuePbest) {
         costFunctionValuePbest = costFunctionValue;
         positionVectorsParticlePbest = positionVectors;
     }
 }
 
-double Particle::getCostFunctionValue()
-{
+double Particle::getCostFunctionValue() {
     return costFunctionValue;
 }
 
-void Particle::setCostFunctionValue(double costFunVal)
-{
-    costFunctionValue = costFunVal;
-}
-
-double Particle::getCostFunctionValuePbest()
-{
+double Particle::getCostFunctionValuePbest() {
     return costFunctionValuePbest;
 }
 
-vector <double > Particle::getPositionVector()
-{
+vector<double> Particle::getPositionVector() {
     return positionVectors;
 }
