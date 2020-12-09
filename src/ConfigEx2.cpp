@@ -13,7 +13,7 @@ ConfigEx2::~ConfigEx2() {}
 double ConfigEx2::computeCostFunctionValue(std::vector<double> positionVector)
 {
     double costFunctionValue = 0.0;
-    for (int i = 0; i < positionVector.size() - 1; i++) {
+    for (unsigned int i = 0; i < positionVector.size() - 1; i++) {
         costFunctionValue = costFunctionValue + (pow((positionVector[i + 1] - pow(positionVector[i], 2)), 2) * 100 + pow((1 -positionVector[i]), 2));
     }
     return costFunctionValue;

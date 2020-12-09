@@ -14,7 +14,7 @@ double ConfigEx1::computeCostFunctionValue(std::vector<double> positionVector)
 {
     double suma = 0;
     double product = 1;
-    for (int i = 0; i <positionVector.size(); i++) {
+    for (unsigned int i = 0; i <positionVector.size(); i++) {
         suma = suma + pow(positionVector[i], 2);
         product = product * cos(positionVector[i]/( i+ 1));
     }
