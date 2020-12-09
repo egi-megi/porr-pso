@@ -81,21 +81,29 @@ void Particle::computeSpeed(float w, float speedConstant1, float speedConstant2,
 
 #ifdef OPEN_MP_SWARM
 void Particle::computePosition(float w, float speedConstant1, float speedConstant2, std::default_random_engine* gen)
+{
+	vector<double> newPositionVector;
+	newPositionVector.resize(vectorDim, 0.0);
+
+	for (int i = 0; i < vectorDim; i++) {
+		do {
+			computeSpeed(w, speedConstant1, speedConstant2, i, gen);
+			newPositionVector[i] = positionVectors[i] + tempSpeedVectors[i];
+		} while (!config->isXInRange(newPositionVector[i]));
+	}
+
+	speedVectors = tempSpeedVectors;
+	positionVectors = newPositionVector;
+}
 #else
 void Particle::computePosition(float w, float speedConstant1, float speedConstant2)
-#endif
-
 {
     vector<double> newPositionVector;
     newPositionVector.resize(vectorDim, 0.0);
 
     for (int i = 0; i < vectorDim; i++) {
         do {
-#ifdef OPEN_MP_SWARM
-            computeSpeed(w, speedConstant1, speedConstant2, i, gen);
-#else
             computeSpeed(w, speedConstant1, speedConstant2, i);
-#endif
             newPositionVector[i] = positionVectors[i] + tempSpeedVectors[i];
         } while (!config->isXInRange(newPositionVector[i]));
     }
@@ -103,6 +111,7 @@ void Particle::computePosition(float w, float speedConstant1, float speedConstan
     speedVectors = tempSpeedVectors;
     positionVectors = newPositionVector;
 }
+#endif
 
 void Particle::computeCostFunctionValue() {
     costFunctionValue = config->computeCostFunctionValue(positionVectors);
