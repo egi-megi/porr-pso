@@ -47,7 +47,7 @@ void Swarm::makeSwarm(OptimizationExercisesConfig* config)
 	int i;
 	int n = amountOfParticles;
 	int s = swarm.size();
-	std::default_random_engine* rand_engines[omp_get_num_procs()];
+    std::vector<std::default_random_engine*> rand_engines(omp_get_num_procs());
 	for (int j = 0; j < omp_get_num_procs(); j++) {
 		rand_engines[j] = new std::default_random_engine();
 		rand_engines[j]->seed(rand());
@@ -102,7 +102,7 @@ void Swarm::computeGbest(Particle *particle) {
 #ifdef OPEN_MP_SWARM
 Particle Swarm::findTheBestParticle(float criterionStopValue, float w, float speedConstant1, float speedConstant2, StopCriterionConfig* configStop)
 {
-	std::default_random_engine* rand_engines[omp_get_num_procs()];
+    std::vector<std::default_random_engine*> rand_engines(omp_get_num_procs());
 	for (int j = 0; j < omp_get_num_procs(); j++) {
 		rand_engines[j] = new std::default_random_engine();
 		rand_engines[j]->seed(rand());

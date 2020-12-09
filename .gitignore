@@ -5,5 +5,6 @@
 *.cd
 *.sln
 *.vcxproj*
+CMakeSettings.json
 Debug
 out
