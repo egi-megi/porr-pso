@@ -4,6 +4,7 @@
 
 #ifndef ROJCZASTEK_SZCZEPANSKI_JURKIEWICZ_PIKULINSKI_MONTECARLOPARTICLE_H
 #define ROJCZASTEK_SZCZEPANSKI_JURKIEWICZ_PIKULINSKI_MONTECARLOPARTICLE_H
+
 #include <iostream>
 #include <vector>
 #include <functional>
@@ -13,43 +14,32 @@
 using namespace std;
 
 class MonteCarloParticle {
-        public:
-        MonteCarloParticle();
-        MonteCarloParticle(int vectorDim, Swarm* s, OptimizationExercisesConfig* config, std::default_random_engine* generator);
-        MonteCarloParticle(int vectorDim, Swarm* s, OptimizationExercisesConfig* config);
-        virtual ~MonteCarloParticle();
+public:
+    //MonteCarloParticle();
 
-        void setStartPosition();
-        void setStartSpeed();
-#ifdef OPEN_MP_MONTE_CARLO
-        void computePosition(float w, float speedConstant1, float speedConstant2, std::default_random_engine* gen);
-    void computeSpeed(float w, float speedConstant1, float speedConstant2, int i, std::default_random_engine* gen);
-#else
-        void computePosition(float w, float speedConstant1, float speedConstant2);
-        void computeSpeed(float w, float speedConstant1, float speedConstant2, int i);
-#endif
-        void computeCostFunctionValue();
-        void computeParticlePbest();
-        double getCostFunctionValue();
-        double getCostFunctionValuePbest();
-        vector <double > getPositionVector();
+    MonteCarloParticle(int vectorDim, OptimizationExercisesConfig *config, std::default_random_engine generator);
 
-        double costFunctionValuePbest;
-        vector <double > positionVectorsParticlePbest;
+    virtual ~MonteCarloParticle();
 
-        protected:
+    void setStartPositionMC();
 
-        private:
-        int vectorDim;
-        vector <double > positionVectors;
-        vector <double > speedVectors;
-        vector <double > tempSpeedVectors;
-        double costFunctionValue;
-        Swarm* swarm;
-        OptimizationExercisesConfig* config;
-        std::default_random_engine* generator;
-    };
+    void computePositionMC(float sigma, float T);
 
+    void computeCostFunctionValueMC();
+
+    void computeParticleMinValuesMC(double costFunctionValueTempMC, vector<double> tempPositionVector, float tVariable);
+
+    double getCostFunctionValueMinMC();
+
+private:
+    int vectorDim;
+    vector<double> positionVectorsMC;
+    vector<double> positionVectorsMinMC;
+    double costFunctionValueMC;
+    double costFunctionValueMinMC;
+    OptimizationExercisesConfig *config;
+    std::default_random_engine *generatorMC;
+};
 
 
 #endif //ROJCZASTEK_SZCZEPANSKI_JURKIEWICZ_PIKULINSKI_MONTECARLOPARTICLE_H
