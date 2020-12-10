@@ -10,6 +10,10 @@
 
 using namespace std;
 
+MonteCarloParticle::MonteCarloParticle(){
+
+}
+
 MonteCarloParticle::MonteCarloParticle(const int mVectorsDim, OptimizationExercisesConfig *mconfig,
                    std::default_random_engine* gen) {
     vectorDim = mVectorsDim;
@@ -39,10 +43,10 @@ void MonteCarloParticle::computePositionMC(float sigma, float tVariable)
 {
     vector<double> tempPositionVector;
     tempPositionVector.resize(vectorDim, 0.0);
-    std::uniform_real_distribution<double> unif(-1.0,1.0);
+    std::normal_distribution<double> normal(-1.0, 1.0);
     for (int i = 0; i < vectorDim; i++) {
         do {
-            double rand = unif(*generatorMC);
+            double rand = normal(*generatorMC);
             tempPositionVector[i] = positionVectorsMC[i] + sigma * rand;
         } while (!config->isXInRange(tempPositionVector[i]));
     }

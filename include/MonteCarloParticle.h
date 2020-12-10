@@ -15,7 +15,7 @@ using namespace std;
 
 class MonteCarloParticle {
 public:
-    //MonteCarloParticle();
+    MonteCarloParticle();
 
     MonteCarloParticle(int vectorDim, OptimizationExercisesConfig *config, std::default_random_engine *generator);
 

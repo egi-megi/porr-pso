@@ -24,7 +24,7 @@ public:
     vector<MonteCarloParticle> monteCarloParticlesVector;
 private:
     int amountOfParticles;
-    int numberOfDraws;
+    int numberOfSteps;
     static std::default_random_engine generatorMC;
 
 };
