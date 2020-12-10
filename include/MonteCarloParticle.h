@@ -17,15 +17,13 @@ class MonteCarloParticle {
 public:
     //MonteCarloParticle();
 
-    MonteCarloParticle(int vectorDim, OptimizationExercisesConfig *config, std::default_random_engine generator);
+    MonteCarloParticle(int vectorDim, OptimizationExercisesConfig *config, std::default_random_engine *generator);
 
     virtual ~MonteCarloParticle();
 
     void setStartPositionMC();
 
     void computePositionMC(float sigma, float T);
-
-    void computeCostFunctionValueMC();
 
     void computeParticleMinValuesMC(double costFunctionValueTempMC, vector<double> tempPositionVector, float tVariable);
 

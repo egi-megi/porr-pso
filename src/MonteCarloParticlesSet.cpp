@@ -25,14 +25,20 @@ bool costFunSort(MonteCarloParticle p1, MonteCarloParticle p2) {
 
 MonteCarloParticle MonteCarloParticlesSet::computeTheBestParticleMC(float sigma, float tVariable, OptimizationExercisesConfig* config, const int mVectorsDim)
 {
+
     //monteCarloParticlesVector.resize(amountOfParticles,0.0);
     for (int i = 0; i < amountOfParticles; i++) {
-        MonteCarloParticle particleMC (mVectorsDim, *config, *generatorMC);
+        MonteCarloParticle particleMC (mVectorsDim, config, &generatorMC);
         for (int j = 0; j < numberOfDraws; j++) {
             particleMC.computePositionMC(sigma, tVariable);
+           // if (j%10000==0) {
+           //     std::cout<<"step "<<j << " partile "<<i<<std::endl;
+           // }
+        }
+        if (i%10==0) {
+            std::cout<<"processed particle "<<i<<std::endl;
         }
         monteCarloParticlesVector.push_back(particleMC);
-
     }
     std::sort(monteCarloParticlesVector.begin(), monteCarloParticlesVector.end(), costFunSort);
     return monteCarloParticlesVector[0];

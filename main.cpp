@@ -25,7 +25,7 @@ int main() {
         //Swarm s1n(100, 10, new ConfigEx1());
         //Particle theBestParticle1n = s1n.findTheBestParticle(0.1, 1.0, 0.1, 0.1, new ConfigStopCriterionNormal());
 
-        MonteCarloParticlesSet setMC1(20, 100, 100000, new ConfigEx1(-40, 40), 0.5, 0.5);
+        MonteCarloParticlesSet setMC1(20, 30, 100000, new ConfigEx1(), 0.5, 0.5);
 
         //Swarm s2a(1000, 40, new ConfigEx2());
         //Particle theBestParticle2a = s2a.findTheBestParticle(0.5, 0.00001, 0.00001, 0.00001, new ConfigStopCriterionAcademic());

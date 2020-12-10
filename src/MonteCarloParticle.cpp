@@ -11,13 +11,13 @@
 using namespace std;
 
 MonteCarloParticle::MonteCarloParticle(const int mVectorsDim, OptimizationExercisesConfig *mconfig,
-                   std::default_random_engine gen) {
+                   std::default_random_engine* gen) {
     vectorDim = mVectorsDim;
-    generatorMC = &gen;
+    generatorMC = gen;
     positionVectorsMC.resize(mVectorsDim, 0.0);
     config = mconfig;
     setStartPositionMC();
-    computeCostFunctionValueMC();
+    costFunctionValueMC=config->computeCostFunctionValue(positionVectorsMC);
     costFunctionValueMinMC = costFunctionValueMC;
 }
 
@@ -39,17 +39,16 @@ void MonteCarloParticle::computePositionMC(float sigma, float tVariable)
 {
     vector<double> tempPositionVector;
     tempPositionVector.resize(vectorDim, 0.0);
-    std::uniform_real_distribution<double> unif(0.0,1.0);
-    double rand = unif(*generatorMC);
+    std::uniform_real_distribution<double> unif(-1.0,1.0);
     for (int i = 0; i < vectorDim; i++) {
         do {
+            double rand = unif(*generatorMC);
             tempPositionVector[i] = positionVectorsMC[i] + sigma * rand;
         } while (!config->isXInRange(tempPositionVector[i]));
     }
     double costFunctionValueTempMC = config->computeCostFunctionValue(positionVectorsMC);
     computeParticleMinValuesMC(costFunctionValueTempMC, tempPositionVector, tVariable);
 }
-
 
 void MonteCarloParticle::computeParticleMinValuesMC(double costFunctionValueTempMC, vector<double> tempPositionVector, float tVariable) {
     if (costFunctionValueTempMC < costFunctionValueMC) {
@@ -73,7 +72,7 @@ void MonteCarloParticle::computeParticleMinValuesMC(double costFunctionValueTemp
 
 }
 
-double getCostFunctionValueMinMC()
+double MonteCarloParticle::getCostFunctionValueMinMC()
 {
-    return getCostFunctionValueMinMC();
+    return costFunctionValueMinMC;
 }
