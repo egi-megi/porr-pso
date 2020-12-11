@@ -156,7 +156,7 @@ void Particle::computePosition(float w, float speedConstant1, float speedConstan
     newPositionVector.resize(vectorDim, 0.0);
 
     // DRY needs refactorization
-    computeSpeed(w, speedConstant1, speedConstant2, 0, gen);
+    computeSpeed(w, speedConstant1, speedConstant2, 0);
     newPositionVector = PositionVectorOperator::add(positionVectors, tempSpeedVectors);
 
     if(!config->isPositionInRange(newPositionVector))
