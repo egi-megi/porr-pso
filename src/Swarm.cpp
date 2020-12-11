@@ -103,15 +103,16 @@ Particle Swarm::findTheBestParticle(float criterionStopValue, float w, float spe
         printf("Thread %d: seed = %ld\n", omp_get_thread_num(), (omp_get_thread_num() + 1) * time(NULL));
 
         while (!foundSolution) {
-            #pragma omp for schedule(dynamic, 1000)
+            #pragma omp for schedule(dynamic, 1000) nowait
             for(int i = 0; i < amountOfParticles; i++) {
                 swarm[i].computePosition(w, speedConstant1, speedConstant2, &rand_engine);
                 swarm[i].computeCostFunctionValue();
                 swarm[i].computeParticlePbest();
             }
 
-            #pragma omp for ordered
+            #pragma omp for
             for (auto &singleParticle : swarm) {
+                #pragma omp critical
                 Swarm::computeGbest(&singleParticle);
             }
 
