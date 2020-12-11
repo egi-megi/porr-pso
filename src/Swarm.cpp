@@ -26,6 +26,7 @@ amountOfParticles{mAmountOfParticles}, vectorDim{mVectorDim}, swarm{(long unsign
 Swarm::Swarm(int mAmountOfParticles, int mVectorDim, OptimizationExercisesConfig *config) :
 amountOfParticles{mAmountOfParticles}, vectorDim{mVectorDim}, swarm{(long unsigned int) mAmountOfParticles}
 {
+    printf("Welcome to serial version!\n");
     makeSwarm(config);
 }
 
@@ -66,7 +67,7 @@ void Swarm::makeSwarm(OptimizationExercisesConfig *config) {
     (*random).seed(rand());
     for (int i = 0; i < amountOfParticles; i++) {
         Particle particle(vectorDim, this, config, random);
-        swarm.push_back(particle);
+        swarm[i] = particle;
     }
     for (int j = 0; j < GbestVectorSize; j++) {
         GbestVector.push_back(swarm[j]);
