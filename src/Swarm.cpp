@@ -16,7 +16,7 @@ using namespace std;
 
 #ifdef OPEN_MP_SWARM
 Swarm::Swarm(int mAmountOfParticles, int mVectorDim, OptimizationExercisesConfig* config) :
-amountOfParticles{mAmountOfParticles}, vectorDim{mVectorDim}, swarm{(long unsigned int) mAmountOfParticles}
+amountOfParticles{mAmountOfParticles}, vectorDim{mVectorDim}, swarm(mAmountOfParticles)
 {
     printf("Welcome to OpenMP version!\n");
     makeSwarm(config);
@@ -24,7 +24,7 @@ amountOfParticles{mAmountOfParticles}, vectorDim{mVectorDim}, swarm{(long unsign
 #else
 
 Swarm::Swarm(int mAmountOfParticles, int mVectorDim, OptimizationExercisesConfig *config) :
-amountOfParticles{mAmountOfParticles}, vectorDim{mVectorDim}, swarm{(long unsigned int) mAmountOfParticles}
+amountOfParticles{mAmountOfParticles}, vectorDim{mVectorDim}, swarm(mAmountOfParticles)
 {
     printf("Welcome to serial version!\n");
     makeSwarm(config);
