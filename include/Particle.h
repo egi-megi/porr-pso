@@ -36,7 +36,7 @@ public:
 #endif
     void computeCostFunctionValue();
     void computeParticlePbest();
-    double getCostFunctionValue();
+    double getCostFunctionValue() const;
     double getCostFunctionValuePbest();
     vector <double > getPositionVector();
 

@@ -71,7 +71,7 @@ void Particle::computeSpeed(float w, float speedConstant1, float speedConstant2,
                 PositionVectorOperator::minus(positionVectorsParticlePbest, positionVectors)),
             PositionVectorOperator::mult(
                 speedConstant2 * rand_2,
-                PositionVectorOperator::minus(swarm->GbestVector[0].positionVectorsParticlePbest, positionVectors))));
+                PositionVectorOperator::minus(swarm->globalBestParticle.first.positionVectors, positionVectors))));
     
     double k = 1;
     std::vector<double> v_positionProposition = PositionVectorOperator::add(positionVectors, v_velocityProposition);
@@ -181,7 +181,7 @@ void Particle::computeParticlePbest()
     }
 }
 
-double Particle::getCostFunctionValue()
+double Particle::getCostFunctionValue() const
 {
     return costFunctionValue;
 }

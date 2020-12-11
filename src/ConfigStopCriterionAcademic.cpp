@@ -8,9 +8,9 @@
 #include <math.h>
 
 
-bool ConfigStopCriterionAcademic::computeStopCriterion(float criterionStopValue, vector <Particle> * GbestVector){
+bool ConfigStopCriterionAcademic::computeStopCriterion(float criterionStopValue, const std::pair<Particle, Particle>& globalBestParticle){
     double modelValueOfCostFunction = 0;
-    if ((*GbestVector)[0].getCostFunctionValuePbest() - modelValueOfCostFunction > criterionStopValue) {
+    if (globalBestParticle.first.getCostFunctionValue() - modelValueOfCostFunction > criterionStopValue) {
       return true;
     } else {
         return false;

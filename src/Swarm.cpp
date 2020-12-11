@@ -35,10 +35,6 @@ amountOfParticles{mAmountOfParticles}, vectorDim{mVectorDim}, swarm(mAmountOfPar
 Swarm::~Swarm() {
 }
 
-bool gbestSort(Particle p1, Particle p2) {
-    return (p1.getCostFunctionValuePbest() < p2.getCostFunctionValuePbest());
-}
-
 #ifdef OPEN_MP_SWARM
 void Swarm::makeSwarm(OptimizationExercisesConfig* config)
 {
@@ -54,10 +50,11 @@ void Swarm::makeSwarm(OptimizationExercisesConfig* config)
         }
     }
 
-    for (int j = 0; j < GbestVectorSize; j++) {
-		GbestVector.push_back(swarm[j]);
-	}
-	std::sort(GbestVector.begin(), GbestVector.end(), gbestSort);
+    globalBestParticle.first = swarm[0];
+    for(int i = 1; i < amountOfParticles; i++) {
+        if(swarm[i].getCostFunctionValue() < globalBestParticle.first.getCostFunctionValue())
+            globalBestParticle.first = swarm[i];
+    }
 }
 
 #else
@@ -69,26 +66,21 @@ void Swarm::makeSwarm(OptimizationExercisesConfig *config) {
         Particle particle(vectorDim, this, config, random);
         swarm[i] = particle;
     }
-    for (int j = 0; j < GbestVectorSize; j++) {
-        GbestVector.push_back(swarm[j]);
+
+    globalBestParticle.first = swarm[0];
+    for(int i = 1; i < amountOfParticles; i++) {
+        if(swarm[i].getCostFunctionValue() < globalBestParticle.first.getCostFunctionValue())
+            globalBestParticle.first = swarm[i];
     }
-    std::sort(GbestVector.begin(), GbestVector.end(), gbestSort);
 }
 
 #endif
 
 
 void Swarm::computeGbest(Particle *particle) {
-    unsigned int j = 0;
-    while (j < GbestVector.size() &&
-           GbestVector[j].getCostFunctionValuePbest() < particle->getCostFunctionValuePbest()) {
-        j++;
-    }
-    if (j < GbestVector.size()) {
-        for (unsigned int i = GbestVector.size() - 1; i > j; i--) {
-            GbestVector[i] = GbestVector[i - 1];
-        }
-        GbestVector[j] = *particle;
+    if(particle->getCostFunctionValue() < globalBestParticle.first.getCostFunctionValue()) {
+        globalBestParticle.second = globalBestParticle.first;
+        globalBestParticle.first = *particle;
     }
 }
 
@@ -96,6 +88,7 @@ void Swarm::computeGbest(Particle *particle) {
 Particle Swarm::findTheBestParticle(float criterionStopValue, float w, float speedConstant1, float speedConstant2, StopCriterionConfig* configStop)
 {
     bool foundSolution = false;
+    int iteration_number = 0;
     #pragma omp parallel
     {
         std::default_random_engine rand_engine;
@@ -116,18 +109,23 @@ Particle Swarm::findTheBestParticle(float criterionStopValue, float w, float spe
                 Swarm::computeGbest(&singleParticle);
             }
 
-            if(omp_get_thread_num() == 0)
-                printf("Swarm::findTheBestParticle: New Gbest = %lf\n", GbestVector[0].costFunctionValuePbest);
-
+            
+            #pragma omp master
+            {
+                printf("Swarm::findTheBestParticle: iteration = %d, globalBestParticle.first = %lf\n",
+                    iteration_number, globalBestParticle.first.getCostFunctionValue());
+                iteration_number++;
+            }
+                
             #pragma omp critical
             {
-                if(!configStop->computeStopCriterion(criterionStopValue, &GbestVector))
+                if(!configStop->computeStopCriterion(criterionStopValue, globalBestParticle))
                     foundSolution = true;
-            } 
+            }
         }
     }
 
-    return GbestVector[0];
+    return globalBestParticle.first;
 }
 
 #else
@@ -145,9 +143,9 @@ Particle Swarm::findTheBestParticle(float criterionStopValue, float w, float spe
         {
             computeGbest(&singleParticle);
         }
-        std::cout << GbestVector[0].costFunctionValuePbest << std::endl;
     }
-    return GbestVector[0];
+
+    return globalBestParticle.first;
 }
 
 #endif
