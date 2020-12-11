@@ -19,24 +19,19 @@ using namespace std;
 class Swarm
 {
 public:
+    Swarm () = default;
     Swarm(int mAmountOfParticles, int mVectorDim, OptimizationExercisesConfig* config);
     virtual ~Swarm();
 
     void makeSwarm(OptimizationExercisesConfig* config);
     void computeGbest(Particle *particle);
     Particle findTheBestParticle(float criterionStopValue, float w, float speedConstant1, float speedConstant2, StopCriterionConfig *configStop);
-    vector <Particle> GbestVector;
-
-protected:
-
+    std::pair<Particle, Particle> globalBestParticle;
 
 private:
-
     int amountOfParticles;
     int vectorDim;
     vector <Particle> swarm;
-    int GbestVectorSize = 10;
-
 };
 
 
