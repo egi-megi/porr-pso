@@ -17,7 +17,7 @@ int main() {
     std::cout << "Początek obliczeń" << std::endl;
     for (int i=0 ;i<1; i++) {
     Swarm s1a(200000, 50, new ConfigEx1());
-    Particle theBestParticle1a = s1a.findTheBestParticle(0.1, 0.00001, 0.00001, 0.00001, new ConfigStopCriterionAcademic());
+    Particle theBestParticle1a = s1a.findTheBestParticle(0.1, 0.8, .1, .2, new ConfigStopCriterionAcademic());
 
     //Swarm s1n(100, 10, new ConfigEx1());
     //Particle theBestParticle1n = s1n.findTheBestParticle(0.1, 1.0, 0.1, 0.1, new ConfigStopCriterionNormal());

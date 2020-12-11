@@ -18,3 +18,13 @@ bool OptimizationExercisesConfig::isXInRange(double position) {
         return false;
     }
 }
+
+bool OptimizationExercisesConfig::isPositionInRange(std::vector<double> positionVector) {
+    for(unsigned int i = 0; i < positionVector.size(); i++) {
+        if(positionVector[i] < lowerLimitPositionVector || positionVector[i] > upperLimitPositionVector) {
+            printf("Position i = %d: %lf\n", i, positionVector[i]);
+            return false;
+        }
+    }
+    return true;
+}

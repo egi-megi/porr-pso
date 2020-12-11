@@ -35,7 +35,8 @@ add_executable(rojCzastek_Szczepanski_Jurkiewicz_Pikulinski main.cpp
     include/ConfigEx2.h src/OptimizationExercisesConfig.cpp
     src/StopCriterionConfig.cpp include/StopCriterionConfig.h
     src/ConfigStopCriterionAcademic.cpp include/ConfigStopCriterionAcademic.h
-    src/ConfigStopCriterionNormal.cpp include/ConfigStopCriterionNormal.h)
+    src/ConfigStopCriterionNormal.cpp include/ConfigStopCriterionNormal.h
+    src/PositionVectorOperator.cpp include/PositionVectorOperator.h)
 
 if(APPLE)
     target_link_libraries(rojCzastek_Szczepanski_Jurkiewicz_Pikulinski PRIVATE OpenMP::OpenMP_CXX -L/usr/local/opt/libomp/lib/)

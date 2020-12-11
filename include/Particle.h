@@ -4,12 +4,15 @@
 
 #ifndef ROJCZASTEK_SZCZEPANSKI_JURKIEWICZ_PIKULINSKI_PARTICLE_H
 #define ROJCZASTEK_SZCZEPANSKI_JURKIEWICZ_PIKULINSKI_PARTICLE_H
+
+#include "OptimizationExercisesConfig.h"
+#include "PositionVectorOperator.h"
+
 #include <iostream>
 #include <vector>
 #include <functional>
-#include "OptimizationExercisesConfig.h"
 #include <random>
-//#include <omp.h>
+
 using namespace std;
 
 class Swarm;
@@ -55,6 +58,8 @@ private:
     //double speedVectors[];
     //vector <double > speedVectorsParticlePbest;
     std::default_random_engine* generator;
+
+    friend class PositionVectorOperator;
 };
 
 

@@ -117,12 +117,12 @@ Particle Swarm::findTheBestParticle(float criterionStopValue, float w, float spe
 			swarm[i].computeCostFunctionValue();
 			swarm[i].computeParticlePbest();
 		}
-		std::cout << " looking for pbest" << std::endl;
+
 		for (auto& singleParticle : swarm) // access by reference to avoid copying
 		{
 			Swarm::computeGbest(&singleParticle);
 		}
-		std::cout << GbestVector[0].costFunctionValuePbest << std::endl;
+        printf("Swarm::findTheBestParticle: New Gbest = %lf\n", GbestVector[0].costFunctionValuePbest);
 	}
 	return GbestVector[0];
 }
