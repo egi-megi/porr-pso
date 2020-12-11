@@ -7,6 +7,7 @@
 
 
 #include "Particle.h"
+#include "Logger.h"
 #include "ConfigStopCriterionAcademic.h"
 #include "ConfigStopCriterionNormal.h"
 #include "StopCriterionConfig.h"

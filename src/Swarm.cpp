@@ -3,6 +3,7 @@
 //
 #include "../include/Swarm.h"
 #include "../include/Particle.h"
+#include "../include/Logger.h"
 #include <iostream>
 #include <math.h>
 #include <algorithm>
