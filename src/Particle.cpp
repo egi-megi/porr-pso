@@ -9,6 +9,7 @@
 #include <iostream>
 #include <math.h>
 #include <random>
+//#include <omp.h>
 
 using namespace std;
 
@@ -33,8 +34,7 @@ Particle::Particle(const int mVectorsDim, Swarm *s, OptimizationExercisesConfig 
     ready = true;
 }
 
-Particle::~Particle()
-{
+Particle::~Particle() {
 }
 
 void Particle::setStartPosition()
@@ -95,6 +95,20 @@ void Particle::computeSpeed(float w, float speedConstant1, float speedConstant2,
 
     tempSpeedVectors = PositionVectorOperator::mult(k, v_velocityProposition);
 }
+#else
+
+void Particle::computeSpeed(float w, float speedConstant1, float speedConstant2, int i) {
+    std::uniform_real_distribution<double> unif(0.0, 1.0);
+    double m = sqrt(vectorDim);
+    double rand_1 = unif(*generator) / m;
+    double rand_2 = unif(*generator) / m;
+    double tempSpeedValue =
+            w * speedVectors[i] + speedConstant1 * rand_1 * (positionVectorsParticlePbest[i] - positionVectors[i]) +
+            speedConstant2 + rand_2 * (swarm->GbestVector[0].positionVectorsParticlePbest[i] - positionVectors[i]);
+    //  cout<<"ts: "<<tempSpeedValue<<"\n";
+    tempSpeedVectors[i] = tempSpeedValue;
+}
+#endif
 
 void Particle::computePosition(float w, float speedConstant1, float speedConstant2, std::default_random_engine *gen)
 {
@@ -109,9 +123,9 @@ void Particle::computePosition(float w, float speedConstant1, float speedConstan
     speedVectors = tempSpeedVectors;
     positionVectors = newPositionVector;
 }
+#endif
 
-void Particle::computeCostFunctionValue()
-{
+void Particle::computeCostFunctionValue() {
     costFunctionValue = config->computeCostFunctionValue(positionVectors);
 }
 
