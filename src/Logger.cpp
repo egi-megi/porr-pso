@@ -9,7 +9,7 @@ Logger::Logger(const std::string& outputFilename) :  outFile(outputFilename, std
       stream << "This is file for data log. \n";
       stream << "$DATE$\n";
       date = currentDateTime();
-      stream << "File created: " << currentDateTime() << '\n';    
+      stream << currentDateTime() << '\n';    
    }
    else
       std::cout << "Unable to open file for datalog.\n";
@@ -34,8 +34,7 @@ Logger::ParamStruct::ParamStruct(const int &amount, const int &dim, const float 
    obj->stream <<"Weight"<<d<<w<<n;
    obj->stream <<"SpeedConstant1"<<d<<s1<<n;
    obj->stream <<"SpeedConstant2"<<d<<s2<<n;
-   obj->stream <<"OmpSizeOfChunk"<<d<<chunk<<n;  
-   obj->logAndClose();
+   obj->stream <<"OmpSizeOfChunk"<<d<<chunk<<n;     
 }
 
 std::string Logger::currentDateTime()

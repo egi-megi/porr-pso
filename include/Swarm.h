@@ -20,7 +20,7 @@ class Swarm
 {
 public:
     Swarm () = default;
-    Swarm(int mAmountOfParticles, int mVectorDim, OptimizationExercisesConfig* config);
+    Swarm(int mAmountOfParticles, int mVectorDim, Logger* log, OptimizationExercisesConfig* config);
     virtual ~Swarm();
 
     void makeSwarm(OptimizationExercisesConfig* config);
