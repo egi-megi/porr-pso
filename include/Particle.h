@@ -27,13 +27,8 @@ public:
 
     void setStartPosition();
     void setStartSpeed();
-#ifdef OPEN_MP_SWARM
     void computePosition(float w, float speedConstant1, float speedConstant2, std::default_random_engine* gen);
-    void computeSpeed(float w, float speedConstant1, float speedConstant2, int i, std::default_random_engine* gen);
-#else
-    void computePosition(float w, float speedConstant1, float speedConstant2);
-    void computeSpeed(float w, float speedConstant1, float speedConstant2, int i);
-#endif
+    void computeSpeed(float w, float speedConstant1, float speedConstant2, std::default_random_engine* gen);
     void computeCostFunctionValue();
     void computeParticlePbest();
     double getCostFunctionValue() const;
