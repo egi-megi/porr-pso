@@ -44,4 +44,7 @@ if(APPLE)
     target_link_libraries(rojCzastek_Szczepanski_Jurkiewicz_Pikulinski PRIVATE OpenMP::OpenMP_CXX -L/usr/local/opt/libomp/lib/)
 else()
     target_link_libraries(rojCzastek_Szczepanski_Jurkiewicz_Pikulinski PRIVATE OpenMP::OpenMP_CXX)
+    #DWARF CONFIG
+    #set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fopenmp -lgomp -l:libgomp.a")
+    #target_link_libraries(rojCzastek_Szczepanski_Jurkiewicz_Pikulinski PRIVATE -l:libgomp.a)
 endif()

@@ -49,7 +49,6 @@ void Swarm::makeSwarm(OptimizationExercisesConfig* config)
     {
         std::default_random_engine rand_engine;
         rand_engine.seed((omp_get_thread_num() + 1) * time(NULL));
-        printf("Thread %d: seed = %ld\n", omp_get_thread_num(), (omp_get_thread_num() + 1) * time(NULL));
         #pragma omp for
         for(int i = 0; i < amountOfParticles; i++) {
             Particle particle(vectorDim, this, config, &rand_engine);
@@ -67,10 +66,10 @@ void Swarm::makeSwarm(OptimizationExercisesConfig* config)
 #else
 
 void Swarm::makeSwarm(OptimizationExercisesConfig *config) {
-    std::default_random_engine *random = new std::default_random_engine();
-    (*random).seed(rand());
+    std::default_random_engine rand_engine;
+    rand_engine.seed(time(NULL));
     for (int i = 0; i < amountOfParticles; i++) {
-        Particle particle(vectorDim, this, config, random);
+        Particle particle(vectorDim, this, config, &rand_engine);
         swarm[i] = particle;
     }
 
@@ -100,23 +99,28 @@ Particle Swarm::findTheBestParticle(float criterionStopValue, float w, float spe
     {
         std::default_random_engine rand_engine;
         rand_engine.seed((omp_get_thread_num() + 1) * time(NULL));
-        printf("Thread %d: seed = %ld\n", omp_get_thread_num(), (omp_get_thread_num() + 1) * time(NULL));
+
+        Particle* bestParticleInIteration = nullptr;
 
         while (!foundSolution) {
-            #pragma omp for schedule(dynamic, 1000) nowait
+            #pragma omp for schedule(static) nowait
             for(int i = 0; i < amountOfParticles; i++) {
                 swarm[i].computePosition(w, speedConstant1, speedConstant2, &rand_engine);
                 swarm[i].computeCostFunctionValue();
                 swarm[i].computeParticlePbest();
+
+                if(bestParticleInIteration == nullptr)
+                    bestParticleInIteration = &swarm[i];
+                else if(swarm[i].getCostFunctionValue() < bestParticleInIteration->getCostFunctionValue())
+                    bestParticleInIteration = &swarm[i];
             }
 
-            #pragma omp for
-            for (auto &singleParticle : swarm) {
-                #pragma omp critical
-                Swarm::computeGbest(&singleParticle);
-            }
+            #pragma omp critical
+            Swarm::computeGbest(bestParticleInIteration);
+            bestParticleInIteration = nullptr;
 
-            
+            #pragma omp barrier
+
             #pragma omp master
             {
                 double cost = globalBestParticle.first.getCostFunctionValue();
@@ -140,18 +144,27 @@ Particle Swarm::findTheBestParticle(float criterionStopValue, float w, float spe
 #else
 
 Particle Swarm::findTheBestParticle(float criterionStopValue, float w, float speedConstant1, float speedConstant2,
+<<<<<<< HEAD
                                     Logger* log, StopCriterionConfig *configStop) {
     while (configStop->computeStopCriterion(criterionStopValue, &GbestVector)) {
+=======
+                                    StopCriterionConfig *configStop){
+    std::default_random_engine rand_engine;
+    rand_engine.seed(time(NULL));
+
+    int iteration_number = 0;
+    while (configStop->computeStopCriterion(criterionStopValue, globalBestParticle)) {
+>>>>>>> SwarmOpenMP
         for (auto &singleParticle : swarm) // access by reference to avoid copying
         {
-            singleParticle.computePosition(w, speedConstant1, speedConstant2);
+            singleParticle.computePosition(w, speedConstant1, speedConstant2, &rand_engine);
             singleParticle.computeCostFunctionValue();
             singleParticle.computeParticlePbest();
-        }
-        for (auto &singleParticle : swarm) // access by reference to avoid copying
-        {
             computeGbest(&singleParticle);
         }
+        printf("Swarm::findTheBestParticle: iteration = %d, globalBestParticle.first = %lf\n",
+             iteration_number, globalBestParticle.first.getCostFunctionValue());
+        iteration_number++;
     }
 
     return globalBestParticle.first;
