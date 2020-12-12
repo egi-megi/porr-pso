@@ -16,17 +16,23 @@
 using namespace std;
 
 #ifdef OPEN_MP_SWARM
-Swarm::Swarm(int mAmountOfParticles, int mVectorDim, OptimizationExercisesConfig* config) :
+Swarm::Swarm(int mAmountOfParticles, int mVectorDim, Logger* log, OptimizationExercisesConfig* config) :
 amountOfParticles{mAmountOfParticles}, vectorDim{mVectorDim}, swarm(mAmountOfParticles)
 {
-    printf("Welcome to OpenMP version!\n");
+    log->stream << "$TYPE$" << '\n';   
+    log->stream << "OpenMP" << '\n';
+    log->stream << "$DATA$" << '\n';    
+    printf("Welcome to OpenMP version!\n");    
     makeSwarm(config);
 }
 #else
 
-Swarm::Swarm(int mAmountOfParticles, int mVectorDim, OptimizationExercisesConfig *config) :
+Swarm::Swarm(int mAmountOfParticles, int mVectorDim, Logger* log, OptimizationExercisesConfig *config) :
 amountOfParticles{mAmountOfParticles}, vectorDim{mVectorDim}, swarm(mAmountOfParticles)
-{
+{   
+    log->stream << "$TYPE$" << '\n';   
+    log->stream << "Serial" << '\n';
+    log->stream << "$DATA$" << '\n';    
     printf("Welcome to serial version!\n");
     makeSwarm(config);
 }
@@ -113,12 +119,14 @@ Particle Swarm::findTheBestParticle(float criterionStopValue, float w, float spe
             
             #pragma omp master
             {
+                double cost = globalBestParticle.first.getCostFunctionValue();
                 printf("Swarm::findTheBestParticle: iteration = %d, globalBestParticle.first = %lf\n",
-                    iteration_number, globalBestParticle.first.getCostFunctionValue());
+                       iteration_number, cost);
+                log->stream << iteration_number << ',' << cost << '\n';
                 iteration_number++;
             }
-                
-            #pragma omp critical
+
+#pragma omp critical
             {
                 if(!configStop->computeStopCriterion(criterionStopValue, globalBestParticle))
                     foundSolution = true;
@@ -132,7 +140,7 @@ Particle Swarm::findTheBestParticle(float criterionStopValue, float w, float spe
 #else
 
 Particle Swarm::findTheBestParticle(float criterionStopValue, float w, float speedConstant1, float speedConstant2,
-                                    StopCriterionConfig *configStop) {
+                                    Logger* log, StopCriterionConfig *configStop) {
     while (configStop->computeStopCriterion(criterionStopValue, &GbestVector)) {
         for (auto &singleParticle : swarm) // access by reference to avoid copying
         {
