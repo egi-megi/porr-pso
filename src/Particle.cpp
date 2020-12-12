@@ -74,9 +74,16 @@ void Particle::computeSpeed(float w, float speedConstant1, float speedConstant2,
                 PositionVectorOperator::minus(swarm->globalBestParticle.first.positionVectors,
                     positionVectors))));
 
-    double k = 1;
     std::vector<double> v_positionProposition = PositionVectorOperator::add(positionVectors,
         v_velocityProposition);
+    tempSpeedVectors = PositionVectorOperator::mult(getCoefficientForBoundedPosition(v_positionProposition,
+        v_velocityProposition), v_velocityProposition);
+}
+
+double Particle::getCoefficientForBoundedPosition(vector<double> &v_positionProposition,
+    vector<double> &v_positionDelta)
+{
+    double k = 1;
     for (int i = 0; i < vectorDim; i++)
     {
         char violation = 0;
@@ -88,15 +95,14 @@ void Particle::computeSpeed(float w, float speedConstant1, float speedConstant2,
         if (violation)
         {
             /* Compute coefficient k so as to make x_{i+1,j} = x{i,j} + k*v{i, j} fit in
-        the box constraints. */
+            the box constraints. */
             double c1 = violation > 0 ? config->upperLimitPositionVector : config->lowerLimitPositionVector;
-            double k_temp = (-positionVectors[i] + c1) / v_velocityProposition[i];
+            double k_temp = (-positionVectors[i] + c1) / v_positionDelta[i];
             if (k_temp < k)
                 k = k_temp;
         }
     }
-
-    tempSpeedVectors = PositionVectorOperator::mult(k, v_velocityProposition);
+    return k;
 }
 
 void Particle::computePosition(float w, float speedConstant1, float speedConstant2,

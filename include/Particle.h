@@ -22,15 +22,15 @@ class Particle
 public:
     Particle();
     Particle(int vectorDim, Swarm *s, OptimizationExercisesConfig *config,
-        std::default_random_engine *generator);
+             std::default_random_engine *generator);
     virtual ~Particle() = default;
 
     void setStartPosition();
     void setStartSpeed();
     void computePosition(float w, float speedConstant1, float speedConstant2,
-        std::default_random_engine *gen);
+                         std::default_random_engine *gen);
     void computeSpeed(float w, float speedConstant1, float speedConstant2,
-        std::default_random_engine *gen);
+                      std::default_random_engine *gen);
     void computeCostFunctionValue();
     void computeParticlePbest();
     double getCostFunctionValue() const;
@@ -45,6 +45,9 @@ public:
 
 protected:
 private:
+    double getCoefficientForBoundedPosition(vector<double> &v_positionProposition,
+        vector<double> &v_positionDelta);
+
     int vectorDim;
     vector<double> positionVectors;
     vector<double> speedVectors;
