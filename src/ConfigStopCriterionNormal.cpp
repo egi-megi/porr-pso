@@ -8,8 +8,10 @@
 #include <math.h>
 
 
-bool ConfigStopCriterionNormal::computeStopCriterion(float criterionStopValue, vector <Particle> * GbestVector){
-    if ((*GbestVector)[0].getCostFunctionValuePbest() - (*GbestVector)[(*GbestVector).size() - 1].getCostFunctionValuePbest() > criterionStopValue) {
+bool ConfigStopCriterionNormal::computeStopCriterion(float criterionStopValue, const std::pair<Particle, Particle>& globalBestParticle){
+    if(!globalBestParticle.second.isReady())
+        return true;
+    else if (globalBestParticle.second.getCostFunctionValue() - globalBestParticle.first.getCostFunctionValue() > criterionStopValue) {
         return true;
     } else {
         return false;

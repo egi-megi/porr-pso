@@ -10,7 +10,7 @@
 
 class StopCriterionConfig {
 public:
-    virtual bool computeStopCriterion(float criterionStopValue, vector <Particle> * GbestVector)=0;
+    virtual bool computeStopCriterion(float criterionStopValue, const std::pair<Particle, Particle>& globalBestParticle)=0;
 };
 
 

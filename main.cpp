@@ -14,10 +14,9 @@
 int main() {
 
     srand (time(NULL));
-    std::cout << "Początek obliczeń" << std::endl;
     for (int i=0 ;i<1; i++) {
     Swarm s1a(200000, 50, new ConfigEx1());
-    Particle theBestParticle1a = s1a.findTheBestParticle(0.1, 0.00001, 0.00001, 0.00001, new ConfigStopCriterionAcademic());
+    Particle theBestParticle1a = s1a.findTheBestParticle(0.1, 0.8, .1, .2, new ConfigStopCriterionAcademic());
 
     //Swarm s1n(100, 10, new ConfigEx1());
     //Particle theBestParticle1n = s1n.findTheBestParticle(0.1, 1.0, 0.1, 0.1, new ConfigStopCriterionNormal());
@@ -28,7 +27,6 @@ int main() {
     //Swarm s2n(100, 4, new ConfigEx2());
     //Particle theBestParticle2n = s2n.findTheBestParticle(0.5, 0.1, 0.1, 0.1, new ConfigStopCriterionNormal());
 
-    std::cout << "Po obliczeniu f. kosztu" << std::endl;
     std::cout << "Cost function for Gbest particle for exercise 1 for academic criterion of stop: " << theBestParticle1a.costFunctionValuePbest << std::endl;
     //std::cout << "Cost function for Gbest particle for exercise 1 for normal criterion of stop: " << theBestParticle1n.costFunctionValuePbest << std::endl;
     //std::cout << "Cost function for Gbest particle for exercise 2 for academic criterion of stop: "<< theBestParticle2a.costFunctionValuePbest << std::endl;

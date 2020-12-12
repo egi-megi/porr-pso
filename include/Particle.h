@@ -4,12 +4,15 @@
 
 #ifndef ROJCZASTEK_SZCZEPANSKI_JURKIEWICZ_PIKULINSKI_PARTICLE_H
 #define ROJCZASTEK_SZCZEPANSKI_JURKIEWICZ_PIKULINSKI_PARTICLE_H
+
+#include "OptimizationExercisesConfig.h"
+#include "PositionVectorOperator.h"
+
 #include <iostream>
 #include <vector>
 #include <functional>
-#include "OptimizationExercisesConfig.h"
 #include <random>
-//#include <omp.h>
+
 using namespace std;
 
 class Swarm;
@@ -24,21 +27,19 @@ public:
 
     void setStartPosition();
     void setStartSpeed();
-#ifdef OPEN_MP_SWARM
     void computePosition(float w, float speedConstant1, float speedConstant2, std::default_random_engine* gen);
-    void computeSpeed(float w, float speedConstant1, float speedConstant2, int i, std::default_random_engine* gen);
-#else
-    void computePosition(float w, float speedConstant1, float speedConstant2);
-    void computeSpeed(float w, float speedConstant1, float speedConstant2, int i);
-#endif
+    void computeSpeed(float w, float speedConstant1, float speedConstant2, std::default_random_engine* gen);
     void computeCostFunctionValue();
     void computeParticlePbest();
-    double getCostFunctionValue();
+    double getCostFunctionValue() const;
+
     double getCostFunctionValuePbest();
     vector <double > getPositionVector();
 
     double costFunctionValuePbest;
     vector <double > positionVectorsParticlePbest;
+
+    bool isReady() const;
 
 protected:
 
@@ -55,6 +56,9 @@ private:
     //double speedVectors[];
     //vector <double > speedVectorsParticlePbest;
     std::default_random_engine* generator;
+    bool ready;
+
+    friend class PositionVectorOperator;
 };
 
 

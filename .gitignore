@@ -1,6 +1,7 @@
 # Project exclude paths
 /cmake-build-debug/
 
+# Visual Studio project files
 *.vs
 *.cd
 *.sln
@@ -8,3 +9,7 @@
 CMakeSettings.json
 Debug
 out
+
+# Visual Code project files
+.vscode
+build
