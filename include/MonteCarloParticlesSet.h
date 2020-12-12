@@ -16,7 +16,7 @@ using namespace std;
 
 class MonteCarloParticlesSet {
 public:
-    MonteCarloParticlesSet(const int mVectorsDim, int mAmountOfParticles, int mNumberOfDraws, OptimizationExercisesConfig* config, float sigma, float tVariable);
+    MonteCarloParticlesSet(const int mVectorsDim, int mAmountOfParticles, int mNumberOfSteps, OptimizationExercisesConfig* config, float sigma, float tVariable);
     virtual ~MonteCarloParticlesSet();
 
     MonteCarloParticle computeTheBestParticleMC(float sigma, float tVariable, OptimizationExercisesConfig* config, const int mVectorsDim);

@@ -11,10 +11,10 @@
 
 std::default_random_engine MonteCarloParticlesSet::generatorMC;
 
-MonteCarloParticlesSet::MonteCarloParticlesSet(const int mVectorsDim, int mAmountOfParticles, int mNumberOfDraws, OptimizationExercisesConfig* config, float sigma, float tVariable)
+MonteCarloParticlesSet::MonteCarloParticlesSet(const int mVectorsDim, int mAmountOfParticles, int mNumberOfSteps, OptimizationExercisesConfig* config, float sigma, float tVariable)
 {
     amountOfParticles = mAmountOfParticles;
-    numberOfSteps = mNumberOfDraws;
+    numberOfSteps = mNumberOfSteps;
 
     computeTheBestParticleMC(sigma, tVariable, config, mVectorsDim);
 }
@@ -33,7 +33,7 @@ MonteCarloParticle MonteCarloParticlesSet::computeTheBestParticleMC(float sigma,
     int i;
 	int n = amountOfParticles;
 	int s = monteCarloParticlesVector.size();
-    std::vector<std::default_random_engine*> rand_engines(omp_get_num_procs());
+    std::vector<std::default_random_engine*> rand_engines(omp_get_num_threads());
 	for (int j = 0; j < omp_get_num_procs(); j++) {
 		rand_engines[j] = new std::default_random_engine();
 		rand_engines[j]->seed(rand());

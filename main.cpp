@@ -18,9 +18,9 @@ int main() {
     srand (time(NULL));
     std::cout << "Początek obliczeń" << std::endl;
     for (int i=0 ;i<1; i++) {
-        MonteCarloParticlesSet setMC1(20, 10000, 100, new ConfigEx1(), 0.01, 0.01);
+        //MonteCarloParticlesSet setMC1(20, 10000, 100, new ConfigEx1(), 0.01, 0.01);
 
-        //MonteCarloParticlesSet setMC2(20, 10000, 100, new ConfigEx2(), 0.1, 0.9);
+        MonteCarloParticlesSet setMC2(2, 100000, 100, new ConfigEx2(), 0.1, 0.9);
 
         //Swarm s1a(200000, 50, new ConfigEx1());
         //Particle theBestParticle1a = s1a.findTheBestParticle(0.1, 0.00001, 0.00001, 0.00001, new ConfigStopCriterionAcademic());
@@ -42,11 +42,11 @@ int main() {
         //std::cout << "Cost function for Gbest particle for exercise 2 for academic criterion of stop: "<< theBestParticle2a.costFunctionValuePbest << std::endl;
         //std::cout << "Cost function for Gbest particle for exercise 2 for normal criterion of stop: " << theBestParticle2n.costFunctionValuePbest << std::endl;
 
-        std::cout << "The best particle for Monte Carlo for exercise 1: "
-                  << setMC1.monteCarloParticlesVector[0].getCostFunctionValueMinMC() << std::endl;
+        //std::cout << "The best particle for Monte Carlo for exercise 1: "
+          //        << setMC1.monteCarloParticlesVector[0].getCostFunctionValueMinMC() << std::endl;
 
-        //std::cout << "The best particle for Monte Carlo for exercise 2: "
-        //          << setMC2.monteCarloParticlesVector[0].getCostFunctionValueMinMC() << std::endl;
+        std::cout << "The best particle for Monte Carlo for exercise 2: "
+                  << setMC2.monteCarloParticlesVector[0].getCostFunctionValueMinMC() << std::endl;
     }
     return 0;
 }

@@ -30,7 +30,7 @@ MonteCarloParticle::~MonteCarloParticle() {
 
 
 void MonteCarloParticle::setStartPositionMC() {
-    std::uniform_real_distribution<double> unif(config->lowerLimitPositionVector/vectorDim, config->upperLimitPositionVector/vectorDim);
+    std::uniform_real_distribution<double> unif(config->lowerLimitPositionVector, config->upperLimitPositionVector);
     for (int i = 0; i < vectorDim; i++) {
         positionVectorsMC[i] = unif(*generatorMC);
     }
