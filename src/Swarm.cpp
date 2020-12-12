@@ -86,7 +86,7 @@ void Swarm::computeGbest(Particle *particle) {
 }
 
 #ifdef OPEN_MP_SWARM
-Particle Swarm::findTheBestParticle(float criterionStopValue, float w, float speedConstant1, float speedConstant2, StopCriterionConfig* configStop)
+Particle Swarm::findTheBestParticle(float criterionStopValue, float w, float speedConstant1, float speedConstant2, Logger* log, StopCriterionConfig* configStop)
 {
     bool foundSolution = false;
     int iteration_number = 0;

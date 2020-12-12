@@ -12,11 +12,14 @@
 
 
 int main() {
+    
+    Logger* log = new Logger("log.txt");
+    Logger::ParamStruct params (200000, 50, 0.1f, 0.8f, 0.1f, 0.2f, 1000, log);
 
     srand (time(NULL));
     for (int i=0 ;i<1; i++) {
-    Swarm s1a(200000, 50, new ConfigEx1());
-    Particle theBestParticle1a = s1a.findTheBestParticle(0.1, 0.8, .1, .2, new ConfigStopCriterionAcademic());
+    Swarm s1a(params.amountOfParticles, params.vectorDim, new ConfigEx1());
+    Particle theBestParticle1a = s1a.findTheBestParticle(params.stopCriterion, params.weight, params.speedConst1, params.speedConst2, log, new ConfigStopCriterionAcademic());
 
     //Swarm s1n(100, 10, new ConfigEx1());
     //Particle theBestParticle1n = s1n.findTheBestParticle(0.1, 1.0, 0.1, 0.1, new ConfigStopCriterionNormal());

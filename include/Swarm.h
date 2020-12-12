@@ -25,7 +25,7 @@ public:
 
     void makeSwarm(OptimizationExercisesConfig* config);
     void computeGbest(Particle *particle);
-    Particle findTheBestParticle(float criterionStopValue, float w, float speedConstant1, float speedConstant2, StopCriterionConfig *configStop);
+    Particle findTheBestParticle(float criterionStopValue, float w, float speedConstant1, float speedConstant2, Logger* log, StopCriterionConfig *configStop);
     std::pair<Particle, Particle> globalBestParticle;
 
 private:
