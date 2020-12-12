@@ -10,14 +10,14 @@
 #include <functional>
 #include <random>
 
+#include "ParticleBase.h"
 #include "OptimizationExercisesConfig.h"
-#include "PositionVectorOperator.h"
 
 using namespace std;
 
 class Swarm;
 
-class Particle
+class Particle : public ParticleBase
 {
 public:
     Particle();
@@ -25,18 +25,14 @@ public:
              std::default_random_engine *generator);
     virtual ~Particle() = default;
 
-    void setStartPosition();
     void setStartSpeed();
     void computePosition(float w, float speedConstant1, float speedConstant2,
                          std::default_random_engine *gen);
     void computeSpeed(float w, float speedConstant1, float speedConstant2,
                       std::default_random_engine *gen);
-    void computeCostFunctionValue();
     void computeParticlePbest();
-    double getCostFunctionValue() const;
 
     double getCostFunctionValuePbest();
-    vector<double> getPositionVector();
 
     double costFunctionValuePbest;
     vector<double> positionVectorsParticlePbest;
@@ -45,20 +41,10 @@ public:
 
 protected:
 private:
-    double getCoefficientForBoundedPosition(vector<double> &v_positionProposition,
-        vector<double> &v_positionDelta);
-
-    int vectorDim;
-    vector<double> positionVectors;
     vector<double> speedVectors;
     vector<double> tempSpeedVectors;
-    double costFunctionValue;
     Swarm *swarm;
-    OptimizationExercisesConfig *config;
-    std::default_random_engine *generator;
     bool ready;
-
-    friend class PositionVectorOperator;
 };
 
 #endif //ROJCZASTEK_SZCZEPANSKI_JURKIEWICZ_PIKULINSKI_PARTICLE_H

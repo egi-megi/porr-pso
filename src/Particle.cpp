@@ -8,6 +8,7 @@
 
 #include "../include/Particle.h"
 #include "../include/Swarm.h"
+#include "../include/PositionVectorOperator.h"
 
 using namespace std;
 
@@ -26,22 +27,12 @@ Particle::Particle(const int mVectorsDim, Swarm *s, OptimizationExercisesConfig 
     positionVectors.resize(mVectorsDim, 0.0);
     config = mconfig;
     setStartPosition();
+    positionVectorsParticlePbest = positionVectors;
     setStartSpeed();
     computeCostFunctionValue();
     swarm = s;
     costFunctionValuePbest = costFunctionValue;
     ready = true;
-}
-
-void Particle::setStartPosition()
-{
-    std::uniform_real_distribution<double> unif(config->lowerLimitPositionVector,
-        config->upperLimitPositionVector);
-    for (int i = 0; i < vectorDim; i++)
-    {
-        positionVectors[i] = unif(*generator);
-    }
-    positionVectorsParticlePbest = positionVectors;
 }
 
 void Particle::setStartSpeed()
@@ -80,31 +71,6 @@ void Particle::computeSpeed(float w, float speedConstant1, float speedConstant2,
         v_velocityProposition), v_velocityProposition);
 }
 
-double Particle::getCoefficientForBoundedPosition(vector<double> &v_positionProposition,
-    vector<double> &v_positionDelta)
-{
-    double k = 1;
-    for (int i = 0; i < vectorDim; i++)
-    {
-        char violation = 0;
-        if (v_positionProposition[i] > config->upperLimitPositionVector)
-            violation = 1;
-        else if (v_positionProposition[i] < config->lowerLimitPositionVector)
-            violation = -1;
-
-        if (violation)
-        {
-            /* Compute coefficient k so as to make x_{i+1,j} = x{i,j} + k*v{i, j} fit in
-            the box constraints. */
-            double c1 = violation > 0 ? config->upperLimitPositionVector : config->lowerLimitPositionVector;
-            double k_temp = (-positionVectors[i] + c1) / v_positionDelta[i];
-            if (k_temp < k)
-                k = k_temp;
-        }
-    }
-    return k;
-}
-
 void Particle::computePosition(float w, float speedConstant1, float speedConstant2,
     std::default_random_engine *gen)
 {
@@ -120,11 +86,6 @@ void Particle::computePosition(float w, float speedConstant1, float speedConstan
     positionVectors = newPositionVector;
 }
 
-void Particle::computeCostFunctionValue()
-{
-    costFunctionValue = config->computeCostFunctionValue(positionVectors);
-}
-
 void Particle::computeParticlePbest()
 {
     if (costFunctionValue < costFunctionValuePbest)
@@ -134,19 +95,9 @@ void Particle::computeParticlePbest()
     }
 }
 
-double Particle::getCostFunctionValue() const
-{
-    return costFunctionValue;
-}
-
 double Particle::getCostFunctionValuePbest()
 {
     return costFunctionValuePbest;
-}
-
-vector<double> Particle::getPositionVector()
-{
-    return positionVectors;
 }
 
 bool Particle::isReady() const

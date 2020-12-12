@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.15)
+cmake_minimum_required(VERSION 2.8.12)
 project(rojCzastek_Szczepanski_Jurkiewicz_Pikulinski)
 
 set(CMAKE_CXX_STANDARD 14)
@@ -28,6 +28,7 @@ if(OpenMP_CXX_FOUND)
 endif()
 
 add_executable(rojCzastek_Szczepanski_Jurkiewicz_Pikulinski main.cpp
+    include/ParticleBase.h src/ParticleBase.cpp
     src/Particle.cpp include/Particle.h
     include/Swarm.h src/Swarm.cpp
     include/OptimizationExercisesConfig.h src/ConfigEx1.cpp
