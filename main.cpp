@@ -13,8 +13,10 @@
 
 int main() {
     
-    Logger* log = new Logger("../log.txt");
-    Logger::ParamStruct params (200000, 50, 0.1f, 0.8f, 0.1f, 0.2f, 1000, log);
+    //particles log only for n=2
+    int dim = 2;
+    Logger* log = new Logger("../log.txt", "../bestParticlesLog.txt", dim, true);
+    Logger::ParamStruct params (100, dim, 0.0001f, 0.8f, 0.1f, 0.2f, 1000, log);
 
     srand (time(NULL));
     for (int i=0 ;i<1; i++) {
@@ -23,7 +25,7 @@ int main() {
     log->logAndClose();
 
     //Swarm s1n(100, 10, new ConfigEx1());
-    //Particle theBestParticle1n = s1n.findTheBestParticle(0.1, 1.0, 0.1, 0.1, new ConfigStopCriterionNormal());
+    //Particle theBestParticle1n = s1n.findTheBestPartiScle(0.1, 1.0, 0.1, 0.1, new ConfigStopCriterionNormal());
 
     //Swarm s2a(1000, 40, new ConfigEx2());
     //Particle theBestParticle2a = s2a.findTheBestParticle(0.5, 0.00001, 0.00001, 0.00001, new ConfigStopCriterionAcademic());

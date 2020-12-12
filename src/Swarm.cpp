@@ -126,7 +126,26 @@ Particle Swarm::findTheBestParticle(float criterionStopValue, float w, float spe
                 double cost = globalBestParticle.first.getCostFunctionValue();
                 printf("Swarm::findTheBestParticle: iteration = %d, globalBestParticle.first = %lf\n",
                        iteration_number, cost);
+
                 log->stream << iteration_number << ',' << cost << '\n';
+                
+                if(log->isParticlesLog) //only for n=2
+                {
+                    if(log->isLogAllParticles)
+                    {
+                        for (int i=0; i<swarm.size(); i++)
+                        {
+                            Particle p = swarm[i];
+                            log->sendAllParticlesStream(iteration_number,i,p.getPositionVector()[0], p.getPositionVector()[1], p.getSpeedVector()[0], p.getSpeedVector()[1]);
+                        }
+                        log->saveParticleStreamBuffer();
+                    }
+                    else
+                    {
+                    Particle p = globalBestParticle.first;
+                    log->sendToParticlesStream(iteration_number, cost, p.getPositionVector()[0], p.getPositionVector()[1], p.getSpeedVector()[0], p.getSpeedVector()[1]);
+                    }
+                }
                 iteration_number++;
             }
 
@@ -144,17 +163,8 @@ Particle Swarm::findTheBestParticle(float criterionStopValue, float w, float spe
 #else
 
 Particle Swarm::findTheBestParticle(float criterionStopValue, float w, float speedConstant1, float speedConstant2,
-<<<<<<< HEAD
                                     Logger* log, StopCriterionConfig *configStop) {
     while (configStop->computeStopCriterion(criterionStopValue, &GbestVector)) {
-=======
-                                    StopCriterionConfig *configStop){
-    std::default_random_engine rand_engine;
-    rand_engine.seed(time(NULL));
-
-    int iteration_number = 0;
-    while (configStop->computeStopCriterion(criterionStopValue, globalBestParticle)) {
->>>>>>> SwarmOpenMP
         for (auto &singleParticle : swarm) // access by reference to avoid copying
         {
             singleParticle.computePosition(w, speedConstant1, speedConstant2, &rand_engine);

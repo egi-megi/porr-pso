@@ -34,6 +34,7 @@ public:
     double getCostFunctionValue() const;
     double getCostFunctionValuePbest();
     vector <double > getPositionVector();
+    vector <double > getSpeedVector();
 
     double costFunctionValuePbest;
     vector <double > positionVectorsParticlePbest;

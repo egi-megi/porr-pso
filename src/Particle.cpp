@@ -139,6 +139,11 @@ vector<double> Particle::getPositionVector()
     return positionVectors;
 }
 
+vector<double> Particle::getSpeedVector() 
+{
+    return speedVectors;
+}
+
 bool Particle::isReady() const {
     return ready;
 }
