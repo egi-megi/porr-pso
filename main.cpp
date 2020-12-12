@@ -14,9 +14,19 @@
 int main() {
     
     //particles log only for n=2
-    int dim = 2;
-    Logger* log = new Logger("../log.txt", "../bestParticlesLog.txt", dim, true);
-    Logger::ParamStruct params (100, dim, 0.0001f, 0.8f, 0.1f, 0.2f, 1000, log);
+    //isLogAll =true - log all data for all particles
+
+    int dim = 50;
+    Logger log_temp;
+    std::string date = log_temp.currentDateTime();
+
+    std::string bestParticlesLogFileName = "../logs/log_" + date + ".txt";
+    std::string allParticlesLogFileName = "../logs/particlesLog_" + date + ".txt";
+
+    // Logger* log = new Logger("../log.txt", "../particlesLog.txt", dim, true);
+    Logger* log = new Logger(bestParticlesLogFileName, allParticlesLogFileName, dim, true);
+    Logger::ParamStruct params (200000, dim, 0.1f, 0.8f, 0.1f, 0.2f, 1000, log);
+
 
     srand (time(NULL));
     for (int i=0 ;i<1; i++) {

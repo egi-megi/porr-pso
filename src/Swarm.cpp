@@ -59,7 +59,10 @@ void Swarm::makeSwarm(OptimizationExercisesConfig* config)
     globalBestParticle.first = swarm[0];
     for(int i = 1; i < amountOfParticles; i++) {
         if(swarm[i].getCostFunctionValue() < globalBestParticle.first.getCostFunctionValue())
+        {
             globalBestParticle.first = swarm[i];
+            bestParticleId = i;
+        }
     }
 }
 
@@ -127,8 +130,8 @@ Particle Swarm::findTheBestParticle(float criterionStopValue, float w, float spe
                 printf("Swarm::findTheBestParticle: iteration = %d, globalBestParticle.first = %lf\n",
                        iteration_number, cost);
 
-                log->stream << iteration_number << ',' << cost << '\n';
-                
+                log->stream << iteration_number << ',' << cost << ',' << bestParticleId << '\n';
+
                 if(log->isParticlesLog) //only for n=2
                 {
                     if(log->isLogAllParticles)

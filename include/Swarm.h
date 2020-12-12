@@ -27,6 +27,7 @@ public:
     void computeGbest(Particle *particle);
     Particle findTheBestParticle(float criterionStopValue, float w, float speedConstant1, float speedConstant2, Logger* log, StopCriterionConfig *configStop);
     std::pair<Particle, Particle> globalBestParticle;
+    int bestParticleId;
 
 private:
     int amountOfParticles;

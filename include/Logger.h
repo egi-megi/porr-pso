@@ -35,12 +35,14 @@ public:
     bool isParticlesLog;
     bool isLogAllParticles;
 
+    std::string currentDateTime();  
     void logAndClose();
     void setLogAll(const bool& val);
     void sendToParticlesStream(const int& iter, const float& cost, const float& pos1, const float& pos2, const float& speed1, const float& speed2);
     void sendAllParticlesStream(const int& iter, const int& id, const float& pos1, const float& pos2, const float& speed1, const float& speed2);
     void saveParticleStreamBuffer();
   
+   Logger () = default;
    Logger(const std::string& outputFilename, const std::string& particlesFile, const int& dim =-1, const bool& isLogAll=false);
     ~Logger();
 
@@ -49,7 +51,6 @@ private:
     std::string date;
     std::ofstream outFile;    
     std::ofstream outParticlesFile;    
-    std::string currentDateTime();  
 
 };
 
