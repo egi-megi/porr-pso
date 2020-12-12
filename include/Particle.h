@@ -43,6 +43,8 @@ public:
     double costFunctionValuePbest;
     vector <double > positionVectorsParticlePbest;
 
+    bool isReady() const;
+
 protected:
 
 private:
@@ -58,6 +60,7 @@ private:
     //double speedVectors[];
     //vector <double > speedVectorsParticlePbest;
     std::default_random_engine* generator;
+    bool ready;
 
     friend class PositionVectorOperator;
 };

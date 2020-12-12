@@ -9,8 +9,9 @@
 
 
 bool ConfigStopCriterionNormal::computeStopCriterion(float criterionStopValue, const std::pair<Particle, Particle>& globalBestParticle){
-    // #TODO What if it is the start of iterations?
-    if (globalBestParticle.second.getCostFunctionValue() - globalBestParticle.first.getCostFunctionValue() > criterionStopValue) {
+    if(!globalBestParticle.second.isReady())
+        return true;
+    else if (globalBestParticle.second.getCostFunctionValue() - globalBestParticle.first.getCostFunctionValue() > criterionStopValue) {
         return true;
     } else {
         return false;

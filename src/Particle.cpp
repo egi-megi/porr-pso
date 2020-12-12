@@ -12,7 +12,9 @@
 
 using namespace std;
 
-Particle::Particle() {}
+Particle::Particle() {
+    ready = false;
+}
 
 Particle::Particle(const int mVectorsDim, Swarm *s, OptimizationExercisesConfig *mconfig,
                    std::default_random_engine *gen)
@@ -28,6 +30,7 @@ Particle::Particle(const int mVectorsDim, Swarm *s, OptimizationExercisesConfig 
     computeCostFunctionValue();
     swarm = s;
     costFunctionValuePbest = costFunctionValue;
+    ready = true;
 }
 
 Particle::~Particle()
@@ -194,4 +197,8 @@ double Particle::getCostFunctionValuePbest()
 vector<double> Particle::getPositionVector()
 {
     return positionVectors;
+}
+
+bool Particle::isReady() const {
+    return ready;
 }
