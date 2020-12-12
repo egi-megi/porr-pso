@@ -75,7 +75,9 @@ void Swarm::makeSwarm(OptimizationExercisesConfig *config)
 
 void Swarm::computeGbest(Particle *particle)
 {
-    if (particle->getCostFunctionValue() < globalBestParticle.first.getCostFunctionValue())
+    if(particle == nullptr)
+        return;
+    else if (particle->getCostFunctionValue() < globalBestParticle.first.getCostFunctionValue())
     {
         globalBestParticle.second = globalBestParticle.first;
         globalBestParticle.first = *particle;
@@ -97,7 +99,7 @@ Particle Swarm::findTheBestParticle(float criterionStopValue, float w, float spe
 
         while (!foundSolution)
         {
-#pragma omp for schedule(static) nowait
+#pragma omp for schedule(static)
             for (int i = 0; i < amountOfParticles; i++)
             {
                 swarm[i].computePosition(w, speedConstant1, speedConstant2, &rand_engine);
