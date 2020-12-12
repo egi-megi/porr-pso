@@ -98,7 +98,7 @@ Particle Swarm::findTheBestParticle(float criterionStopValue, float w, float spe
         Particle* bestParticleInIteration = nullptr;
 
         while (!foundSolution) {
-            #pragma omp for schedule(dynamic, 1000) nowait
+            #pragma omp for schedule(static) nowait
             for(int i = 0; i < amountOfParticles; i++) {
                 swarm[i].computePosition(w, speedConstant1, speedConstant2, &rand_engine);
                 swarm[i].computeCostFunctionValue();
