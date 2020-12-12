@@ -3,6 +3,3 @@
 //
 
 #include "../include/StopCriterionConfig.h"
-
-
-

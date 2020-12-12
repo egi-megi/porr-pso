@@ -2,18 +2,17 @@
 // Created by Agnieszka Jurkiewicz on 28/10/2020.
 //
 
-#include "../include/Particle.h"
-#include "../include/Swarm.h"
-
-
 #include <iostream>
 #include <math.h>
 #include <random>
-//#include <omp.h>
+
+#include "../include/Particle.h"
+#include "../include/Swarm.h"
 
 using namespace std;
 
-Particle::Particle() {
+Particle::Particle()
+{
     ready = false;
 }
 
@@ -34,12 +33,10 @@ Particle::Particle(const int mVectorsDim, Swarm *s, OptimizationExercisesConfig 
     ready = true;
 }
 
-Particle::~Particle() {
-}
-
 void Particle::setStartPosition()
 {
-    std::uniform_real_distribution<double> unif(config->lowerLimitPositionVector, config->upperLimitPositionVector);
+    std::uniform_real_distribution<double> unif(config->lowerLimitPositionVector,
+        config->upperLimitPositionVector);
     for (int i = 0; i < vectorDim; i++)
     {
         positionVectors[i] = unif(*generator);
@@ -58,7 +55,8 @@ void Particle::setStartSpeed()
     }
 }
 
-void Particle::computeSpeed(float w, float speedConstant1, float speedConstant2, std::default_random_engine *gen)
+void Particle::computeSpeed(float w, float speedConstant1, float speedConstant2,
+    std::default_random_engine *gen)
 {
     std::uniform_real_distribution<double> unif(0.0, 1.0);
 
@@ -73,44 +71,51 @@ void Particle::computeSpeed(float w, float speedConstant1, float speedConstant2,
                 PositionVectorOperator::minus(positionVectorsParticlePbest, positionVectors)),
             PositionVectorOperator::mult(
                 speedConstant2 * rand_2,
-                PositionVectorOperator::minus(swarm->globalBestParticle.first.positionVectors, positionVectors))));
-    
+                PositionVectorOperator::minus(swarm->globalBestParticle.first.positionVectors,
+                    positionVectors))));
+
     double k = 1;
-    std::vector<double> v_positionProposition = PositionVectorOperator::add(positionVectors, v_velocityProposition);
-    for(int i = 0; i < vectorDim; i++) {
+    std::vector<double> v_positionProposition = PositionVectorOperator::add(positionVectors,
+        v_velocityProposition);
+    for (int i = 0; i < vectorDim; i++)
+    {
         char violation = 0;
-        if(v_positionProposition[i] > config->upperLimitPositionVector)
+        if (v_positionProposition[i] > config->upperLimitPositionVector)
             violation = 1;
-        else if(v_positionProposition[i] < config->lowerLimitPositionVector)
+        else if (v_positionProposition[i] < config->lowerLimitPositionVector)
             violation = -1;
 
-        if(violation) {
-        /* Compute coefficient k so as to make x_{i+1,j} = x{i,j} + k*v{i, j} fit in
+        if (violation)
+        {
+            /* Compute coefficient k so as to make x_{i+1,j} = x{i,j} + k*v{i, j} fit in
         the box constraints. */
             double c1 = violation > 0 ? config->upperLimitPositionVector : config->lowerLimitPositionVector;
-            double k_temp = (- positionVectors[i] + c1) / v_velocityProposition[i];
-            if (k_temp < k) k = k_temp;
+            double k_temp = (-positionVectors[i] + c1) / v_velocityProposition[i];
+            if (k_temp < k)
+                k = k_temp;
         }
     }
 
     tempSpeedVectors = PositionVectorOperator::mult(k, v_velocityProposition);
 }
 
-void Particle::computePosition(float w, float speedConstant1, float speedConstant2, std::default_random_engine *gen)
+void Particle::computePosition(float w, float speedConstant1, float speedConstant2,
+    std::default_random_engine *gen)
 {
     vector<double> newPositionVector(vectorDim);
 
     computeSpeed(w, speedConstant1, speedConstant2, gen);
     newPositionVector = PositionVectorOperator::add(positionVectors, tempSpeedVectors);
 
-    if(!config->isPositionInRange(newPositionVector))
+    if (!config->isPositionInRange(newPositionVector))
         throw "Particle out of the box constraints!";
 
     speedVectors = tempSpeedVectors;
     positionVectors = newPositionVector;
 }
 
-void Particle::computeCostFunctionValue() {
+void Particle::computeCostFunctionValue()
+{
     costFunctionValue = config->computeCostFunctionValue(positionVectors);
 }
 
@@ -138,6 +143,7 @@ vector<double> Particle::getPositionVector()
     return positionVectors;
 }
 
-bool Particle::isReady() const {
+bool Particle::isReady() const
+{
     return ready;
 }

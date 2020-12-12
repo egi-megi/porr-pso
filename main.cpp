@@ -1,20 +1,14 @@
 #include <iostream>
+
 #include "include/Particle.h"
 #include "include/Swarm.h"
 #include "include/ConfigEx1.h"
 #include "include/ConfigEx2.h"
 #include "include/ConfigStopCriterionNormal.h"
 #include "include/ConfigStopCriterionAcademic.h"
-#include <math.h>
-#include <stdio.h>      /* printf, NULL */
-#include <stdlib.h>     /* srand, rand */
-#include <time.h>       /* time */
 
-
-int main() {
-
-    srand (time(NULL));
-    for (int i=0 ;i<1; i++) {
+int main()
+{
     Swarm s1a(200000, 50, new ConfigEx1());
     Particle theBestParticle1a = s1a.findTheBestParticle(0.1, 0.8, .1, .2, new ConfigStopCriterionAcademic());
 
@@ -31,6 +25,6 @@ int main() {
     //std::cout << "Cost function for Gbest particle for exercise 1 for normal criterion of stop: " << theBestParticle1n.costFunctionValuePbest << std::endl;
     //std::cout << "Cost function for Gbest particle for exercise 2 for academic criterion of stop: "<< theBestParticle2a.costFunctionValuePbest << std::endl;
     //std::cout << "Cost function for Gbest particle for exercise 2 for normal criterion of stop: " << theBestParticle2n.costFunctionValuePbest << std::endl;
-}
+
     return 0;
 }

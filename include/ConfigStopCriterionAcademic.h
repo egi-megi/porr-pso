@@ -8,10 +8,11 @@
 #include "StopCriterionConfig.h"
 #include "Particle.h"
 
-class ConfigStopCriterionAcademic : public StopCriterionConfig {
+class ConfigStopCriterionAcademic : public StopCriterionConfig
+{
 public:
-    bool computeStopCriterion(float criterionStopValue, const std::pair<Particle, Particle>& globalBestParticle);
+    bool computeStopCriterion(float criterionStopValue,
+        const std::pair<Particle, Particle> &globalBestParticle);
 };
-
 
 #endif //ROJCZASTEK_SZCZEPANSKI_JURKIEWICZ_PIKULINSKI_CONFIGSTOPCRITERIONACADEMIC_H

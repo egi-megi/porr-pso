@@ -5,13 +5,13 @@
 #ifndef ROJCZASTEK_SZCZEPANSKI_JURKIEWICZ_PIKULINSKI_PARTICLE_H
 #define ROJCZASTEK_SZCZEPANSKI_JURKIEWICZ_PIKULINSKI_PARTICLE_H
 
-#include "OptimizationExercisesConfig.h"
-#include "PositionVectorOperator.h"
-
 #include <iostream>
 #include <vector>
 #include <functional>
 #include <random>
+
+#include "OptimizationExercisesConfig.h"
+#include "PositionVectorOperator.h"
 
 using namespace std;
 
@@ -21,45 +21,41 @@ class Particle
 {
 public:
     Particle();
-    Particle(int vectorDim, Swarm* s, OptimizationExercisesConfig* config, std::default_random_engine* generator);
-    Particle(int vectorDim, Swarm* s, OptimizationExercisesConfig* config);
-    virtual ~Particle();
+    Particle(int vectorDim, Swarm *s, OptimizationExercisesConfig *config,
+        std::default_random_engine *generator);
+    virtual ~Particle() = default;
 
     void setStartPosition();
     void setStartSpeed();
-    void computePosition(float w, float speedConstant1, float speedConstant2, std::default_random_engine* gen);
-    void computeSpeed(float w, float speedConstant1, float speedConstant2, std::default_random_engine* gen);
+    void computePosition(float w, float speedConstant1, float speedConstant2,
+        std::default_random_engine *gen);
+    void computeSpeed(float w, float speedConstant1, float speedConstant2,
+        std::default_random_engine *gen);
     void computeCostFunctionValue();
     void computeParticlePbest();
     double getCostFunctionValue() const;
 
     double getCostFunctionValuePbest();
-    vector <double > getPositionVector();
+    vector<double> getPositionVector();
 
     double costFunctionValuePbest;
-    vector <double > positionVectorsParticlePbest;
+    vector<double> positionVectorsParticlePbest;
 
     bool isReady() const;
 
 protected:
-
 private:
     int vectorDim;
-    vector <double > positionVectors;
-    vector <double > speedVectors;
-    vector <double > tempSpeedVectors;
-    //double tempSpeedValue;
+    vector<double> positionVectors;
+    vector<double> speedVectors;
+    vector<double> tempSpeedVectors;
     double costFunctionValue;
-    //double particlePbest;
-    Swarm* swarm;
-    OptimizationExercisesConfig* config;
-    //double speedVectors[];
-    //vector <double > speedVectorsParticlePbest;
-    std::default_random_engine* generator;
+    Swarm *swarm;
+    OptimizationExercisesConfig *config;
+    std::default_random_engine *generator;
     bool ready;
 
     friend class PositionVectorOperator;
 };
-
 
 #endif //ROJCZASTEK_SZCZEPANSKI_JURKIEWICZ_PIKULINSKI_PARTICLE_H
