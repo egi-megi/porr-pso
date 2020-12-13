@@ -20,7 +20,13 @@ int main(int argc, char* argv[])
     InputParser::parse(options, argc, argv);
 
     Swarm s1a(options);
-    SwarmParticle s1a_best = s1a.findTheBestParticle(0.8, .1, .2);
+
+    double chi = 0.72984, c1 = 2.05, c2 = 2.05;
+    double w = chi;
+    c1 = chi*c1;
+    c2 = chi*c2;
+    
+    SwarmParticle s1a_best = s1a.findTheBestParticle(w, c1, c2);
     
     printf("Best particle f(s1a_best) = %lf\n", s1a_best.getCostFunctionValue());
 
