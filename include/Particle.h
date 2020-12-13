@@ -1,50 +1,33 @@
-//
-// Created by Agnieszka Jurkiewicz on 28/10/2020.
-//
+#ifndef ROJCZASTEK_SZCZEPANSKI_JURKIEWICZ_PIKULINSKI_PARTICLEBASE_H
+#define ROJCZASTEK_SZCZEPANSKI_JURKIEWICZ_PIKULINSKI_PARTICLEBASE_H
 
-#ifndef ROJCZASTEK_SZCZEPANSKI_JURKIEWICZ_PIKULINSKI_PARTICLE_H
-#define ROJCZASTEK_SZCZEPANSKI_JURKIEWICZ_PIKULINSKI_PARTICLE_H
-
-#include <iostream>
 #include <vector>
-#include <functional>
 #include <random>
 
-#include "ParticleBase.h"
 #include "OptimizationExercisesConfig.h"
 
-using namespace std;
-
-class Swarm;
-
-class Particle : public ParticleBase
+class Particle
 {
 public:
-    Particle();
-    Particle(int vectorDim, Swarm *s, OptimizationExercisesConfig *config,
-             std::default_random_engine *generator);
+    Particle() = default;
     virtual ~Particle() = default;
 
-    void setStartSpeed();
-    void computePosition(float w, float speedConstant1, float speedConstant2,
-                         std::default_random_engine *gen);
-    void computeSpeed(float w, float speedConstant1, float speedConstant2,
-                      std::default_random_engine *gen);
-    void computeParticlePbest();
-
-    double getCostFunctionValuePbest();
-
-    double costFunctionValuePbest;
-    vector<double> positionVectorsParticlePbest;
-
+    void setStartPosition();
+    void computeCostFunctionValue();
+    double getCostFunctionValue() const;
+    std::vector<double> getPositionVector();
     bool isReady() const;
 
 protected:
-private:
-    vector<double> speedVectors;
-    vector<double> tempSpeedVectors;
-    Swarm *swarm;
+    double getCoefficientForBoundedPosition(std::vector<double> &v_positionProposition,
+        std::vector<double> &v_positionDelta);
+
+    int vectorDim;
+    std::vector<double> positionVectors;
+    double costFunctionValue;
+    OptimizationExercisesConfig *config;
+    std::default_random_engine *generator;
     bool ready;
 };
 
-#endif //ROJCZASTEK_SZCZEPANSKI_JURKIEWICZ_PIKULINSKI_PARTICLE_H
+#endif

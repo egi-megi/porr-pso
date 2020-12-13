@@ -1,6 +1,6 @@
 #include <iostream>
 
-#include "include/Particle.h"
+#include "include/SwarmParticle.h"
 #include "include/Swarm.h"
 #include "include/ConfigEx1.h"
 #include "include/ConfigEx2.h"
@@ -10,7 +10,7 @@
 int main()
 {
     Swarm s1a(200000, 50, new ConfigEx1());
-    Particle theBestParticle1a = s1a.findTheBestParticle(0.1, 0.8, .1, .2, new ConfigStopCriterionAcademic());
+    SwarmParticle theBestParticle1a = s1a.findTheBestParticle(0.1, 0.8, .1, .2, new ConfigStopCriterionAcademic());
 
     //Swarm s1n(100, 10, new ConfigEx1());
     //Particle theBestParticle1n = s1n.findTheBestParticle(0.1, 1.0, 0.1, 0.1, new ConfigStopCriterionNormal());

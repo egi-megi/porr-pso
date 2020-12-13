@@ -11,7 +11,7 @@
 #endif
 
 #include "../include/Swarm.h"
-#include "../include/Particle.h"
+#include "../include/SwarmParticle.h"
 
 using namespace std;
 
@@ -41,7 +41,7 @@ void Swarm::makeSwarm(OptimizationExercisesConfig *config)
 #pragma omp for
         for (int i = 0; i < amountOfParticles; i++)
         {
-            Particle particle(vectorDim, this, config, &rand_engine);
+            SwarmParticle particle(vectorDim, this, config, &rand_engine);
             swarm[i] = particle;
         }
     }
@@ -60,7 +60,7 @@ void Swarm::makeSwarm(OptimizationExercisesConfig *config)
     rand_engine.seed(time(NULL));
     for (int i = 0; i < amountOfParticles; i++)
     {
-        Particle particle(vectorDim, this, config, &rand_engine);
+        SwarmParticle particle(vectorDim, this, config, &rand_engine);
         swarm[i] = particle;
     }
 
@@ -73,7 +73,7 @@ void Swarm::makeSwarm(OptimizationExercisesConfig *config)
 }
 #endif
 
-void Swarm::computeGbest(Particle *particle)
+void Swarm::computeGbest(SwarmParticle *particle)
 {
     if(particle == nullptr)
         return;
@@ -85,7 +85,7 @@ void Swarm::computeGbest(Particle *particle)
 }
 
 #ifdef OPEN_MP_SWARM
-Particle Swarm::findTheBestParticle(float criterionStopValue, float w, float speedConstant1,
+SwarmParticle Swarm::findTheBestParticle(float criterionStopValue, float w, float speedConstant1,
     float speedConstant2, StopCriterionConfig *configStop)
 {
     bool foundSolution = false;
@@ -95,7 +95,7 @@ Particle Swarm::findTheBestParticle(float criterionStopValue, float w, float spe
         std::default_random_engine rand_engine;
         rand_engine.seed((omp_get_thread_num() + 1) * time(NULL));
 
-        Particle *bestParticleInIteration = nullptr;
+        SwarmParticle *bestParticleInIteration = nullptr;
 
         while (!foundSolution)
         {
@@ -136,7 +136,7 @@ Particle Swarm::findTheBestParticle(float criterionStopValue, float w, float spe
     return globalBestParticle.first;
 }
 #else
-Particle Swarm::findTheBestParticle(float criterionStopValue, float w, float speedConstant1,
+SwarmParticle Swarm::findTheBestParticle(float criterionStopValue, float w, float speedConstant1,
     float speedConstant2, StopCriterionConfig *configStop)
 {
     std::default_random_engine rand_engine;

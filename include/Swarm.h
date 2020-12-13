@@ -8,7 +8,7 @@
 #include <iostream>
 #include <vector>
 
-#include "Particle.h"
+#include "SwarmParticle.h"
 #include "ConfigStopCriterionAcademic.h"
 #include "ConfigStopCriterionNormal.h"
 #include "StopCriterionConfig.h"
@@ -23,15 +23,15 @@ public:
     virtual ~Swarm() = default;
 
     void makeSwarm(OptimizationExercisesConfig *config);
-    void computeGbest(Particle *particle);
-    Particle findTheBestParticle(float criterionStopValue, float w, float speedConstant1,
+    void computeGbest(SwarmParticle *particle);
+    SwarmParticle findTheBestParticle(float criterionStopValue, float w, float speedConstant1,
         float speedConstant2, StopCriterionConfig *configStop);
-    std::pair<Particle, Particle> globalBestParticle;
+    std::pair<SwarmParticle, SwarmParticle> globalBestParticle;
 
 private:
     int amountOfParticles;
     int vectorDim;
-    vector<Particle> swarm;
+    vector<SwarmParticle> swarm;
 };
 
 #endif //ROJCZASTEK_SZCZEPANSKI_JURKIEWICZ_PIKULINSKI_SWARM_H
