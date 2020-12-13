@@ -17,8 +17,9 @@
 
 using namespace std;
 
-Swarm::Swarm(int mAmountOfParticles, int mVectorDim, OptimizationExercisesConfig *config) :
-    amountOfParticles{mAmountOfParticles}, vectorDim{mVectorDim}, swarm(mAmountOfParticles)
+Swarm::Swarm(Options* mOptions) :
+    amountOfParticles{mOptions->amountOfParticles}, vectorDim{mOptions->dimension},
+    swarm(mOptions->amountOfParticles), options{mOptions}
 {
 #ifdef OPEN_MP_SWARM
     printf("Welcome to OpenMP version!\n");
@@ -26,18 +27,12 @@ Swarm::Swarm(int mAmountOfParticles, int mVectorDim, OptimizationExercisesConfig
     printf("Welcome to serial version!\n");
 #endif
     Timer t1;
-    makeSwarm(config);
+    makeSwarm();
     printf("Swarm::Swarm: Initialization took %.2lf s\n", t1.click());
 }
 
-Swarm::Swarm(Options* mOptions) :
-    Swarm(mOptions->amountOfParticles, mOptions->dimension, mOptions->optimizationExerciseConfig)
-{
-    options = mOptions;
-}
-
 #ifdef OPEN_MP_SWARM
-void Swarm::makeSwarm(OptimizationExercisesConfig *config)
+void Swarm::makeSwarm()
 {
 #pragma omp parallel
     {
@@ -46,7 +41,7 @@ void Swarm::makeSwarm(OptimizationExercisesConfig *config)
 #pragma omp for
         for (int i = 0; i < amountOfParticles; i++)
         {
-            SwarmParticle particle(vectorDim, this, config, &rand_engine);
+            SwarmParticle particle(vectorDim, this, options->optimizationExerciseConfig, &rand_engine);
             swarm[i] = particle;
         }
     }
@@ -59,13 +54,13 @@ void Swarm::makeSwarm(OptimizationExercisesConfig *config)
     }
 }
 #else
-void Swarm::makeSwarm(OptimizationExercisesConfig *config)
+void Swarm::makeSwarm()
 {
     std::default_random_engine rand_engine;
     rand_engine.seed(time(NULL));
     for (int i = 0; i < amountOfParticles; i++)
     {
-        SwarmParticle particle(vectorDim, this, config, &rand_engine);
+        SwarmParticle particle(vectorDim, this, options->optimizationExerciseConfig, &rand_engine);
         swarm[i] = particle;
     }
 

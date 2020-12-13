@@ -11,11 +11,10 @@ class MonteCarlo
 {
 public:
     MonteCarlo() = default;
-    MonteCarlo(int mAmountOfParticles, int mVectorDim, OptimizationExercisesConfig *config);
     MonteCarlo(Options *mOptions);
     virtual ~MonteCarlo() = default;
 
-    void makeMonteCarlo(OptimizationExercisesConfig &config);
+    void makeMonteCarlo();
     void computeGlobalBest(MonteCarloParticle *particle);
     MonteCarloParticle findTheBestParticle(float criterionStopValue, float sigma, float T,
         StopCriterionConfig *configStop);

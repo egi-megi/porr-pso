@@ -20,11 +20,10 @@ class Swarm
 {
 public:
     Swarm() = default;
-    Swarm(int mAmountOfParticles, int mVectorDim, OptimizationExercisesConfig *config);
     Swarm(Options *mOptions);
     virtual ~Swarm() = default;
 
-    void makeSwarm(OptimizationExercisesConfig *config);
+    void makeSwarm();
     void computeGbest(SwarmParticle *particle);
     SwarmParticle findTheBestParticle(float criterionStopValue, float w, float speedConstant1,
         float speedConstant2, StopCriterionConfig *configStop);

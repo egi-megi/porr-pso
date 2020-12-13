@@ -10,10 +10,9 @@
 #include "../include/Options.h"
 #include "../include/Timer.h"
 
-MonteCarlo::MonteCarlo(int mAmountOfParticles, int mVectorDim,
-    OptimizationExercisesConfig *config) :
-    amountOfParticles{mAmountOfParticles}, vectorDim{mVectorDim},
-    v_particles(mAmountOfParticles)
+MonteCarlo::MonteCarlo(Options *mOptions) :
+    amountOfParticles{mOptions->amountOfParticles}, vectorDim{mOptions->dimension},
+    v_particles(mOptions->amountOfParticles), options{mOptions}
 {
 #ifdef OPEN_MP_SWARM   
     printf("Welcome to OpenMP version!\n");
@@ -21,18 +20,12 @@ MonteCarlo::MonteCarlo(int mAmountOfParticles, int mVectorDim,
     printf("Welcome to sequential version!\n");
 #endif
     Timer t1;
-    makeMonteCarlo(*config);
+    makeMonteCarlo();
     printf("MonteCarlo::MonteCarlo: Initialization took %.2lf s\n", t1.click());
 }
 
-MonteCarlo::MonteCarlo(Options *mOptions) :
-MonteCarlo(mOptions->amountOfParticles, mOptions->dimension, mOptions->optimizationExerciseConfig)
-{
-    options = mOptions;
-}
-
 #ifdef OPEN_MP_SWARM
-void MonteCarlo::makeMonteCarlo(OptimizationExercisesConfig &config)
+void MonteCarlo::makeMonteCarlo()
 {
 #pragma omp parallel
 {
@@ -40,7 +33,7 @@ void MonteCarlo::makeMonteCarlo(OptimizationExercisesConfig &config)
     rand_engine.seed((omp_get_thread_num() + 1) * time(NULL));
 #pragma omp for
     for(int i = 0; i < amountOfParticles; i++)
-        v_particles[i] = MonteCarloParticle(vectorDim, &config, rand_engine);
+        v_particles[i] = MonteCarloParticle(vectorDim, options->optimizationExerciseConfig, rand_engine);
 }
 
     globalBestParticle.first = v_particles[0];
@@ -51,12 +44,12 @@ void MonteCarlo::makeMonteCarlo(OptimizationExercisesConfig &config)
     }
 }
 #else
-void MonteCarlo::makeMonteCarlo(OptimizationExercisesConfig &config)
+void MonteCarlo::makeMonteCarlo()
 {
     std::default_random_engine rand_engine;
     rand_engine.seed(time(NULL));
     for(int i = 0; i < amountOfParticles; i++)
-        v_particles[i] = MonteCarloParticle(vectorDim, &config, rand_engine);
+        v_particles[i] = MonteCarloParticle(vectorDim, options->optimizationExerciseConfig, rand_engine);
 
     globalBestParticle.first = v_particles[0];
     for(int i = 1; i < amountOfParticles; i++)
