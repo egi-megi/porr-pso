@@ -5,14 +5,14 @@
 #ifndef ROJCZASTEK_SZCZEPANSKI_JURKIEWICZ_PIKULINSKI_SWARM_H
 #define ROJCZASTEK_SZCZEPANSKI_JURKIEWICZ_PIKULINSKI_SWARM_H
 
-#include <iostream>
-#include <vector>
-
 #include "SwarmParticle.h"
 #include "ConfigStopCriterionAcademic.h"
 #include "ConfigStopCriterionNormal.h"
 #include "StopCriterionConfig.h"
 #include "Options.h"
+
+#include <iostream>
+#include <vector>
 
 using namespace std;
 
@@ -31,6 +31,8 @@ public:
     std::pair<SwarmParticle, SwarmParticle> globalBestParticle;
 
 private:
+    vector<double> getPositionOfBetterParticle(SwarmParticle& p_1, SwarmParticle& p_2);
+
     int amountOfParticles;
     int vectorDim;
     vector<SwarmParticle> swarm;

@@ -5,13 +5,14 @@
 #ifndef ROJCZASTEK_SZCZEPANSKI_JURKIEWICZ_PIKULINSKI_SWARMPARTICLE_H
 #define ROJCZASTEK_SZCZEPANSKI_JURKIEWICZ_PIKULINSKI_SWARMPARTICLE_H
 
+#include "Particle.h"
+#include "OptimizationExercisesConfig.h"
+#include "Options.h"
+
 #include <iostream>
 #include <vector>
 #include <functional>
 #include <random>
-
-#include "Particle.h"
-#include "OptimizationExercisesConfig.h"
 
 using namespace std;
 
@@ -21,8 +22,7 @@ class SwarmParticle : public Particle
 {
 public:
     SwarmParticle() = default;
-    SwarmParticle(const int mVectorsDim, Swarm *s, OptimizationExercisesConfig *mconfig,
-        std::default_random_engine *gen);
+    SwarmParticle(Options *mOptions, Swarm *s, std::default_random_engine *gen);
     virtual ~SwarmParticle() = default;
 
     void setStartSpeed(std::default_random_engine &gen);
@@ -34,13 +34,21 @@ public:
 
     double getCostFunctionValuePbest();
 
+    void setLocalBestParticleVisiblePosition(const vector<double> &particlePosition);
+
     double costFunctionValuePbest;
     vector<double> positionVectorsParticlePbest;
 
 private:
+    vector<double>& getBestVisibleParticlePosition();
+
+    vector<double> v_localBestParticleVisiblePosition;
     vector<double> speedVectors;
     vector<double> tempSpeedVectors;
     Swarm *swarm;
+
+    Options::CommunicationType communication;
+    Options *options;
 };
 
 #endif //ROJCZASTEK_SZCZEPANSKI_JURKIEWICZ_PIKULINSKI_SWARMPARTICLE_H

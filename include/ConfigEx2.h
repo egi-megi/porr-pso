@@ -5,9 +5,9 @@
 #ifndef ROJCZASTEK_SZCZEPANSKI_JURKIEWICZ_PIKULINSKI_CONFIGEX2_H
 #define ROJCZASTEK_SZCZEPANSKI_JURKIEWICZ_PIKULINSKI_CONFIGEX2_H
 
-#include <vector>
-
 #include "OptimizationExercisesConfig.h"
+
+#include <vector>
 
 class ConfigEx2 : public OptimizationExercisesConfig
 {
