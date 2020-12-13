@@ -9,6 +9,12 @@
 
 #include <math.h>
 
+ConfigStopCriterionNormal::ConfigStopCriterionNormal(int mThreshold) :
+    threshold(mThreshold)
+{
+    checksFallenBelowStopValue = 0;
+}
+
 bool ConfigStopCriterionNormal::computeStopCriterion(float criterionStopValue,
     const std::pair<Particle, Particle> &globalBestParticle)
 {
@@ -17,10 +23,20 @@ bool ConfigStopCriterionNormal::computeStopCriterion(float criterionStopValue,
     else if (globalBestParticle.second.getCostFunctionValue() -
         globalBestParticle.first.getCostFunctionValue() > criterionStopValue)
     {
+        checksFallenBelowStopValue = 0;
         return true;
     }
     else
     {
-        return false;
+        checksFallenBelowStopValue++;
+        if(checksFallenBelowStopValue >= threshold)
+            return false;
+        else
+            return true;
     }
+}
+
+void ConfigStopCriterionNormal::reset()
+{
+    checksFallenBelowStopValue = 0;
 }

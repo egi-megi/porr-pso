@@ -150,13 +150,12 @@ SwarmParticle Swarm::findTheBestParticle(float criterionStopValue, float w, floa
                     printf("Swarm::findTheBestParticle: iteration = %d, globalBestParticle.first = %lf\n",
                         iteration_number, globalBestParticle.first.getCostFunctionValue());
                 iteration_number++;
-            }
 
-#pragma omp critical
-            {
                 if (!configStop->computeStopCriterion(criterionStopValue, globalBestParticle))
                     foundSolution = true;
             }
+
+#pragma omp barrier
         }
     }
 
