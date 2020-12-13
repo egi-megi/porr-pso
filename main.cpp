@@ -9,12 +9,15 @@
 #include "include/MonteCarloParticle.h"
 #include "include/MonteCarlo.h"
 #include "include/Options.h"
+#include "include/InputParser.h"
 
-int main()
+int main(int argc, char* argv[])
 {
     Options* options = new Options();
     options->optimizationExerciseConfig = new ConfigEx1();
     options->stopCriterionConfig = new ConfigStopCriterionAcademic();
+
+    InputParser::parse(options, argc, argv);
 
     Swarm s1a(options);
     SwarmParticle s1a_best = s1a.findTheBestParticle(0.8, .1, .2);
@@ -24,13 +27,13 @@ int main()
     
     printf("Best particle f(s1a_best) = %lf\n", s1a_best.getCostFunctionValue());
 
-    MonteCarlo mc1a(options);
-    MonteCarloParticle mc1a_best = mc1a.findTheBestParticle(1, 8);
+    // MonteCarlo mc1a(options);
+    // MonteCarloParticle mc1a_best = mc1a.findTheBestParticle(1, 8);
 
     // MonteCarlo mc1a(10, 3, new ConfigEx1());
     // MonteCarloParticle mc1a_best = mc1a.findTheBestParticle(0.1, 1, 8, new ConfigStopCriterionAcademic());
 
-    printf("Best particle f(mc1a_best) = %lf\n", mc1a_best.getCostFunctionValue());
+    // printf("Best particle f(mc1a_best) = %lf\n", mc1a_best.getCostFunctionValue());
 
     return 0;
 }
