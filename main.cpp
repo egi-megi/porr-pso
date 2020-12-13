@@ -31,6 +31,7 @@ int main(int argc, char* argv[])
 
     delete options->optimizationExerciseConfig;
     delete options->stopCriterionConfig;
+    delete options;
 
     return 0;
 }
