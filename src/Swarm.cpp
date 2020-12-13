@@ -61,7 +61,6 @@ void Swarm::makeSwarm(OptimizationExercisesConfig* config)
         if(swarm[i].getCostFunctionValue() < globalBestParticle.first.getCostFunctionValue())
         {
             globalBestParticle.first = swarm[i];
-            bestParticleId = i;
         }
     }
 }
@@ -116,6 +115,7 @@ Particle Swarm::findTheBestParticle(float criterionStopValue, float w, float spe
                     bestParticleInIteration = &swarm[i];
                 else if(swarm[i].getCostFunctionValue() < bestParticleInIteration->getCostFunctionValue())
                     bestParticleInIteration = &swarm[i];
+                    bestParticleId = i;
             }
 
             #pragma omp critical
