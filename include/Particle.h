@@ -1,61 +1,33 @@
-//
-// Created by Agnieszka Jurkiewicz on 28/10/2020.
-//
-
 #ifndef ROJCZASTEK_SZCZEPANSKI_JURKIEWICZ_PIKULINSKI_PARTICLE_H
 #define ROJCZASTEK_SZCZEPANSKI_JURKIEWICZ_PIKULINSKI_PARTICLE_H
 
-#include <iostream>
 #include <vector>
-#include <functional>
 #include <random>
 
 #include "OptimizationExercisesConfig.h"
-#include "PositionVectorOperator.h"
-
-using namespace std;
-
-class Swarm;
 
 class Particle
 {
 public:
-    Particle();
-    Particle(int vectorDim, Swarm *s, OptimizationExercisesConfig *config,
-        std::default_random_engine *generator);
+    Particle() = default;
     virtual ~Particle() = default;
 
-    void setStartPosition();
-    void setStartSpeed();
-    void computePosition(float w, float speedConstant1, float speedConstant2,
-        std::default_random_engine *gen);
-    void computeSpeed(float w, float speedConstant1, float speedConstant2,
-        std::default_random_engine *gen);
+    void setStartPosition(std::default_random_engine &gen);
     void computeCostFunctionValue();
-    void computeParticlePbest();
     double getCostFunctionValue() const;
-
-    double getCostFunctionValuePbest();
-    vector<double> getPositionVector();
-
-    double costFunctionValuePbest;
-    vector<double> positionVectorsParticlePbest;
-
+    double getCostFunctionValue(std::vector<double> &v_position) const;
+    std::vector<double> getPositionVector();
     bool isReady() const;
 
 protected:
-private:
-    int vectorDim;
-    vector<double> positionVectors;
-    vector<double> speedVectors;
-    vector<double> tempSpeedVectors;
-    double costFunctionValue;
-    Swarm *swarm;
-    OptimizationExercisesConfig *config;
-    std::default_random_engine *generator;
-    bool ready;
+    double getCoefficientForBoundedPosition(std::vector<double> &v_positionProposition,
+        std::vector<double> &v_positionDelta);
 
-    friend class PositionVectorOperator;
+    int vectorDim;
+    std::vector<double> positionVectors;
+    double costFunctionValue;
+    OptimizationExercisesConfig *config;
+    bool ready = false;
 };
 
 #endif //ROJCZASTEK_SZCZEPANSKI_JURKIEWICZ_PIKULINSKI_PARTICLE_H

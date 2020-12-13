@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.15)
+cmake_minimum_required(VERSION 2.8.12)
 project(rojCzastek_Szczepanski_Jurkiewicz_Pikulinski)
 
 set(CMAKE_CXX_STANDARD 14)
@@ -28,7 +28,8 @@ if(OpenMP_CXX_FOUND)
 endif()
 
 add_executable(rojCzastek_Szczepanski_Jurkiewicz_Pikulinski main.cpp
-    src/Particle.cpp include/Particle.h
+    include/Particle.h src/Particle.cpp
+    src/SwarmParticle.cpp include/SwarmParticle.h
     include/Swarm.h src/Swarm.cpp
     include/OptimizationExercisesConfig.h src/ConfigEx1.cpp
     include/ConfigEx1.h src/ConfigEx2.cpp
@@ -36,7 +37,9 @@ add_executable(rojCzastek_Szczepanski_Jurkiewicz_Pikulinski main.cpp
     src/StopCriterionConfig.cpp include/StopCriterionConfig.h
     src/ConfigStopCriterionAcademic.cpp include/ConfigStopCriterionAcademic.h
     src/ConfigStopCriterionNormal.cpp include/ConfigStopCriterionNormal.h
-    src/PositionVectorOperator.cpp include/PositionVectorOperator.h)
+    src/PositionVectorOperator.cpp include/PositionVectorOperator.h
+    src/MonteCarloParticle.cpp include/MonteCarloParticle.h
+    src/MonteCarlo.cpp include/MonteCarlo.h)
 
 if(APPLE)
     target_link_libraries(rojCzastek_Szczepanski_Jurkiewicz_Pikulinski PRIVATE OpenMP::OpenMP_CXX -L/usr/local/opt/libomp/lib/)
