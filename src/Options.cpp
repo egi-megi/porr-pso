@@ -7,4 +7,7 @@ Options::Options()
     stopCriterionThreshold  = 0.1;
     amountOfParticles = 10;
     dimension = 3;
+
+    verbose = true;
+    timing = true;
 }

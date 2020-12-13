@@ -15,6 +15,9 @@ public:
     double stopCriterionThreshold;
     int amountOfParticles;
     int dimension;
+
+    bool verbose;
+    bool timing;
 };
 
 #endif // ROJCZASTEK_SZCZEPANSKI_JURKIEWICZ_PIKULINSKI_OPTIONS_H

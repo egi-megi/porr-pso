@@ -21,7 +21,8 @@ MonteCarlo::MonteCarlo(Options *mOptions) :
 #endif
     Timer t1;
     makeMonteCarlo();
-    printf("MonteCarlo::MonteCarlo: Initialization took %.2lf s\n", t1.click());
+    if(options->timing)
+        printf("MonteCarlo::MonteCarlo: Initialization took %.2lf s\n", t1.click());
 }
 
 #ifdef OPEN_MP_SWARM
@@ -112,8 +113,9 @@ MonteCarloParticle MonteCarlo::findTheBestParticle(float criterionStopValue,
                 if(threadsCompleted >= threads)
                 {
                     threadsCompleted -= threads;
-                    printf("MonteCarlo::findTheBestParticle: iteration = %d, globalBestParticle.first = %lf\n",
-                        iteration_number, globalBestParticle.first.getCostFunctionValue());
+                    if(options->verbose)
+                        printf("MonteCarlo::findTheBestParticle: iteration = %d, globalBestParticle.first = %lf\n",
+                            iteration_number, globalBestParticle.first.getCostFunctionValue());
                     iteration_number++;
                 }
 
@@ -123,7 +125,8 @@ MonteCarloParticle MonteCarlo::findTheBestParticle(float criterionStopValue,
         }
     }
 
-    printf("MonteCarlo::findTheBestParticle: Solution took %.2lf s\n", t1.click());
+    if(options->timing)
+        printf("MonteCarlo::findTheBestParticle: Solution took %.2lf s\n", t1.click());
 
     return globalBestParticle.first;
 }
@@ -144,12 +147,14 @@ MonteCarloParticle MonteCarlo::findTheBestParticle(float criterionStopValue,
             particle.computePosition(sigma, T, rand_engine);
             computeGlobalBest(&particle);
         }
-        printf("MonteCarlo::findTheBestParticle: iteration = %d, globalBestParticle.first = %lf\n",
-               iteration_number, globalBestParticle.first.getCostFunctionValue());
+        if(options->verbose)
+            printf("MonteCarlo::findTheBestParticle: iteration = %d, globalBestParticle.first = %lf\n",
+                iteration_number, globalBestParticle.first.getCostFunctionValue());
         iteration_number++;
     }
 
-    printf("MonteCarlo::findTheBestParticle: Solution took %.2lf s\n", t1.click());
+    if(options->timing)
+        printf("MonteCarlo::findTheBestParticle: Solution took %.2lf s\n", t1.click());
 
     return globalBestParticle.first;
 }

@@ -28,7 +28,8 @@ Swarm::Swarm(Options* mOptions) :
 #endif
     Timer t1;
     makeSwarm();
-    printf("Swarm::Swarm: Initialization took %.2lf s\n", t1.click());
+    if(options->timing)
+        printf("Swarm::Swarm: Initialization took %.2lf s\n", t1.click());
 }
 
 #ifdef OPEN_MP_SWARM
@@ -122,8 +123,9 @@ SwarmParticle Swarm::findTheBestParticle(float criterionStopValue, float w, floa
 
 #pragma omp master
             {
-                printf("Swarm::findTheBestParticle: iteration = %d, globalBestParticle.first = %lf\n",
-                       iteration_number, globalBestParticle.first.getCostFunctionValue());
+                if(options->verbose)
+                    printf("Swarm::findTheBestParticle: iteration = %d, globalBestParticle.first = %lf\n",
+                        iteration_number, globalBestParticle.first.getCostFunctionValue());
                 iteration_number++;
             }
 
@@ -135,7 +137,8 @@ SwarmParticle Swarm::findTheBestParticle(float criterionStopValue, float w, floa
         }
     }
 
-    printf("Swarm::findTheBestParticle: Solution took %.2lf s\n", t1.click());
+    if(options->timing)
+        printf("Swarm::findTheBestParticle: Solution took %.2lf s\n", t1.click());
 
     return globalBestParticle.first;
 }
@@ -158,12 +161,14 @@ SwarmParticle Swarm::findTheBestParticle(float criterionStopValue, float w, floa
             singleParticle.computeParticlePbest();
             computeGbest(&singleParticle);
         }
-        printf("Swarm::findTheBestParticle: iteration = %d, globalBestParticle.first = %lf\n",
-               iteration_number, globalBestParticle.first.getCostFunctionValue());
+        if(options->verbose)
+            printf("Swarm::findTheBestParticle: iteration = %d, globalBestParticle.first = %lf\n",
+                iteration_number, globalBestParticle.first.getCostFunctionValue());
         iteration_number++;
     }
 
-    printf("Swarm::findTheBestParticle: Solution took %.2lf s\n", t1.click());
+    if(options->timing)
+        printf("Swarm::findTheBestParticle: Solution took %.2lf s\n", t1.click());
 
     return globalBestParticle.first;
 }
