@@ -25,10 +25,10 @@ MonteCarloParticle::MonteCarloParticle(Options* mOptions, std::default_random_en
 
 void MonteCarloParticle::computePosition(float sigma, float T, std::default_random_engine &gen)
 {
-    std::normal_distribution<double> normal(0, 1);
+    std::uniform_real_distribution<double> uniform(-1, 1);
     std::vector<double> v_positionDelta(vectorDim);
     for(int i = 0; i < vectorDim; i++)
-        v_positionDelta[i] = sigma*normal(gen);
+        v_positionDelta[i] = sigma*uniform(gen);
     
     std::vector<double> v_positionProposition = PositionVectorOperator::add(
         positionVectors,
@@ -52,8 +52,8 @@ void MonteCarloParticle::computePosition(float sigma, float T, std::default_rand
     }
     else
     {
-        double threshold = std::exp(-(costFunctionValueProposition - costFunctionValue) / T);
         std::uniform_real_distribution<double> uniform(0, 1);
+        double threshold = std::exp(-(costFunctionValueProposition - costFunctionValue) / T);
         if(uniform(gen) < threshold)
         {
             costFunctionValue = costFunctionValueProposition;

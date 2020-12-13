@@ -25,13 +25,13 @@ int main(int argc, char* argv[])
     double w = chi;
     c1 = chi*c1;
     c2 = chi*c2;
-    
+
     SwarmParticle s1a_best = s1a.findTheBestParticle(w, c1, c2);
     
     printf("Best particle f(s1a_best) = %lf\n", s1a_best.getCostFunctionValue());
 
     // MonteCarlo mc1a(options);
-    // MonteCarloParticle mc1a_best = mc1a.findTheBestParticle(1, 8);
+    // MonteCarloParticle mc1a_best = mc1a.findTheBestParticle(.01, .1);
 
     // printf("Best particle f(mc1a_best) = %lf\n", mc1a_best.getCostFunctionValue());
 
