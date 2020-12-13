@@ -21,28 +21,27 @@ SwarmParticle::SwarmParticle(const int mVectorsDim, Swarm *s, OptimizationExerci
                    std::default_random_engine *gen)
 {
     vectorDim = mVectorsDim;
-    generator = gen;
     speedVectors.resize(mVectorsDim, 0.0);
     tempSpeedVectors.resize(mVectorsDim, 0.0);
     positionVectors.resize(mVectorsDim, 0.0);
     config = mconfig;
-    setStartPosition();
+    setStartPosition(*gen);
     positionVectorsParticlePbest = positionVectors;
-    setStartSpeed();
+    setStartSpeed(*gen);
     computeCostFunctionValue();
     swarm = s;
     costFunctionValuePbest = costFunctionValue;
     ready = true;
 }
 
-void SwarmParticle::setStartSpeed()
+void SwarmParticle::setStartSpeed(std::default_random_engine &gen)
 {
     std::uniform_real_distribution<double> unif(
         (config->lowerLimitPositionVector - config->upperLimitPositionVector) / (vectorDim * vectorDim),
         (config->upperLimitPositionVector - config->lowerLimitPositionVector) / (vectorDim * vectorDim));
     for (int i = 0; i < vectorDim; i++)
     {
-        speedVectors[i] = unif(*generator);
+        speedVectors[i] = unif(gen);
     }
 }
 

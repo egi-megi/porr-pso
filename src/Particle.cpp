@@ -3,13 +3,13 @@
 
 #include "../include/Particle.h"
 
-void Particle::setStartPosition()
+void Particle::setStartPosition(std::default_random_engine &gen)
 {
     std::uniform_real_distribution<double> unif(config->lowerLimitPositionVector,
         config->upperLimitPositionVector);
     for (int i = 0; i < vectorDim; i++)
     {
-        positionVectors[i] = unif(*generator);
+        positionVectors[i] = unif(gen);
     }
 }
 

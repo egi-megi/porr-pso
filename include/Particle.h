@@ -12,7 +12,7 @@ public:
     Particle() = default;
     virtual ~Particle() = default;
 
-    void setStartPosition();
+    void setStartPosition(std::default_random_engine &gen);
     void computeCostFunctionValue();
     double getCostFunctionValue() const;
     std::vector<double> getPositionVector();
@@ -26,7 +26,6 @@ protected:
     std::vector<double> positionVectors;
     double costFunctionValue;
     OptimizationExercisesConfig *config;
-    std::default_random_engine *generator;
     bool ready;
 };
 
