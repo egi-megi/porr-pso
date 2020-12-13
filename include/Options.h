@@ -4,6 +4,8 @@
 #include "OptimizationExercisesConfig.h"
 #include "StopCriterionConfig.h"
 
+class StopCriterionConfig;
+
 class Options
 {
 public:

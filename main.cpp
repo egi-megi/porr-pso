@@ -1,12 +1,12 @@
-#include "include/SwarmParticle.h"
-#include "include/Swarm.h"
-#include "include/ConfigEx1.h"
-#include "include/ConfigEx2.h"
+#include "include/Options.h"
 #include "include/ConfigStopCriterionNormal.h"
 #include "include/ConfigStopCriterionAcademic.h"
+#include "include/ConfigEx1.h"
+#include "include/ConfigEx2.h"
+#include "include/SwarmParticle.h"
 #include "include/MonteCarloParticle.h"
+#include "include/Swarm.h"
 #include "include/MonteCarlo.h"
-#include "include/Options.h"
 #include "include/InputParser.h"
 
 #include <iostream>

@@ -48,7 +48,6 @@ private:
     Swarm *swarm;
 
     Options::CommunicationType communication;
-    Options *options;
 };
 
 #endif //ROJCZASTEK_SZCZEPANSKI_JURKIEWICZ_PIKULINSKI_SWARMPARTICLE_H

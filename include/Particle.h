@@ -2,9 +2,12 @@
 #define ROJCZASTEK_SZCZEPANSKI_JURKIEWICZ_PIKULINSKI_PARTICLE_H
 
 #include "OptimizationExercisesConfig.h"
+#include "Options.h"
 
 #include <vector>
 #include <random>
+
+class Options;
 
 class Particle
 {
@@ -28,6 +31,8 @@ protected:
     double costFunctionValue;
     OptimizationExercisesConfig *config;
     bool ready = false;
+
+    Options *options;
 };
 
 #endif //ROJCZASTEK_SZCZEPANSKI_JURKIEWICZ_PIKULINSKI_PARTICLE_H
