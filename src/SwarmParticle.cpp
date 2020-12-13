@@ -12,11 +12,6 @@
 
 using namespace std;
 
-SwarmParticle::SwarmParticle()
-{
-    ready = false;
-}
-
 SwarmParticle::SwarmParticle(const int mVectorsDim, Swarm *s, OptimizationExercisesConfig *mconfig,
                    std::default_random_engine *gen)
 {

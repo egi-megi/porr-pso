@@ -26,7 +26,7 @@ protected:
     std::vector<double> positionVectors;
     double costFunctionValue;
     OptimizationExercisesConfig *config;
-    bool ready;
+    bool ready = false;
 };
 
 #endif

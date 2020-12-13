@@ -20,7 +20,7 @@ class Swarm;
 class SwarmParticle : public Particle
 {
 public:
-    SwarmParticle();
+    SwarmParticle() = default;
     SwarmParticle(int vectorDim, Swarm *s, OptimizationExercisesConfig *config,
              std::default_random_engine *generator);
     virtual ~SwarmParticle() = default;
