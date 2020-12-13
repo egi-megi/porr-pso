@@ -29,5 +29,8 @@ int main(int argc, char* argv[])
 
     // printf("Best particle f(mc1a_best) = %lf\n", mc1a_best.getCostFunctionValue());
 
+    delete options->optimizationExerciseConfig;
+    delete options->stopCriterionConfig;
+
     return 0;
 }

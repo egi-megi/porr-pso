@@ -13,6 +13,8 @@
 class StopCriterionConfig
 {
 public:
+    virtual ~StopCriterionConfig() = default;
+
     virtual bool computeStopCriterion(float criterionStopValue, const std::pair<Particle,
         Particle> &globalBestParticle) = 0;
 };
