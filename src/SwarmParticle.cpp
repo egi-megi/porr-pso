@@ -2,30 +2,41 @@
 // Created by Agnieszka Jurkiewicz on 28/10/2020.
 //
 
+#include "../include/SwarmParticle.h"
+
+#include "../include/Swarm.h"
+#include "../include/PositionVectorOperator.h"
+#include "../include/Options.h"
+
 #include <iostream>
 #include <math.h>
 #include <random>
 
-#include "../include/SwarmParticle.h"
-#include "../include/Swarm.h"
-#include "../include/PositionVectorOperator.h"
-
 using namespace std;
 
-SwarmParticle::SwarmParticle(const int mVectorsDim, Swarm *s, OptimizationExercisesConfig *mconfig,
+SwarmParticle::SwarmParticle(Options* mOptions, Swarm *s,
     std::default_random_engine *gen)
 {
-    vectorDim = mVectorsDim;
-    speedVectors.resize(mVectorsDim, 0.0);
-    tempSpeedVectors.resize(mVectorsDim, 0.0);
-    positionVectors.resize(mVectorsDim, 0.0);
-    config = mconfig;
+    options = mOptions;
+
+    vectorDim = options->dimension;
+    speedVectors.resize(vectorDim, 0.0);
+    tempSpeedVectors.resize(vectorDim, 0.0);
+    positionVectors.resize(vectorDim, 0.0);
+
+    config = options->optimizationExerciseConfig;
+
     setStartPosition(*gen);
     positionVectorsParticlePbest = positionVectors;
     setStartSpeed(*gen);
+
     computeCostFunctionValue();
-    swarm = s;
     costFunctionValuePbest = costFunctionValue;
+
+    swarm = s;
+
+    communication = options->communication;
+
     ready = true;
 }
 
@@ -56,13 +67,28 @@ void SwarmParticle::computeSpeed(float w, float speedConstant1, float speedConst
                 PositionVectorOperator::minus(positionVectorsParticlePbest, positionVectors)),
             PositionVectorOperator::mult(
                 speedConstant2 * rand_2,
-                PositionVectorOperator::minus(swarm->globalBestParticle.first.positionVectors,
+                PositionVectorOperator::minus(getBestVisibleParticlePosition(),
                     positionVectors))));
 
     std::vector<double> v_positionProposition = PositionVectorOperator::add(positionVectors,
         v_velocityProposition);
     tempSpeedVectors = PositionVectorOperator::mult(getCoefficientForBoundedPosition(v_positionProposition,
         v_velocityProposition), v_velocityProposition);
+}
+
+vector<double>& SwarmParticle::getBestVisibleParticlePosition()
+{
+    if(communication == Options::CommunicationType::GLOBAL_BEST)
+        return swarm->globalBestParticle.first.positionVectors;
+    else if(communication == Options::CommunicationType::LOCAL_BEST)
+        return v_localBestParticleVisiblePosition;
+    else
+        throw "I don't know the communication type!";
+}
+
+void SwarmParticle::setLocalBestParticleVisiblePosition(const vector<double> &particlePosition)
+{
+    v_localBestParticleVisiblePosition = particlePosition;
 }
 
 void SwarmParticle::computePosition(float w, float speedConstant1, float speedConstant2,

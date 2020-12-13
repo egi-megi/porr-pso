@@ -1,14 +1,14 @@
+#include "../include/MonteCarlo.h"
+#include "../include/MonteCarloParticle.h"
+#include "../include/Options.h"
+#include "../include/Timer.h"
+
 #include <stdio.h>
 #include <random>
 #include <time.h>
 #ifdef OPEN_MP_SWARM
 #include <omp.h>
 #endif
-
-#include "../include/MonteCarlo.h"
-#include "../include/MonteCarloParticle.h"
-#include "../include/Options.h"
-#include "../include/Timer.h"
 
 MonteCarlo::MonteCarlo(Options *mOptions) :
     amountOfParticles{mOptions->amountOfParticles}, vectorDim{mOptions->dimension},
@@ -34,7 +34,7 @@ void MonteCarlo::makeMonteCarlo()
     rand_engine.seed((omp_get_thread_num() + 1) * time(NULL));
 #pragma omp for
     for(int i = 0; i < amountOfParticles; i++)
-        v_particles[i] = MonteCarloParticle(vectorDim, options->optimizationExerciseConfig, rand_engine);
+        v_particles[i] = MonteCarloParticle(options, rand_engine);
 }
 
     globalBestParticle.first = v_particles[0];
@@ -50,7 +50,7 @@ void MonteCarlo::makeMonteCarlo()
     std::default_random_engine rand_engine;
     rand_engine.seed(time(NULL));
     for(int i = 0; i < amountOfParticles; i++)
-        v_particles[i] = MonteCarloParticle(vectorDim, options->optimizationExerciseConfig, rand_engine);
+        v_particles[i] = MonteCarloParticle(options, rand_engine);
 
     globalBestParticle.first = v_particles[0];
     for(int i = 1; i < amountOfParticles; i++)

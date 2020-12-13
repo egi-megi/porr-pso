@@ -18,6 +18,12 @@ public:
 
     bool verbose;
     bool timing;
+
+    enum CommunicationType {
+        GLOBAL_BEST,
+        LOCAL_BEST
+    };
+    CommunicationType communication;
 };
 
 #endif // ROJCZASTEK_SZCZEPANSKI_JURKIEWICZ_PIKULINSKI_OPTIONS_H

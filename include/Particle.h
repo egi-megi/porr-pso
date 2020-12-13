@@ -1,10 +1,10 @@
 #ifndef ROJCZASTEK_SZCZEPANSKI_JURKIEWICZ_PIKULINSKI_PARTICLE_H
 #define ROJCZASTEK_SZCZEPANSKI_JURKIEWICZ_PIKULINSKI_PARTICLE_H
 
+#include "OptimizationExercisesConfig.h"
+
 #include <vector>
 #include <random>
-
-#include "OptimizationExercisesConfig.h"
 
 class Particle
 {

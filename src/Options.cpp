@@ -10,4 +10,6 @@ Options::Options()
 
     verbose = true;
     timing = true;
+
+    communication = CommunicationType::GLOBAL_BEST;
 }

@@ -1,7 +1,7 @@
+#include "../include/Particle.h"
+
 #include <random>
 #include <vector>
-
-#include "../include/Particle.h"
 
 void Particle::setStartPosition(std::default_random_engine &gen)
 {

@@ -2,11 +2,12 @@
 // Created by Agnieszka Jurkiewicz on 02/11/2020.
 //
 
-#include <math.h>
-
 #include "../include/ConfigStopCriterionNormal.h"
+
 #include "../include/StopCriterionConfig.h"
 #include "../include/Particle.h"
+
+#include <math.h>
 
 bool ConfigStopCriterionNormal::computeStopCriterion(float criterionStopValue,
     const std::pair<Particle, Particle> &globalBestParticle)

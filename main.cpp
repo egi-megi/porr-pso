@@ -1,5 +1,3 @@
-#include <iostream>
-
 #include "include/SwarmParticle.h"
 #include "include/Swarm.h"
 #include "include/ConfigEx1.h"
@@ -10,6 +8,8 @@
 #include "include/MonteCarlo.h"
 #include "include/Options.h"
 #include "include/InputParser.h"
+
+#include <iostream>
 
 int main(int argc, char* argv[])
 {
