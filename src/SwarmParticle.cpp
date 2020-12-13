@@ -13,7 +13,7 @@
 using namespace std;
 
 SwarmParticle::SwarmParticle(const int mVectorsDim, Swarm *s, OptimizationExercisesConfig *mconfig,
-                   std::default_random_engine *gen)
+    std::default_random_engine *gen)
 {
     vectorDim = mVectorsDim;
     speedVectors.resize(mVectorsDim, 0.0);

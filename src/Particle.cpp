@@ -23,6 +23,11 @@ double Particle::getCostFunctionValue() const
     return costFunctionValue;
 }
 
+double Particle::getCostFunctionValue(std::vector<double> &v_position) const
+{
+    return config->computeCostFunctionValue(v_position);
+}
+
 std::vector<double> Particle::getPositionVector()
 {
     return positionVectors;

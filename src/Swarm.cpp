@@ -99,7 +99,7 @@ SwarmParticle Swarm::findTheBestParticle(float criterionStopValue, float w, floa
 
         while (!foundSolution)
         {
-#pragma omp for schedule(static)
+#pragma omp for schedule(static) nowait
             for (int i = 0; i < amountOfParticles; i++)
             {
                 swarm[i].computePosition(w, speedConstant1, speedConstant2, &rand_engine);
@@ -113,7 +113,7 @@ SwarmParticle Swarm::findTheBestParticle(float criterionStopValue, float w, floa
             }
 
 #pragma omp critical
-            Swarm::computeGbest(bestParticleInIteration);
+            computeGbest(bestParticleInIteration);
             bestParticleInIteration = nullptr;
 
 #pragma omp barrier

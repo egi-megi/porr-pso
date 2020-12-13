@@ -1,5 +1,5 @@
-#ifndef ROJCZASTEK_SZCZEPANSKI_JURKIEWICZ_PIKULINSKI_PARTICLEBASE_H
-#define ROJCZASTEK_SZCZEPANSKI_JURKIEWICZ_PIKULINSKI_PARTICLEBASE_H
+#ifndef ROJCZASTEK_SZCZEPANSKI_JURKIEWICZ_PIKULINSKI_PARTICLE_H
+#define ROJCZASTEK_SZCZEPANSKI_JURKIEWICZ_PIKULINSKI_PARTICLE_H
 
 #include <vector>
 #include <random>
@@ -15,6 +15,7 @@ public:
     void setStartPosition(std::default_random_engine &gen);
     void computeCostFunctionValue();
     double getCostFunctionValue() const;
+    double getCostFunctionValue(std::vector<double> &v_position) const;
     std::vector<double> getPositionVector();
     bool isReady() const;
 
@@ -29,4 +30,4 @@ protected:
     bool ready = false;
 };
 
-#endif
+#endif //ROJCZASTEK_SZCZEPANSKI_JURKIEWICZ_PIKULINSKI_PARTICLE_H
