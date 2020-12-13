@@ -12,6 +12,7 @@
 
 #include "../include/Swarm.h"
 #include "../include/SwarmParticle.h"
+#include "../include/Options.h"
 
 using namespace std;
 
@@ -30,6 +31,12 @@ Swarm::Swarm(int mAmountOfParticles, int mVectorDim, OptimizationExercisesConfig
     makeSwarm(config);
 }
 #endif
+
+Swarm::Swarm(Options* mOptions) :
+Swarm(mOptions->amountOfParticles, mOptions->dimension, mOptions->optimizationExerciseConfig)
+{
+    options = mOptions;
+}
 
 #ifdef OPEN_MP_SWARM
 void Swarm::makeSwarm(OptimizationExercisesConfig *config)
@@ -99,7 +106,7 @@ SwarmParticle Swarm::findTheBestParticle(float criterionStopValue, float w, floa
 
         while (!foundSolution)
         {
-#pragma omp for schedule(static) nowait
+#pragma omp for schedule(static)
             for (int i = 0; i < amountOfParticles; i++)
             {
                 swarm[i].computePosition(w, speedConstant1, speedConstant2, &rand_engine);
@@ -160,3 +167,9 @@ SwarmParticle Swarm::findTheBestParticle(float criterionStopValue, float w, floa
     return globalBestParticle.first;
 }
 #endif
+
+SwarmParticle Swarm::findTheBestParticle(float w, float speedConstant1, float speedConstant2)
+{
+    return findTheBestParticle(options->stopCriterionThreshold, w, speedConstant1,
+        speedConstant2, options->stopCriterionConfig);
+}

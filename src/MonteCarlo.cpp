@@ -7,6 +7,7 @@
 
 #include "../include/MonteCarlo.h"
 #include "../include/MonteCarloParticle.h"
+#include "../include/Options.h"
 
 MonteCarlo::MonteCarlo(int mAmountOfParticles, int mVectorDim,
     OptimizationExercisesConfig *config) :
@@ -19,6 +20,12 @@ MonteCarlo::MonteCarlo(int mAmountOfParticles, int mVectorDim,
     printf("Welcome to sequential version!\n");
 #endif
     makeMonteCarlo(*config);
+}
+
+MonteCarlo::MonteCarlo(Options *mOptions) :
+MonteCarlo(mOptions->amountOfParticles, mOptions->dimension, mOptions->optimizationExerciseConfig)
+{
+    options = mOptions;
 }
 
 #ifdef OPEN_MP_SWARM
@@ -143,3 +150,9 @@ MonteCarloParticle MonteCarlo::findTheBestParticle(float criterionStopValue,
     return globalBestParticle.first;
 }
 #endif
+
+MonteCarloParticle MonteCarlo::findTheBestParticle(float sigma, float T)
+{
+    return findTheBestParticle(options->stopCriterionThreshold, sigma, T,
+        options->stopCriterionConfig);
+}
