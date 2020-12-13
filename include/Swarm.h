@@ -1,16 +1,12 @@
-//
-// Created by Agnieszka Jurkiewicz on 28/10/2020.
-//
-
 #ifndef ROJCZASTEK_SZCZEPANSKI_JURKIEWICZ_PIKULINSKI_SWARM_H
 #define ROJCZASTEK_SZCZEPANSKI_JURKIEWICZ_PIKULINSKI_SWARM_H
 
-
-#include "Particle.h"
-#include "Logger.h"
+#include "SwarmParticle.h"
 #include "ConfigStopCriterionAcademic.h"
 #include "ConfigStopCriterionNormal.h"
 #include "StopCriterionConfig.h"
+#include "Options.h"
+
 #include <iostream>
 #include <vector>
 
@@ -19,21 +15,24 @@ using namespace std;
 class Swarm
 {
 public:
-    Swarm () = default;
-    Swarm(int mAmountOfParticles, int mVectorDim, Logger* log, OptimizationExercisesConfig* config);
-    virtual ~Swarm();
+    Swarm() = default;
+    Swarm(Options *mOptions);
+    virtual ~Swarm() = default;
 
-    void makeSwarm(OptimizationExercisesConfig* config);
-    void computeGbest(Particle *particle);
-    Particle findTheBestParticle(float criterionStopValue, float w, float speedConstant1, float speedConstant2, Logger* log, StopCriterionConfig *configStop);
-    std::pair<Particle, Particle> globalBestParticle;
-    int bestParticleId;
+    void makeSwarm();
+    void computeGbest(SwarmParticle *particle);
+    SwarmParticle findTheBestParticle(float criterionStopValue, float w, float speedConstant1,
+        float speedConstant2, StopCriterionConfig *configStop);
+    SwarmParticle findTheBestParticle(float w, float speedConstant1, float speedConstant2);
+    std::pair<SwarmParticle, SwarmParticle> globalBestParticle;
 
 private:
+    vector<double> getPositionOfBetterParticle(SwarmParticle& p_1, SwarmParticle& p_2);
+
     int amountOfParticles;
     int vectorDim;
-    vector <Particle> swarm;
+    vector<SwarmParticle> swarm;
+    Options *options;
 };
-
 
 #endif //ROJCZASTEK_SZCZEPANSKI_JURKIEWICZ_PIKULINSKI_SWARM_H

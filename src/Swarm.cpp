@@ -1,173 +1,199 @@
-//
-// Created by Agnieszka Jurkiewicz on 28/10/2020.
-//
 #include "../include/Swarm.h"
-#include "../include/Particle.h"
-#include "../include/Logger.h"
+
+#include "../include/SwarmParticle.h"
+#include "../include/Options.h"
+#include "../include/Timer.h"
+
 #include <iostream>
 #include <math.h>
 #include <algorithm>
 #include <time.h>
-
 #ifdef OPEN_MP_SWARM
 #include <omp.h>
 #endif
 
 using namespace std;
 
-#ifdef OPEN_MP_SWARM
-Swarm::Swarm(int mAmountOfParticles, int mVectorDim, Logger* log, OptimizationExercisesConfig* config) :
-amountOfParticles{mAmountOfParticles}, vectorDim{mVectorDim}, swarm(mAmountOfParticles)
+Swarm::Swarm(Options* mOptions) :
+    amountOfParticles{mOptions->amountOfParticles}, vectorDim{mOptions->dimension},
+    swarm(mOptions->amountOfParticles), options{mOptions}
 {
-    log->stream << "$TYPE$" << '\n';   
-    log->stream << "OpenMP" << '\n';
-    log->stream << "$DATA$" << '\n';    
-    printf("Welcome to OpenMP version!\n");    
-    makeSwarm(config);
-}
+#ifdef OPEN_MP_SWARM
+    printf("Welcome to OpenMP version!\n");
 #else
-
-Swarm::Swarm(int mAmountOfParticles, int mVectorDim, Logger* log, OptimizationExercisesConfig *config) :
-amountOfParticles{mAmountOfParticles}, vectorDim{mVectorDim}, swarm(mAmountOfParticles)
-{   
-    log->stream << "$TYPE$" << '\n';   
-    log->stream << "Serial" << '\n';
-    log->stream << "$DATA$" << '\n';    
     printf("Welcome to serial version!\n");
-    makeSwarm(config);
-}
-
 #endif
-
-Swarm::~Swarm() {
+    Timer t1;
+    makeSwarm();
+    if(options->timing)
+        printf("Swarm::Swarm: Initialization took %.2lf s\n", t1.click());
 }
 
 #ifdef OPEN_MP_SWARM
-void Swarm::makeSwarm(OptimizationExercisesConfig* config)
+void Swarm::makeSwarm()
 {
-    #pragma omp parallel
+#pragma omp parallel
     {
         std::default_random_engine rand_engine;
         rand_engine.seed((omp_get_thread_num() + 1) * time(NULL));
-        #pragma omp for
-        for(int i = 0; i < amountOfParticles; i++) {
-            Particle particle(vectorDim, this, config, &rand_engine);
+#pragma omp for
+        for (int i = 0; i < amountOfParticles; i++)
+        {
+            SwarmParticle particle(options, this, &rand_engine);
             swarm[i] = particle;
         }
     }
 
     globalBestParticle.first = swarm[0];
-    for(int i = 1; i < amountOfParticles; i++) {
-        if(swarm[i].getCostFunctionValue() < globalBestParticle.first.getCostFunctionValue())
-        {
+    for (int i = 1; i < amountOfParticles; i++)
+    {
+        if (swarm[i].getCostFunctionValue() < globalBestParticle.first.getCostFunctionValue())
             globalBestParticle.first = swarm[i];
-        }
     }
 }
-
 #else
-
-void Swarm::makeSwarm(OptimizationExercisesConfig *config) {
+void Swarm::makeSwarm()
+{
     std::default_random_engine rand_engine;
     rand_engine.seed(time(NULL));
-    for (int i = 0; i < amountOfParticles; i++) {
-        Particle particle(vectorDim, this, config, &rand_engine);
+    for (int i = 0; i < amountOfParticles; i++)
+    {
+        SwarmParticle particle(options, this, &rand_engine);
         swarm[i] = particle;
     }
 
     globalBestParticle.first = swarm[0];
-    for(int i = 1; i < amountOfParticles; i++) {
-        if(swarm[i].getCostFunctionValue() < globalBestParticle.first.getCostFunctionValue())
+    for (int i = 1; i < amountOfParticles; i++)
+    {
+        if (swarm[i].getCostFunctionValue() < globalBestParticle.first.getCostFunctionValue())
             globalBestParticle.first = swarm[i];
     }
 }
-
 #endif
 
-
-void Swarm::computeGbest(Particle *particle) {
-    if(particle->getCostFunctionValue() < globalBestParticle.first.getCostFunctionValue()) {
+void Swarm::computeGbest(SwarmParticle *particle)
+{
+    if(particle == nullptr)
+        return;
+    else if (particle->getCostFunctionValue() < globalBestParticle.first.getCostFunctionValue())
+    {
         globalBestParticle.second = globalBestParticle.first;
         globalBestParticle.first = *particle;
     }
 }
 
 #ifdef OPEN_MP_SWARM
-Particle Swarm::findTheBestParticle(float criterionStopValue, float w, float speedConstant1, float speedConstant2, Logger* log, StopCriterionConfig* configStop)
+SwarmParticle Swarm::findTheBestParticle(float criterionStopValue, float w, float speedConstant1,
+    float speedConstant2, StopCriterionConfig *configStop)
 {
+    Timer t1;
+
     bool foundSolution = false;
     int iteration_number = 0;
-    #pragma omp parallel
+#pragma omp parallel
     {
         std::default_random_engine rand_engine;
         rand_engine.seed((omp_get_thread_num() + 1) * time(NULL));
 
-        Particle* bestParticleInIteration = nullptr;
+        SwarmParticle *bestParticleInIteration = nullptr;
 
-        while (!foundSolution) {
-            #pragma omp for schedule(static) nowait
-            for(int i = 0; i < amountOfParticles; i++) {
+        while (!foundSolution)
+        {
+            if(options->communication == Options::CommunicationType::LOCAL_BEST)
+            {
+                swarm[0].setLocalBestParticleVisiblePosition(
+                    getPositionOfBetterParticle(
+                        swarm[amountOfParticles - 1], swarm[1]
+                    )
+                );
+                swarm[amountOfParticles - 1].setLocalBestParticleVisiblePosition(
+                    getPositionOfBetterParticle(
+                        swarm[amountOfParticles - 2],
+                        swarm[0]
+                    )
+                );
+#pragma omp for schedule(static)
+                for(int i = 1; i < amountOfParticles - 1; i++)
+                    swarm[i].setLocalBestParticleVisiblePosition(
+                        getPositionOfBetterParticle(
+                            swarm[i-1],
+                            swarm[i+1]
+                        )
+                    );
+            }
+#pragma omp for schedule(static)
+            for (int i = 0; i < amountOfParticles; i++)
+            {
                 swarm[i].computePosition(w, speedConstant1, speedConstant2, &rand_engine);
                 swarm[i].computeCostFunctionValue();
                 swarm[i].computeParticlePbest();
 
-                if(bestParticleInIteration == nullptr)
+                if (bestParticleInIteration == nullptr)
                     bestParticleInIteration = &swarm[i];
-                else if(swarm[i].getCostFunctionValue() < bestParticleInIteration->getCostFunctionValue())
+                else if (swarm[i].getCostFunctionValue() < bestParticleInIteration->getCostFunctionValue())
                     bestParticleInIteration = &swarm[i];
-                    bestParticleId = i;
             }
 
-            #pragma omp critical
-            Swarm::computeGbest(bestParticleInIteration);
-            bestParticleInIteration = nullptr; 
+#pragma omp critical
+            computeGbest(bestParticleInIteration);
+            bestParticleInIteration = nullptr;
 
-            #pragma omp master
+#pragma omp barrier
+
+#pragma omp master
             {
-                double cost = globalBestParticle.first.getCostFunctionValue();
-                printf("Swarm::findTheBestParticle: iteration = %d, globalBestParticle.first = %lf\n",
-                       iteration_number, cost);
-
-                log->stream << iteration_number << ',' << cost << ',' << bestParticleId << '\n';
-
-
-                if(log->isParticlesLog) //only for n=2
-                {
-                    if(log->isLogAllParticles)
-                    {
-                        for (int i=0; i<swarm.size(); i++)
-                        {
-                            Particle p = swarm[i];
-                            log->sendAllParticlesStream(iteration_number,i,p.getPositionVector()[0], p.getPositionVector()[1], p.getSpeedVector()[0], p.getSpeedVector()[1], p.getCostFunctionValue());
-                        }
-                        log->saveParticleStreamBuffer();
-                    }
-                    else
-                    {
-                    Particle p = globalBestParticle.first;
-                    log->sendToParticlesStream(iteration_number, cost, p.getPositionVector()[0], p.getPositionVector()[1], p.getSpeedVector()[0], p.getSpeedVector()[1]);
-                    }
-                }
+                if(options->verbose)
+                    printf("Swarm::findTheBestParticle: iteration = %d, globalBestParticle.first = %lf\n",
+                        iteration_number, globalBestParticle.first.getCostFunctionValue());
                 iteration_number++;
             }
-            #pragma omp barrier
 
 #pragma omp critical
             {
-                if(!configStop->computeStopCriterion(criterionStopValue, globalBestParticle))
+                if (!configStop->computeStopCriterion(criterionStopValue, globalBestParticle))
                     foundSolution = true;
             }
         }
     }
 
+    if(options->timing)
+        printf("Swarm::findTheBestParticle: Solution took %.2lf s\n", t1.click());
+
     return globalBestParticle.first;
 }
-
 #else
+SwarmParticle Swarm::findTheBestParticle(float criterionStopValue, float w, float speedConstant1,
+    float speedConstant2, StopCriterionConfig *configStop)
+{
+    Timer t1;
 
-Particle Swarm::findTheBestParticle(float criterionStopValue, float w, float speedConstant1, float speedConstant2,
-                                    Logger* log, StopCriterionConfig *configStop) {
-    while (configStop->computeStopCriterion(criterionStopValue, &GbestVector)) {
+    std::default_random_engine rand_engine;
+    rand_engine.seed(time(NULL));
+
+    int iteration_number = 0;
+    while (configStop->computeStopCriterion(criterionStopValue, globalBestParticle))
+    {
+        if(options->communication == Options::CommunicationType::LOCAL_BEST)
+        {
+            swarm[0].setLocalBestParticleVisiblePosition(
+                getPositionOfBetterParticle(
+                    swarm[amountOfParticles - 1], swarm[1]
+                )
+            );
+            swarm[amountOfParticles - 1].setLocalBestParticleVisiblePosition(
+                getPositionOfBetterParticle(
+                    swarm[amountOfParticles - 2],
+                    swarm[0]
+                )
+            );
+            for(int i = 1; i < amountOfParticles - 1; i++)
+                swarm[i].setLocalBestParticleVisiblePosition(
+                    getPositionOfBetterParticle(
+                        swarm[i-1],
+                        swarm[i+1]
+                    )
+                );
+        }
         for (auto &singleParticle : swarm) // access by reference to avoid copying
         {
             singleParticle.computePosition(w, speedConstant1, speedConstant2, &rand_engine);
@@ -175,13 +201,29 @@ Particle Swarm::findTheBestParticle(float criterionStopValue, float w, float spe
             singleParticle.computeParticlePbest();
             computeGbest(&singleParticle);
         }
-        printf("Swarm::findTheBestParticle: iteration = %d, globalBestParticle.first = %lf\n",
-             iteration_number, globalBestParticle.first.getCostFunctionValue());
+        if(options->verbose)
+            printf("Swarm::findTheBestParticle: iteration = %d, globalBestParticle.first = %lf\n",
+                iteration_number, globalBestParticle.first.getCostFunctionValue());
         iteration_number++;
     }
 
+    if(options->timing)
+        printf("Swarm::findTheBestParticle: Solution took %.2lf s\n", t1.click());
+
     return globalBestParticle.first;
 }
-
 #endif
 
+SwarmParticle Swarm::findTheBestParticle(float w, float speedConstant1, float speedConstant2)
+{
+    return findTheBestParticle(options->stopCriterionThreshold, w, speedConstant1,
+        speedConstant2, options->stopCriterionConfig);
+}
+
+vector<double> Swarm::getPositionOfBetterParticle(SwarmParticle& p_1, SwarmParticle& p_2)
+{
+    if(p_1.getCostFunctionValue() < p_2.getCostFunctionValue())
+        return p_1.getPositionVector();
+    else
+        return p_2.getPositionVector();
+}
