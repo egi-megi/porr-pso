@@ -120,9 +120,7 @@ Particle Swarm::findTheBestParticle(float criterionStopValue, float w, float spe
 
             #pragma omp critical
             Swarm::computeGbest(bestParticleInIteration);
-            bestParticleInIteration = nullptr;
-
-            #pragma omp barrier
+            bestParticleInIteration = nullptr; 
 
             #pragma omp master
             {
@@ -131,6 +129,7 @@ Particle Swarm::findTheBestParticle(float criterionStopValue, float w, float spe
                        iteration_number, cost);
 
                 log->stream << iteration_number << ',' << cost << ',' << bestParticleId << '\n';
+
 
                 if(log->isParticlesLog) //only for n=2
                 {
@@ -151,6 +150,7 @@ Particle Swarm::findTheBestParticle(float criterionStopValue, float w, float spe
                 }
                 iteration_number++;
             }
+            #pragma omp barrier
 
 #pragma omp critical
             {

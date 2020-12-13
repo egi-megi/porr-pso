@@ -13,3 +13,6 @@ out
 # Visual Code project files
 .vscode
 build
+
+plots/*
+
