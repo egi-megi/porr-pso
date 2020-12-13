@@ -13,6 +13,7 @@
 #include "../include/Swarm.h"
 #include "../include/SwarmParticle.h"
 #include "../include/Options.h"
+#include "../include/Timer.h"
 
 using namespace std;
 
@@ -33,7 +34,7 @@ Swarm::Swarm(int mAmountOfParticles, int mVectorDim, OptimizationExercisesConfig
 #endif
 
 Swarm::Swarm(Options* mOptions) :
-Swarm(mOptions->amountOfParticles, mOptions->dimension, mOptions->optimizationExerciseConfig)
+    Swarm(mOptions->amountOfParticles, mOptions->dimension, mOptions->optimizationExerciseConfig)
 {
     options = mOptions;
 }
