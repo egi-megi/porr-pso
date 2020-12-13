@@ -16,7 +16,7 @@ int main() {
     //particles log only for n=2
     //isLogAll =true - log all data for all particles
 
-    int dim = 50;
+    int dim = 2;
     Logger log_temp;
     std::string date = log_temp.currentDateTime();
 
@@ -25,7 +25,7 @@ int main() {
 
     // Logger* log = new Logger("../log.txt", "../particlesLog.txt", dim, true);
     Logger* log = new Logger(bestParticlesLogFileName, allParticlesLogFileName, dim, true);
-    Logger::ParamStruct params (200000, dim, 0.1f, 0.8f, 0.1f, 0.2f, 1000, log);
+    Logger::ParamStruct params (25, dim, 0.001f, 0.8f, 0.1f, 0.2f, 1000, log);
 
 
     srand (time(NULL));

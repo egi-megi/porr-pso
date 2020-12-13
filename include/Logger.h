@@ -39,7 +39,7 @@ public:
     void logAndClose();
     void setLogAll(const bool& val);
     void sendToParticlesStream(const int& iter, const float& cost, const float& pos1, const float& pos2, const float& speed1, const float& speed2);
-    void sendAllParticlesStream(const int& iter, const int& id, const float& pos1, const float& pos2, const float& speed1, const float& speed2);
+    void sendAllParticlesStream(const int& iter, const int& id, const float& pos1, const float& pos2, const float& speed1, const float& speed2, const float& cost);
     void saveParticleStreamBuffer();
   
    Logger () = default;

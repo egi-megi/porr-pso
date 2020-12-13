@@ -139,7 +139,7 @@ Particle Swarm::findTheBestParticle(float criterionStopValue, float w, float spe
                         for (int i=0; i<swarm.size(); i++)
                         {
                             Particle p = swarm[i];
-                            log->sendAllParticlesStream(iteration_number,i,p.getPositionVector()[0], p.getPositionVector()[1], p.getSpeedVector()[0], p.getSpeedVector()[1]);
+                            log->sendAllParticlesStream(iteration_number,i,p.getPositionVector()[0], p.getPositionVector()[1], p.getSpeedVector()[0], p.getSpeedVector()[1], p.getCostFunctionValue());
                         }
                         log->saveParticleStreamBuffer();
                     }

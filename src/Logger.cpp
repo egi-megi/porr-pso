@@ -96,10 +96,10 @@ void Logger::sendToParticlesStream(const int &iter, const float &cost, const flo
    pStream << iter << d << cost << d << pos1 << d << pos2 << d << speed1 << d << speed2 << '\n';
 }
 
-void Logger::sendAllParticlesStream(const int& iter, const int& id, const float& pos1, const float& pos2, const float& speed1, const float& speed2)
+void Logger::sendAllParticlesStream(const int& iter, const int& id, const float& pos1, const float& pos2, const float& speed1, const float& speed2, const float& cost)
 {
   char d = ',';
-  pStream << iter << d << id << d << pos1 << d << pos2 << d << speed1 << d << speed2 << '\n';
+  pStream << iter << d << id << d << pos1 << d << pos2 << d << speed1 << d << speed2 << d << cost << '\n';
 }
 
 void Logger::saveParticleStreamBuffer() 

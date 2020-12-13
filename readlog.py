@@ -117,46 +117,73 @@ import os
 ######################################################################
 #all particles
 
-# file: iteracja, id, x, y , vx, vy
+# file: iteracja, id, x, y , vx, vy, cost
 
-with open("logs/particlesLog_2020-12-12_20:30:15.txt", "r") as f:
+
+with open("logs/particlesLog_2020-12-12_22:13:02.txt", "r") as f:
     logParticles = f.readlines()
 
 logParticles = [x.rstrip() for x in logParticles] 
 
+cols= 7 #iteracja, id, x, y , vx, vy, cost
 n = 2 # wymiary
 N = 25 # czastki
-arr = np.empty((0,6), float)
+arr = np.empty((0,cols), float)
 
 for line in logParticles:
     lineSplit = line.split(",")
     lineFloat = [float(x) for x in lineSplit]
     arr = np.append(arr, np.array([lineFloat]), axis=0)
 
+costMax =max(arr[:,6])
 rows = arr.shape[0]
 iterations =int(rows / N)
-arr = np.reshape(arr,(iterations, N, 6))
+arr = np.reshape(arr,(iterations, N, cols))
 
 
 
 plt.figure(3)
 plt.scatter(arr[0,:,2], arr[0,:,3])
-plt.show()
+#plt.show()
+
+marker_size=25
+plt.figure(4)
+plt.scatter(arr[0,:,2], arr[0,:,3], marker_size,c=arr[0,:,6])
+plt.title("PSO n=2, 25 czastek")
+plt.xlabel("x1")
+plt.ylabel("x2")
+cbar= plt.colorbar()
+cbar.set_label("koszt", labelpad=+1)
+#plt.show()
 
 
 from matplotlib import cm
 import numpy as np
 from celluloid import Camera
 
+
 camera = Camera(plt.figure())
+
 for i in range(iterations):
-    plt.scatter(arr[i,:,2], arr[i,:,3])
-    camera.snap()
-anim = camera.animate(blit=True)
-anim.save('scatter.mp4')
+    # plt.scatter(arr[i,:,2], arr[i,:,3])
+    plt.clf()
+    plt.xlim(-40, 40)
+    plt.ylim(-40, 40)
+    plt.xticks(np.arange(-40,50,10))
+    plt.yticks(np.arange(-40,50,10))
+    plt.scatter(arr[i,:,2], arr[i,:,3], marker_size, c=arr[i,:,6],vmin=0, vmax=costMax)
+    plt.title(f"PSO n=2, 25 czastek, iter: {i}")
+    plt.xlabel("x1")
+    plt.ylabel("x2")
+    cbar= plt.colorbar()
+    cbar.set_label("koszt")
+    #plt.savefig(f"plots/plot_{i}.png")
+    #camera.snap()   
+   
+# anim = camera.animate(blit=True)
+# anim.save('scatter2.mp4')
 
-
-
+os.system("ffmpeg -r 5 -i plot_%d.png -vcodec mpeg4 -y scatter.mp4")
 
 
 
