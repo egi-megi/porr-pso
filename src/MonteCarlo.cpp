@@ -8,6 +8,7 @@
 #include "../include/MonteCarlo.h"
 #include "../include/MonteCarloParticle.h"
 #include "../include/Options.h"
+#include "../include/Timer.h"
 
 MonteCarlo::MonteCarlo(int mAmountOfParticles, int mVectorDim,
     OptimizationExercisesConfig *config) :
@@ -19,7 +20,9 @@ MonteCarlo::MonteCarlo(int mAmountOfParticles, int mVectorDim,
 #else
     printf("Welcome to sequential version!\n");
 #endif
+    Timer t1;
     makeMonteCarlo(*config);
+    printf("MonteCarlo::MonteCarlo: Initialization took %.2lf s\n", t1.click());
 }
 
 MonteCarlo::MonteCarlo(Options *mOptions) :
@@ -79,6 +82,8 @@ void MonteCarlo::computeGlobalBest(MonteCarloParticle *particle)
 MonteCarloParticle MonteCarlo::findTheBestParticle(float criterionStopValue,
     float sigma, float T, StopCriterionConfig *configStop)
 {
+    Timer t1;
+
     bool foundSolution = false;
     int iteration_number = 0;
     int threadsCompleted = 0;
@@ -125,12 +130,16 @@ MonteCarloParticle MonteCarlo::findTheBestParticle(float criterionStopValue,
         }
     }
 
+    printf("MonteCarlo::findTheBestParticle: Solution took %.2lf s\n", t1.click());
+
     return globalBestParticle.first;
 }
 #else
 MonteCarloParticle MonteCarlo::findTheBestParticle(float criterionStopValue,
     float sigma, float T, StopCriterionConfig *configStop)
 {
+    Timer t1;
+
     std::default_random_engine rand_engine;
     rand_engine.seed(time(NULL));
 
@@ -146,6 +155,8 @@ MonteCarloParticle MonteCarlo::findTheBestParticle(float criterionStopValue,
                iteration_number, globalBestParticle.first.getCostFunctionValue());
         iteration_number++;
     }
+
+    printf("MonteCarlo::findTheBestParticle: Solution took %.2lf s\n", t1.click());
 
     return globalBestParticle.first;
 }

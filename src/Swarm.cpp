@@ -17,21 +17,18 @@
 
 using namespace std;
 
+Swarm::Swarm(int mAmountOfParticles, int mVectorDim, OptimizationExercisesConfig *config) :
+    amountOfParticles{mAmountOfParticles}, vectorDim{mVectorDim}, swarm(mAmountOfParticles)
+{
 #ifdef OPEN_MP_SWARM
-Swarm::Swarm(int mAmountOfParticles, int mVectorDim, OptimizationExercisesConfig *config) :
-    amountOfParticles{mAmountOfParticles}, vectorDim{mVectorDim}, swarm(mAmountOfParticles)
-{
     printf("Welcome to OpenMP version!\n");
-    makeSwarm(config);
-}
 #else
-Swarm::Swarm(int mAmountOfParticles, int mVectorDim, OptimizationExercisesConfig *config) :
-    amountOfParticles{mAmountOfParticles}, vectorDim{mVectorDim}, swarm(mAmountOfParticles)
-{
     printf("Welcome to serial version!\n");
-    makeSwarm(config);
-}
 #endif
+    Timer t1;
+    makeSwarm(config);
+    printf("Swarm::Swarm: Initialization took %.2lf s\n", t1.click());
+}
 
 Swarm::Swarm(Options* mOptions) :
     Swarm(mOptions->amountOfParticles, mOptions->dimension, mOptions->optimizationExerciseConfig)
@@ -96,6 +93,8 @@ void Swarm::computeGbest(SwarmParticle *particle)
 SwarmParticle Swarm::findTheBestParticle(float criterionStopValue, float w, float speedConstant1,
     float speedConstant2, StopCriterionConfig *configStop)
 {
+    Timer t1;
+
     bool foundSolution = false;
     int iteration_number = 0;
 #pragma omp parallel
@@ -141,12 +140,16 @@ SwarmParticle Swarm::findTheBestParticle(float criterionStopValue, float w, floa
         }
     }
 
+    printf("Swarm::findTheBestParticle: Solution took %.2lf s\n", t1.click());
+
     return globalBestParticle.first;
 }
 #else
 SwarmParticle Swarm::findTheBestParticle(float criterionStopValue, float w, float speedConstant1,
     float speedConstant2, StopCriterionConfig *configStop)
 {
+    Timer t1;
+
     std::default_random_engine rand_engine;
     rand_engine.seed(time(NULL));
 
@@ -164,6 +167,8 @@ SwarmParticle Swarm::findTheBestParticle(float criterionStopValue, float w, floa
                iteration_number, globalBestParticle.first.getCostFunctionValue());
         iteration_number++;
     }
+
+    printf("Swarm::findTheBestParticle: Solution took %.2lf s\n", t1.click());
 
     return globalBestParticle.first;
 }
