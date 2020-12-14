@@ -21,8 +21,9 @@ public:
         StopCriterionConfig *configStop);
     MonteCarloParticle findTheBestParticle(float sigma, float T);
     std::pair<MonteCarloParticle, MonteCarloParticle> globalBestParticle;
-
+    
 private:
+    void monteCarloLogger(const int& iteration, const double& cost);
     int amountOfParticles;
     int vectorDim;
     std::vector<MonteCarloParticle> v_particles;

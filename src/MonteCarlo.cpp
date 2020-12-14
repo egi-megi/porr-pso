@@ -113,9 +113,16 @@ MonteCarloParticle MonteCarlo::findTheBestParticle(float criterionStopValue,
                 if(threadsCompleted >= threads)
                 {
                     threadsCompleted -= threads;
-                    if(options->verbose)
+
+                    if (options->verbose)
+                    {
+                        double cost = globalBestParticle.first.getCostFunctionValue();
                         printf("MonteCarlo::findTheBestParticle: iteration = %d, globalBestParticle.first = %lf\n",
-                            iteration_number, globalBestParticle.first.getCostFunctionValue());
+                               iteration_number, globalBestParticle.first.getCostFunctionValue());
+                        //log
+                        monteCarloLogger(iteration_number, cost);
+                    }
+
                     iteration_number++;
 
                     if (!configStop->computeStopCriterion(criterionStopValue, globalBestParticle))
@@ -147,9 +154,14 @@ MonteCarloParticle MonteCarlo::findTheBestParticle(float criterionStopValue,
             particle.computePosition(sigma, T, rand_engine);
             computeGlobalBest(&particle);
         }
-        if(options->verbose)
+        if (options->verbose)
+        {
+            double cost = globalBestParticle.first.getCostFunctionValue();
             printf("MonteCarlo::findTheBestParticle: iteration = %d, globalBestParticle.first = %lf\n",
-                iteration_number, globalBestParticle.first.getCostFunctionValue());
+                   iteration_number, globalBestParticle.first.getCostFunctionValue());
+            //log
+            monteCarloLogger(iteration_number, cost);
+        }
         iteration_number++;
     }
 
@@ -164,4 +176,29 @@ MonteCarloParticle MonteCarlo::findTheBestParticle(float sigma, float T)
 {
     return findTheBestParticle(options->stopCriterionThreshold, sigma, T,
         options->stopCriterionConfig);
+}
+
+void MonteCarlo::monteCarloLogger(const int& iteration, const double& cost)
+{
+    if (log->isLoggerActive)
+    {
+        log->stream << iteration << ',' << cost << ',' << globalBestParticle.first.getParticleId() << '\n';
+    }
+
+    if (log->isLoggerActive) //only for n=2
+    {
+        if (log->isLogAllData)
+        {
+            for (auto p : v_particles)
+            {
+                log->sendAllParticlesStream(iteration, p.getParticleId(), p.getPositionVector()[0], p.getPositionVector()[1], -1, -1, p.getCostFunctionValue());
+            }
+            log->saveParticleStreamBuffer();
+        }
+        else if (log->isLogOnlyBest)
+        {
+            MonteCarloParticle p = globalBestParticle.first;
+            log->sendToParticlesStream(iteration, cost, p.getPositionVector()[0], p.getPositionVector()[1], -1, -1);
+        }
+    }
 }
