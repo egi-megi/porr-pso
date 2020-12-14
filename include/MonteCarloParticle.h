@@ -12,6 +12,9 @@ public:
     virtual ~MonteCarloParticle() = default;
 
     void computePosition(float sigma, float T, std::default_random_engine &gen);
+
+private:
+    Options *options;
 };
 
 #endif // ROJCZASTEK_SZCZEPANSKI_JURKIEWICZ_PIKULINSKI_MONTECARLOPARTICLE_H

@@ -28,12 +28,13 @@ if(OpenMP_CXX_FOUND)
 endif()
 
 add_executable(rojCzastek_Szczepanski_Jurkiewicz_Pikulinski main.cpp
-    include/Particle.h src/Particle.cpp
+    src/Particle.cpp include/Particle.h
     src/SwarmParticle.cpp include/SwarmParticle.h
-    include/Swarm.h src/Swarm.cpp
-    include/OptimizationExercisesConfig.h src/ConfigEx1.cpp
-    include/ConfigEx1.h src/ConfigEx2.cpp
-    include/ConfigEx2.h src/OptimizationExercisesConfig.cpp
+    src/Swarm.cpp  include/Swarm.h
+    src/ConfigEx1.cpp include/OptimizationExercisesConfig.h 
+    src/ConfigEx2.cpp include/ConfigEx1.h
+    src/OptimizationExercisesConfig.cpp include/ConfigEx2.h
+    src/Logger.cpp include/Logger.h 
     src/StopCriterionConfig.cpp include/StopCriterionConfig.h
     src/ConfigStopCriterionAcademic.cpp include/ConfigStopCriterionAcademic.h
     src/ConfigStopCriterionNormal.cpp include/ConfigStopCriterionNormal.h

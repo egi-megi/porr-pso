@@ -10,7 +10,7 @@
 #include <math.h>
 
 bool ConfigStopCriterionAcademic::computeStopCriterion(float criterionStopValue,
-  const std::pair<Particle, Particle> &globalBestParticle)
+                                                       const std::pair<Particle, Particle> &globalBestParticle)
 {
   double modelValueOfCostFunction = 0;
   if (globalBestParticle.first.getCostFunctionValue() - modelValueOfCostFunction > criterionStopValue)

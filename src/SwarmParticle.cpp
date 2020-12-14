@@ -1,7 +1,3 @@
-//
-// Created by Agnieszka Jurkiewicz on 28/10/2020.
-//
-
 #include "../include/SwarmParticle.h"
 
 #include "../include/Swarm.h"
@@ -38,6 +34,11 @@ SwarmParticle::SwarmParticle(Options* mOptions, Swarm *s,
     communication = options->communication;
 
     ready = true;
+}
+
+std::vector<double> SwarmParticle::getSpeedVector() 
+{
+    return speedVectors;
 }
 
 void SwarmParticle::setStartSpeed(std::default_random_engine &gen)

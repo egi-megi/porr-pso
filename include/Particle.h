@@ -15,6 +15,8 @@ public:
     Particle() = default;
     virtual ~Particle() = default;
 
+    void setId(const int& id);
+    int getParticleId();
     void setStartPosition(std::default_random_engine &gen);
     void computeCostFunctionValue();
     double getCostFunctionValue() const;
@@ -33,6 +35,7 @@ protected:
     bool ready = false;
 
     Options *options;
+    int particleId;
 };
 
 #endif //ROJCZASTEK_SZCZEPANSKI_JURKIEWICZ_PIKULINSKI_PARTICLE_H
