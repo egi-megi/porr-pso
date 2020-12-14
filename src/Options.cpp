@@ -12,6 +12,9 @@ Options::Options()
     timing = true;
 
     communication = CommunicationType::GLOBAL_BEST;
+
+    isSetLowerBoundBoxInitialization = false;
+    isSetUpperBoundBoxInitialization = false;
 }
 
 std::string Options::optionsToString(const bool& useDate) 
@@ -34,4 +37,32 @@ std::string Options::currentDateTime()
 
    strftime(buf, sizeof(buf), "%Y-%m-%d_%H-%M-%S", &tstruct);
    return buf;
+}
+
+void Options::setLowerBoundBoxInitialization(const double& bound)
+{
+    lowerBoundBoxInitialization = bound;
+    isSetLowerBoundBoxInitialization = true;
+}
+
+void Options::setUpperBoundBoxInitialization(const double& bound)
+{
+    upperBoundBoxInitialization = bound;
+    isSetUpperBoundBoxInitialization = true;
+}
+
+double& Options::getLowerBoundBoxInitialization()
+{
+    if(isSetLowerBoundBoxInitialization)
+        return lowerBoundBoxInitialization;
+    else
+        return optimizationExerciseConfig->lowerLimitPositionVector;
+}
+
+double& Options::getUpperBoundBoxInitialization()
+{
+    if(isSetUpperBoundBoxInitialization)
+        return upperBoundBoxInitialization;
+    else
+        return optimizationExerciseConfig->upperLimitPositionVector;
 }

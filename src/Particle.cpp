@@ -5,8 +5,8 @@
 
 void Particle::setStartPosition(std::default_random_engine &gen)
 {
-    std::uniform_real_distribution<double> unif(config->lowerLimitPositionVector,
-        config->upperLimitPositionVector);
+    std::uniform_real_distribution<double> unif(options->getLowerBoundBoxInitialization(),
+        options->getUpperBoundBoxInitialization());
     for (int i = 0; i < vectorDim; i++)
     {
         positionVectors[i] = unif(gen);

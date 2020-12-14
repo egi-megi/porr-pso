@@ -13,7 +13,12 @@ class Options
 {
 public:
     Options();
-      virtual ~Options() = default;
+    virtual ~Options() = default;
+
+    void setLowerBoundBoxInitialization(const double &bound);
+    void setUpperBoundBoxInitialization(const double &bound);
+    double& getLowerBoundBoxInitialization();
+    double& getUpperBoundBoxInitialization();
 
     OptimizationExercisesConfig* optimizationExerciseConfig;
     StopCriterionConfig* stopCriterionConfig;
@@ -33,6 +38,12 @@ public:
         LOCAL_BEST
     };
     CommunicationType communication;
+
+private:
+    bool isSetLowerBoundBoxInitialization;
+    double lowerBoundBoxInitialization;
+    bool isSetUpperBoundBoxInitialization;
+    double upperBoundBoxInitialization;
 };
 
 
