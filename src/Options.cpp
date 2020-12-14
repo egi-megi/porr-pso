@@ -12,6 +12,7 @@ Options::Options()
     timing = true;
 
     communication = CommunicationType::GLOBAL_BEST;
+
 }
 
 std::string Options::optionsToString(const bool& useDate) 

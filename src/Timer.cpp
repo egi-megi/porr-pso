@@ -1,6 +1,6 @@
-#include <sys/time.h>
-
 #include "../include/Timer.h"
+
+#include <sys/time.h>
 
 Timer::Timer()
 {

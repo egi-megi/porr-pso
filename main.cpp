@@ -13,6 +13,8 @@
 
 #include <iostream>
 
+#include <iostream>
+
 int main(int argc, char* argv[])
 {
     Options* options = new Options();
