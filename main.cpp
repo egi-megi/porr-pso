@@ -75,77 +75,109 @@ int main(int argc, char* argv[])
 {
     Logger* logger;
     Options* options = new Options();
-    options->optimizationExerciseConfig = new ConfigEx1();
 
-    InputParser::parse(options, argc, argv);
-
-    // algorithm, task, stop condition, parallel or serial
-    // s = 0, task1 = 0, a = 0, P = 0 
-
-    std::vector<std::string> taskTypes = {"s1aP","s1nP","mc1aP","mc1nP","s2aP","s2nP","mc2aP","mc2nP",
-                                           "s1aS","s1nS","mc1aS","mc1nS","s2aS","s2nS","mc2aS","mc2nS"};
-                 
-    std::vector<int> chosenTests{0};//tests ids you want to run
-
-    for (auto testId : chosenTests)
+    if(argc > 1)
     {
+        // It seems that the user wants manual control
 
-        Combination combination = getTestCombination(static_cast<TEST>(testId));
+        options->stopCriterionConfig = new ConfigStopCriterionAcademic();
+        options->optimizationExerciseConfig = new ConfigEx1();
 
-        std::string logPath = "logs/log_" + options->optionsToString(true) + "_" + taskTypes[testId] + ".txt";
-        std::string particlesPath = "logs/particlesLog_" + options->optionsToString(true) + "_" + taskTypes[testId] + ".txt";
+        InputParser::parse(options, argc, argv);
 
-        if (combination.stopCondition == "Academic")
-        {
-            options->stopCriterionConfig = new ConfigStopCriterionAcademic();
-        }
-        else
-        {
-            options->stopCriterionConfig = new ConfigStopCriterionNormal(0.1); // TODO add treshold variable
-        }
+        std::string logPath = "logs/log_" + options->optionsToString(true) + "_manual.txt";
+        std::string particlesPath = "logs/particlesLog_" + options->optionsToString(true) + "_manual.txt";
 
-        logger = new Logger(options, logPath, particlesPath, true);
+        logger = new Logger(options, logPath, particlesPath, true, false);
 
-        if (combination.algorithm == "Swarm")
-        {
-            if (combination.task == "Task1")
-            {
-                Swarm s1a(options, logger);
+        Swarm s1a(options, logger);
 
-                double chi = 0.72984, c1 = 2.05, c2 = 2.05;
-                double w = chi;
-                c1 = chi * c1;
-                c2 = chi * c2;
+        double chi = 0.72984, c1 = 2.05, c2 = 2.05;
+        double w = chi;
+        c1 = chi * c1;
+        c2 = chi * c2;
 
-                SwarmParticle s1a_best = s1a.findTheBestParticle(w, c1, c2);
-                printf("Best particle f(s1a_best) = %lf\n", s1a_best.getCostFunctionValue());
-            }
-            else
-            {
-                // TODO add task2 for swarm
-            }
-        }
-        else
-        {
-            if (combination.task == "TASK1")
-            {
-                MonteCarlo mc1a(options, logger);
-                MonteCarloParticle mc1a_best = mc1a.findTheBestParticle(.01, .1);
-
-                printf("Best particle f(mc1a_best) = %lf\n", mc1a_best.getCostFunctionValue());
-            }
-            else
-            {
-                //TODO add task 2 for monte carlo
-            }
-        }
+        SwarmParticle s1a_best = s1a.findTheBestParticle(w, c1, c2);
+        printf("Best particle f(s1a_best) = %lf\n", s1a_best.getCostFunctionValue());
 
         logger->saveToFileAndClose();
-        delete options->optimizationExerciseConfig;
         delete options->stopCriterionConfig;
-        delete options;
+        delete options->optimizationExerciseConfig;
         delete logger;
-    }  
+    }
+    else
+    {
+        // algorithm, task, stop condition, parallel or serial
+        // s = 0, task1 = 0, a = 0, P = 0 
+
+        std::vector<std::string> taskTypes = {"s1aP","s1nP","mc1aP","mc1nP","s2aP","s2nP","mc2aP","mc2nP",
+                                            "s1aS","s1nS","mc1aS","mc1nS","s2aS","s2nS","mc2aS","mc2nS"};
+                    
+        std::vector<int> chosenTests{0};//tests ids you want to run
+
+        for (auto testId : chosenTests)
+        {
+
+            Combination combination = getTestCombination(static_cast<TEST>(testId));
+
+            std::string logPath = "logs/log_" + options->optionsToString(true) + "_" + taskTypes[testId] + ".txt";
+            std::string particlesPath = "logs/particlesLog_" + options->optionsToString(true) + "_" + taskTypes[testId] + ".txt";
+
+            if (combination.stopCondition == "Academic")
+            {
+                options->stopCriterionConfig = new ConfigStopCriterionAcademic();
+            }
+            else
+            {
+                options->stopCriterionConfig = new ConfigStopCriterionNormal(0.1); // TODO add treshold variable
+            }
+
+            logger = new Logger(options, logPath, particlesPath, true);
+
+            if (combination.algorithm == "Swarm")
+            {
+                if (combination.task == "Task1")
+                {
+                    options->optimizationExerciseConfig = new ConfigEx1();
+
+                    Swarm s1a(options, logger);
+
+                    double chi = 0.72984, c1 = 2.05, c2 = 2.05;
+                    double w = chi;
+                    c1 = chi * c1;
+                    c2 = chi * c2;
+
+                    SwarmParticle s1a_best = s1a.findTheBestParticle(w, c1, c2);
+                    printf("Best particle f(s1a_best) = %lf\n", s1a_best.getCostFunctionValue());
+                }
+                else
+                {
+                    // TODO add task2 for swarm
+                }
+            }
+            else
+            {
+                if (combination.task == "TASK1")
+                {
+                    MonteCarlo mc1a(options, logger);
+                    MonteCarloParticle mc1a_best = mc1a.findTheBestParticle(.01, .1);
+
+                    printf("Best particle f(mc1a_best) = %lf\n", mc1a_best.getCostFunctionValue());
+                }
+                else
+                {
+                    //TODO add task 2 for monte carlo
+                }
+            }
+
+            logger->saveToFileAndClose();
+            delete options->optimizationExerciseConfig;
+            delete options->stopCriterionConfig;
+            delete logger;
+        }
+    }
+
+    delete options;
 
     return 0;
 }
