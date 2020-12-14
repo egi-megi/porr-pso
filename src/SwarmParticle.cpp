@@ -36,6 +36,11 @@ SwarmParticle::SwarmParticle(Options* mOptions, Swarm *s,
     ready = true;
 }
 
+std::vector<double> SwarmParticle::getSpeedVector() 
+{
+    return speedVectors;
+}
+
 void SwarmParticle::setStartSpeed(std::default_random_engine &gen)
 {
     std::uniform_real_distribution<double> unif(

@@ -1,68 +1,116 @@
 #include "../include/Logger.h"
 
-Logger::Logger(const std::string &outputFilename, 
-               const std::string &particlesFile, 
-               const int &dim,
-               const bool& isLogAll) : outFile(outputFilename, std::ios::out | std::ios::trunc),
-                                 outParticlesFile(particlesFile, std::ios::out | std::ios::trunc),
-                                 isLogAllParticles(isLogAll)
-{
+// Logger::Logger(const std::string &outputFilename, 
+//                const std::string &particlesFile, 
+//                const int &dim,
+//                const bool& isLogAll) : outFile(outputFilename, std::ios::out | std::ios::trunc),
+//                                  outParticlesFile(particlesFile, std::ios::out | std::ios::trunc)                                
+// {
 
    
-   if (outFile.is_open())
-   {
-      std::cout << "File for datalog opened.\n";
-      stream << "$INFO$\n";
-      stream << "This is file for data log. \n";
-      stream << "$DATE$\n";
-      date = currentDateTime();
-      stream << currentDateTime() << '\n';
-   }
-   else
-      std::cout << "Unable to open file for datalog.\n";
+//    if (outFile.is_open())
+//    {
+//       std::cout << "File for datalog opened.\n";
+//       stream << "$INFO$\n";
+//       stream << "This is file for data log. \n";
+//       stream << "$DATE$\n";
+//       date = currentDateTime();
+//       stream << currentDateTime() << '\n';
+//    }
+//    else
+//       std::cout << "Unable to open file for datalog.\n";
 
-   if (dim == 2)
-   {
-      isParticlesLog = true;
+//    if (dim == 2)
+//    {
+//       isParticlesLog = true;
 
-      if (outParticlesFile.is_open())
+//       if (outParticlesFile.is_open())
+//       {
+//          std::cout << "File for particles log opened(n = 2).\n";
+//          if(!isLogAllParticles)
+//          {
+//          pStream << "Iter,Cost,PositionN1,PositionN2,SpeedVec1,SpeedVec\n";
+//          }
+//       }
+//       else
+//          std::cout << "Unable to open file for particlesLog.\n";
+//    }
+//    else
+//    {
+//       isParticlesLog = false;
+//       outParticlesFile.close();
+//    }
+// }
+
+// Logger::ParamStruct::ParamStruct(const int &amount, const int &dim, const float &stop,
+//                                  const float &w, const float &s1, const float &s2, const int &chunk, Logger* obj) : amountOfParticles(amount), vectorDim(dim), stopCriterion(stop),
+//                                                                                                        weight(w), speedConst1(s1), speedConst2(s2), ompChunkSize(chunk)
+
+// {
+//    char d = ',';
+//    char n = '\n';
+//    obj->stream << "$PARAMS$\n";
+//    obj->stream << "AmountOfParticles"<<d<<amount<<n;
+//    obj->stream <<"DimensionsOfVector"<<d<<dim<<n;
+//    obj->stream <<"StopCriterion"<<d<<stop<<n;
+//    obj->stream <<"Weight"<<d<<w<<n;
+//    obj->stream <<"SpeedConstant1"<<d<<s1<<n;
+//    obj->stream <<"SpeedConstant2"<<d<<s2<<n;
+//    obj->stream <<"OmpSizeOfChunk"<<d<<chunk<<n;     
+// }
+
+Logger::Logger(Options* options, const std::string &_mainLogPath, const std::string &_particlesLogPath, const bool &isLogAll, const bool &isActive) : options(options), mainLogPath(_mainLogPath), particlesLogPath(_particlesLogPath), isLogAllData(isLogAll), isLoggerActive(isActive)
+{
+   isLogOnlyBest = false;
+   outFile = nullptr;
+   outParticlesFile = nullptr;
+
+   if (!mainLogPath.empty())
+   {
+      isLoggerActive = true;
+      outFile = new std::ofstream(); 
+      outFile->open(mainLogPath, std::ios::out | std::ios::trunc);
+      if (outFile->is_open())
       {
-         std::cout << "File for particles log opened(n = 2).\n";
-         if(!isLogAllParticles)
-         {
-         pStream << "Iter,Cost,PositionN1,PositionN2,SpeedVec1,SpeedVec\n";
-         }
+         std::cout << "File for datalog opened.\n";
       }
       else
-         std::cout << "Unable to open file for particlesLog.\n";
+      {
+         std::cout << "Unable to open: " << mainLogPath << " file\n";
+      }
    }
-   else
+   if (!particlesLogPath.empty() && options->dimension == 2 && isLogAll)
    {
-      isParticlesLog = false;
-      outParticlesFile.close();
+      isLogAllData = true;
+      outParticlesFile = new std::ofstream(); 
+      outParticlesFile->open(particlesLogPath, std::ios::out | std::ios::trunc);
+      if (outParticlesFile->is_open())
+      {
+         std::cout << "File for all particles log opened.\n";
+      }
+      else
+      {
+         std::cout << "Unable to open: " << particlesLogPath << " file\n";
+      }
+   }
+   else if (!particlesLogPath.empty() && options->dimension != 2)
+   {
+      isLogOnlyBest = true;
+      outParticlesFile = new std::ofstream(particlesLogPath, std::ios::out | std::ios::trunc);
+      if (outParticlesFile->is_open())
+      {
+         std::cout << "File for only best particles opened.\n";
+      }
+      else
+      {
+         std::cout << "Unable to open: " << particlesLogPath << " file\n";
+      }
    }
 }
 
 Logger::~Logger()
 {
 
-}
-
-Logger::ParamStruct::ParamStruct(const int &amount, const int &dim, const float &stop,
-                                 const float &w, const float &s1, const float &s2, const int &chunk, Logger* obj) : amountOfParticles(amount), vectorDim(dim), stopCriterion(stop),
-                                                                                                       weight(w), speedConst1(s1), speedConst2(s2), ompChunkSize(chunk)
-
-{
-   char d = ',';
-   char n = '\n';
-   obj->stream << "$PARAMS$\n";
-   obj->stream << "AmountOfParticles"<<d<<amount<<n;
-   obj->stream <<"DimensionsOfVector"<<d<<dim<<n;
-   obj->stream <<"StopCriterion"<<d<<stop<<n;
-   obj->stream <<"Weight"<<d<<w<<n;
-   obj->stream <<"SpeedConstant1"<<d<<s1<<n;
-   obj->stream <<"SpeedConstant2"<<d<<s2<<n;
-   obj->stream <<"OmpSizeOfChunk"<<d<<chunk<<n;     
 }
 
 std::string Logger::currentDateTime()
@@ -76,18 +124,13 @@ std::string Logger::currentDateTime()
    return buf;
 }
 
-void Logger::logAndClose()
+void Logger::saveToFileAndClose()
 {
-   outFile << stream.rdbuf();
-   outFile.close();
-
-   outParticlesFile << pStream.rdbuf();
-   outParticlesFile.close();
-}
-
-void Logger::setLogAll(const bool& val) 
-{
-    isLogAllParticles = val;
+   *outFile << stream.rdbuf();
+   outFile->close();
+   
+   *outParticlesFile << pStream.rdbuf();
+   outParticlesFile->close();   
 }
 
 void Logger::sendToParticlesStream(const int &iter, const float &cost, const float &pos1, const float &pos2, const float &speed1, const float &speed2)
@@ -104,9 +147,12 @@ void Logger::sendAllParticlesStream(const int& iter, const int& id, const float&
 
 void Logger::saveParticleStreamBuffer() 
 {
-    outParticlesFile << pStream.rdbuf();    
-    pStream.str("");
+    *outParticlesFile << pStream.rdbuf();    
+    pStream.str(""); // clears stream buffer
 }
 
-
+void Logger::setActivityOfLogger(const bool& _isActive) 
+{
+   isLoggerActive = _isActive;
+}
 

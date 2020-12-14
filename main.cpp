@@ -8,6 +8,7 @@
 #include "include/MonteCarlo.h"
 #include "include/Options.h"
 #include "include/InputParser.h"
+#include "include/Logger.h"
 
 
 #include <iostream>
@@ -27,22 +28,34 @@ int main(int argc, char* argv[])
     Options* options = new Options();
     options->optimizationExerciseConfig = new ConfigEx1();
     options->stopCriterionConfig = new ConfigStopCriterionAcademic();
+    
+    //InputParser::parse(options, argc, argv);
 
-    InputParser::parse(options, argc, argv);
+    // algorithm, task, stop condition, paraller or serial
+     std::vector<std::string> taskTypes = {"s1aP","s1nP","mc1aP","mc1nP","s2aP","s2nP","mc2aP","mc2nP",
+                                           "s1aS","s1nS","mc1aS","mc1nS","s2aS","s2nS","mc2aS","mc2nS"};
+    int testID = 0;      
+    //std::vector<int> testTypeSequence = {0,0,0,0}; // propozycja automatyzacji                          
 
-    Swarm s1a(options);
+    std::string logPath = "logs/log_" + options->optionsToString(true) + "_" + taskTypes[testID] + ".txt";
+    std::string particlesPath = "logs/particlesLog_" + options->optionsToString(true) + "_" + taskTypes[testID] + ".txt";
+    Logger* log = new Logger(options, logPath, particlesPath, true);  
+
+    Swarm s1a(options, log);
     SwarmParticle s1a_best = s1a.findTheBestParticle(0.8, .1, .2);
     
     printf("Best particle f(s1a_best) = %lf\n", s1a_best.getCostFunctionValue());
 
-    // MonteCarlo mc1a(options);
+    // MonteCarlo mc1a(options, log);
     // MonteCarloParticle mc1a_best = mc1a.findTheBestParticle(1, 8);
 
     // printf("Best particle f(mc1a_best) = %lf\n", mc1a_best.getCostFunctionValue());
 
+    log->saveToFileAndClose();
     delete options->optimizationExerciseConfig;
     delete options->stopCriterionConfig;
     delete options;
+    delete log;
 
     return 0;
 }

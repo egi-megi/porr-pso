@@ -10,9 +10,9 @@
 #include "../include/Options.h"
 #include "../include/Timer.h"
 
-MonteCarlo::MonteCarlo(Options *mOptions) :
+MonteCarlo::MonteCarlo(Options *mOptions, Logger* _log) :
     amountOfParticles{mOptions->amountOfParticles}, vectorDim{mOptions->dimension},
-    v_particles(mOptions->amountOfParticles), options{mOptions}
+    v_particles(mOptions->amountOfParticles), options{mOptions}, log{_log} 
 {
 #ifdef OPEN_MP_SWARM   
     printf("Welcome to OpenMP version!\n");

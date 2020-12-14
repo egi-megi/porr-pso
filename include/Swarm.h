@@ -6,6 +6,7 @@
 #include "ConfigStopCriterionNormal.h"
 #include "StopCriterionConfig.h"
 #include "Options.h"
+#include "Logger.h"
 
 #include <iostream>
 #include <vector>
@@ -16,7 +17,7 @@ class Swarm
 {
 public:
     Swarm() = default;
-    Swarm(Options *mOptions);
+    Swarm(Options *mOptions, Logger *log);
     virtual ~Swarm() = default;
 
     void makeSwarm();
@@ -33,6 +34,7 @@ private:
     int vectorDim;
     vector<SwarmParticle> swarm;
     Options *options;
+    Logger *log;
 };
 
 #endif //ROJCZASTEK_SZCZEPANSKI_JURKIEWICZ_PIKULINSKI_SWARM_H

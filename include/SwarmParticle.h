@@ -21,6 +21,7 @@ public:
     SwarmParticle(Options *mOptions, Swarm *s, std::default_random_engine *gen);
     virtual ~SwarmParticle() = default;
 
+    std::vector<double> getSpeedVector();
     void setStartSpeed(std::default_random_engine &gen);
     void computePosition(float w, float speedConstant1, float speedConstant2,
         std::default_random_engine *gen);

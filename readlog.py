@@ -3,68 +3,59 @@ from matplotlib import pyplot as plt
 import datetime
 import os
 
-# def stringToDate(dateStr):
-#     d = dateStr.replace('-','')
-#     d = d.replace('_','')
-#     d = d.replace(':','')
-#     return datetime.datetime.strptime(d,'%Y%m%d%H%M%S')
-
-
-# dateStr = ""
-# paramsDict = {}
-# loopType = ""
-# logContent = []
-# indices = []
+def stringToDate(dateStr):
+    d = dateStr.replace('-','')
+    d = d.replace('_','')
+    d = d.replace(':','')
+    d = d.replace(".txt",'')
+    return datetime.datetime.strptime(d,'%Y%m%d%H%M%S')
 
 # keywords = ["$INFO$", "$DATE$", "$PARAMS$", "$TYPE$", "$DATA$"]
 
-# #open log file and read data
+#MAIN LOG ANALYSIS
 
-# with open("logs/log_2020-12-12_20:39:58.txt", "r") as f:
-#     logContent = f.readlines()
+fileName = "log_10_2_0.001_2020-12-14_01:32:29_s1a.txt"
+fileNamePattern = fileName.split("_")
 
-# #remove ends of line
-# logContent = [x.rstrip() for x in logContent] 
+name = fileNamePattern[0]
+partNum = fileNamePattern[1]
+dim = fileNamePattern[2]
+stop = fileNamePattern[3]
+date = fileNamePattern[4]
+time = fileNamePattern[5]
+taskType = fileNamePattern[6]
 
-# #get ids of log keywords
-# for elem in keywords:
-#     indices.append(logContent.index(elem))
+pyDate = stringToDate(date+time)
 
-# #date 
-# date = stringToDate(logContent[indices[1]+1])
+with open("logs/"+fileName, "r") as f:
+    logContent = f.readlines()
 
-# #params
-# #read paramteres of the algorithm to dictionary
-# for elem in logContent[(indices[2]+1):indices[3]]:
-#     currentline = elem.split(",")
-#     paramsDict[currentline[0]]=currentline[1]
+#remove ends of line
+logContent = [x.rstrip() for x in logContent] 
 
-# #type - serial or openMP
-# loopType = logContent[indices[3]+1]
+iterations = []
+costs = []
+bestIds = []
 
-# #data
-# #get data
-# iterations = []
-# costs = []
+for elem in logContent:
+    currentline = elem.split(",")
+    iterations.append(int(currentline[0]))
+    costs.append(float(currentline[1]))
+    bestIds.append(int(currentline[2]))
 
-# for elem in logContent[indices[4]+1:len(logContent)]:
-#     currentline = elem.split(",")
-#     iterations.append(int(currentline[0]))
-#     costs.append(float(currentline[1]))
+#plot
 
-# #plot
-# plt.figure(0)
-# myTitle = "PSO_"+loopType+" dla: "+paramsDict["AmountOfParticles"] + " czastek"
-# plt.plot(iterations, costs)
-# plt.xticks(np.arange(0, max(iterations)+2, 5.0))
-# plt.xlabel("iteracje")
-# plt.ylabel("koszt")
-# plt.title(myTitle)
-# plt.show()
-# #plt.savefig("PSO_koszt.png")    
+plt.figure(0)
+myTitle = f"PSO_OpenMP: n={dim}, l.czastek{partNum}, stop={stop}"
+plt.plot(iterations, costs)
+plt.xticks(np.arange(0, max(iterations)+2, 5.0))
+plt.xlabel("iteracje")
+plt.ylabel("koszt")
+plt.title(myTitle)
+plt.savefig("PSO_koszt2.png")    
 
-# ######################################################################
-# # Funkcje ktore optymalizujemy
+######################################################################
+# Funkcje ktore optymalizujemy
 
 # import math
 
@@ -109,7 +100,6 @@ import os
 # plt.show()
 
 
-
 ######################################################################
 #best particles
 
@@ -119,15 +109,30 @@ import os
 
 # file: iteracja, id, x, y , vx, vy, cost
 
+fileNameParticles = "particlesLog_10_2_0.001_2020-12-14_01:32:29_s1a.txt"
 
-with open("logs/particlesLog_2020-12-12_22:13:02.txt", "r") as f:
+fileNameParticlesSplit = fileNameParticles.split("_") #TODO - put into function
+
+name = fileNameParticlesSplit[0]
+partNum = int(fileNameParticlesSplit[1])
+dim = int(fileNameParticlesSplit[2])
+stop = float(fileNameParticlesSplit[3])
+date = fileNameParticlesSplit[4]
+time = fileNameParticlesSplit[5]
+taskType = fileNamePattern[6]
+
+title = ""
+if(taskType == "s1aP"):
+    title = "PSO_OMP_zad1_academic"  #TODO - make list of title types - #16
+
+pyDate = stringToDate(date+time)
+
+with open("logs/"+fileNameParticles, "r") as f:
     logParticles = f.readlines()
 
 logParticles = [x.rstrip() for x in logParticles] 
 
-cols= 7 #iteracja, id, x, y , vx, vy, cost
-n = 2 # wymiary
-N = 25 # czastki
+cols= len(logParticles[0].split(',')) #iteracja, id, x, y , vx, vy, cost
 arr = np.empty((0,cols), float)
 
 for line in logParticles:
@@ -137,53 +142,38 @@ for line in logParticles:
 
 costMax =max(arr[:,6])
 rows = arr.shape[0]
-iterations =int(rows / N)
-arr = np.reshape(arr,(iterations, N, cols))
-
-
-
-plt.figure(3)
-plt.scatter(arr[0,:,2], arr[0,:,3])
-#plt.show()
+iterations =int(rows / partNum)
+arr = np.reshape(arr,(iterations, partNum, cols))
 
 marker_size=25
 plt.figure(4)
+plt.xlim(-40, 40)
+plt.ylim(-40, 40)
 plt.scatter(arr[0,:,2], arr[0,:,3], marker_size,c=arr[0,:,6])
-plt.title("PSO n=2, 25 czastek")
+plt.title(f"PSO n={dim}, l.czastek{partNum}")
 plt.xlabel("x1")
 plt.ylabel("x2")
 cbar= plt.colorbar()
 cbar.set_label("koszt", labelpad=+1)
-#plt.show()
-
+plt.savefig("PSO_scatter.png")    
 
 from matplotlib import cm
-import numpy as np
-from celluloid import Camera
-
-
-camera = Camera(plt.figure())
 
 for i in range(iterations):
-    # plt.scatter(arr[i,:,2], arr[i,:,3])
     plt.clf()
     plt.xlim(-40, 40)
     plt.ylim(-40, 40)
     plt.xticks(np.arange(-40,50,10))
     plt.yticks(np.arange(-40,50,10))
     plt.scatter(arr[i,:,2], arr[i,:,3], marker_size, c=arr[i,:,6],vmin=0, vmax=costMax)
-    plt.title(f"PSO n=2, 25 czastek, iter: {i}")
+    plt.title(f"PSO n={dim}, l.czastek{partNum}, iter: {i}")
     plt.xlabel("x1")
     plt.ylabel("x2")
     cbar= plt.colorbar()
     cbar.set_label("koszt")
-    #plt.savefig(f"plots/plot_{i}.png")
-    #camera.snap()   
-   
-# anim = camera.animate(blit=True)
-# anim.save('scatter2.mp4')
+    plt.savefig(f"plots/plot_{i}.png")
 
-os.system("ffmpeg -r 5 -i plot_%d.png -vcodec mpeg4 -y scatter.mp4")
+os.system("ffmpeg -r 5 -i plots/plot_%d.png -vcodec mpeg4 -y plots/scatter3.mp4")
 
 
 

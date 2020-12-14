@@ -6,12 +6,13 @@
 #include "MonteCarloParticle.h"
 #include "StopCriterionConfig.h"
 #include "Options.h"
+#include "Logger.h"
 
 class MonteCarlo
 {
 public:
     MonteCarlo() = default;
-    MonteCarlo(Options *mOptions);
+    MonteCarlo(Options *mOptions, Logger *log);
     virtual ~MonteCarlo() = default;
 
     void makeMonteCarlo();
@@ -26,6 +27,7 @@ private:
     int vectorDim;
     std::vector<MonteCarloParticle> v_particles;
     Options *options;
+    Logger *log;
 };
 
 #endif // ROJCZASTEK_SZCZEPANSKI_JURKIEWICZ_PIKULINSKI_MONTECARLO_H
