@@ -1,19 +1,25 @@
+#include "../include/MonteCarloParticle.h"
+
+#include "../include/OptimizationExercisesConfig.h"
+#include "../include/PositionVectorOperator.h"
+#include "../include/Options.h"
+
 #include <random>
 #include <vector>
 #include <math.h>
 
-#include "../include/MonteCarloParticle.h"
-#include "../include/OptimizationExercisesConfig.h"
-#include "../include/PositionVectorOperator.h"
-
-MonteCarloParticle::MonteCarloParticle(const int mVectorDim,
-    OptimizationExercisesConfig *mconfig, std::default_random_engine &gen)
+MonteCarloParticle::MonteCarloParticle(Options* mOptions, std::default_random_engine &gen)
 {
-    vectorDim = mVectorDim;
-    positionVectors.resize(mVectorDim, 0);
-    config = mconfig;
+    options = mOptions;
+
+    vectorDim = options->dimension;
+    positionVectors.resize(vectorDim, 0);
+
+    config = options->optimizationExerciseConfig;
+
     setStartPosition(gen);
     computeCostFunctionValue();
+    
     ready = true;
 }
 

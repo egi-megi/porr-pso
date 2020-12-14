@@ -1,7 +1,12 @@
-#include <math.h>
+//
+// Created by Agnieszka Jurkiewicz on 01/11/2020.
+//
+
+#include "../include/ConfigEx2.h"
 
 #include "../include/OptimizationExercisesConfig.h"
-#include "../include/ConfigEx2.h"
+
+#include <math.h>
 
 ConfigEx2::ConfigEx2() : OptimizationExercisesConfig() {}
 

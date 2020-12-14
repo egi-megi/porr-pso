@@ -174,7 +174,7 @@ for i in range(iterations):
     plt.savefig(f"plots/plot_{i}.png")
 
 os.system("ffmpeg -r 5 -i plots/plot_%d.png -vcodec mpeg4 -y plots/scatter3.mp4")
-
+#os.system("convert -delay 20 -loop 0 plots/plot_{0..38}*.png plots/myimage.gif")
 
 
 

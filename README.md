@@ -13,4 +13,7 @@ Task 2
 # Results for PSO, for n=2
 
 Tu dodac gif
+<<<<<<< HEAD
 
+=======
+>>>>>>> 5694b1b2c3519b8498f6c9770e0317c9445ecf4f

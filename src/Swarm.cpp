@@ -4,6 +4,12 @@
 #include "../include/Options.h"
 #include "../include/Timer.h"
 
+#include "../include/Swarm.h"
+
+#include "../include/SwarmParticle.h"
+#include "../include/Options.h"
+#include "../include/Timer.h"
+
 #include <iostream>
 #include <math.h>
 #include <algorithm>

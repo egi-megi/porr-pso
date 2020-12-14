@@ -1,6 +1,6 @@
-#include <vector>
-
 #include "../include/PositionVectorOperator.h"
+
+#include <vector>
 
 std::vector<double> PositionVectorOperator::add(const std::vector<double> &v_a,
     const std::vector<double> &v_b)
