@@ -12,45 +12,140 @@
 
 #include <iostream>
 
+//TODO clean code for auto testing - move it to options or new file
+
+enum class TEST
+{
+    S1AP = 0,
+    S1NP, //1
+    MC1AP,
+    MC1NP,
+    S2AP,
+    S2NP,
+    MC2AP,
+    MC2NP,
+    S1AS,
+    S1NS,
+    MC1AS,
+    MC1NS,
+    S2AS,
+    S2NS,
+    MC2AS,
+    MC2NS //15
+};
+
+typedef std::vector<std::string> Parameters;
+struct Combination
+{   
+    std::string algorithm;
+    std::string task;
+    std::string stopCondition;
+    std::string cpuBehaviour;
+
+    Combination(Parameters params) : algorithm(params[0]), task(params[1]), stopCondition(params[2]), cpuBehaviour(params[3]){};
+};
+
+Combination getTestCombination(TEST val) 
+{   
+    Parameters params;
+
+    switch (val) {
+	case TEST::S1AP: params = Parameters {"Swarm", "Task1", "Academic", "Parallel"}; break;
+    case TEST::S1NP: params = Parameters {"Swarm", "Task1", "Normal", "Parallel"}; break;
+    case TEST::MC1AP: params = Parameters {"MonteCarlo", "Task1", "Academic", "Parallel"}; break;
+    case TEST::MC1NP: params = Parameters {"MonteCarlo", "Task1", "Normal", "Parallel"}; break;
+    case TEST::S2AP: params = Parameters {"Swarm", "Task2", "Academic", "Parallel"}; break;
+    case TEST::S2NP: params = Parameters {"Swarm", "Task2", "Normal", "Parallel"}; break;
+    case TEST::MC2AP: params = Parameters {"MonteCarlo", "Task2", "Academic", "Parallel"}; break;
+    case TEST::MC2NP: params = Parameters {"MonteCarlo", "Task2", "Normal", "Parallel"}; break;
+    case TEST::S1AS: params = Parameters {"Swarm", "Task1", "Academic", "Serial"}; break;
+    case TEST::S1NS: params = Parameters {"Swarm", "Task1", "Normal", "Serial"}; break;
+    case TEST::MC1AS: params = Parameters {"MonteCarlo", "Task1", "Academic", "Serial"}; break;
+    case TEST::MC1NS: params = Parameters {"MonteCarlo", "Task1", "Normal", "Serial"}; break;
+    case TEST::S2AS: params = Parameters {"Swarm", "Task2", "Academic", "Serial"}; break;
+    case TEST::S2NS: params = Parameters {"Swarm", "Task2", "Normal", "Serial"}; break;
+    case TEST::MC2AS: params = Parameters {"MonteCarlo", "Task2", "Academic", "Serial"}; break;
+    case TEST::MC2NS: params = Parameters {"MonteCarlo", "Task2", "Normal", "ParaSerialllel"}; break;
+    }
+    return Combination (params);
+} 
+
+
 int main(int argc, char* argv[])
 {
+    Logger* logger;
     Options* options = new Options();
     options->optimizationExerciseConfig = new ConfigEx1();
-    options->stopCriterionConfig = new ConfigStopCriterionAcademic();
-    
+
     InputParser::parse(options, argc, argv);
 
-    // algorithm, task, stop condition, paraller or serial
-     std::vector<std::string> taskTypes = {"s1aP","s1nP","mc1aP","mc1nP","s2aP","s2nP","mc2aP","mc2nP",
+    // algorithm, task, stop condition, parallel or serial
+    // s = 0, task1 = 0, a = 0, P = 0 
+
+    std::vector<std::string> taskTypes = {"s1aP","s1nP","mc1aP","mc1nP","s2aP","s2nP","mc2aP","mc2nP",
                                            "s1aS","s1nS","mc1aS","mc1nS","s2aS","s2nS","mc2aS","mc2nS"};
-    int testID = 0;      
-    //std::vector<int> testTypeSequence = {0,0,0,0}; // propozycja automatyzacji                          
+                 
+    std::vector<int> chosenTests{0};//tests ids you want to run
 
-    std::string logPath = "logs/log_" + options->optionsToString(true) + "_" + taskTypes[testID] + ".txt";
-    std::string particlesPath = "logs/particlesLog_" + options->optionsToString(true) + "_" + taskTypes[testID] + ".txt";
-    Logger* log = new Logger(options, logPath, particlesPath, true);  
+    for (auto testId : chosenTests)
+    {
 
-    Swarm s1a(options, log);
+        Combination combination = getTestCombination(static_cast<TEST>(testId));
 
-    double chi = 0.72984, c1 = 2.05, c2 = 2.05;
-    double w = chi;
-    c1 = chi*c1;
-    c2 = chi*c2;
+        std::string logPath = "logs/log_" + options->optionsToString(true) + "_" + taskTypes[testId] + ".txt";
+        std::string particlesPath = "logs/particlesLog_" + options->optionsToString(true) + "_" + taskTypes[testId] + ".txt";
 
-    SwarmParticle s1a_best = s1a.findTheBestParticle(w, c1, c2);
-    
-    printf("Best particle f(s1a_best) = %lf\n", s1a_best.getCostFunctionValue());
+        if (combination.stopCondition == "Academic")
+        {
+            options->stopCriterionConfig = new ConfigStopCriterionAcademic();
+        }
+        else
+        {
+            options->stopCriterionConfig = new ConfigStopCriterionNormal(0.1); // TODO add treshold variable
+        }
 
-    // MonteCarlo mc1a(options);
-    // MonteCarloParticle mc1a_best = mc1a.findTheBestParticle(.01, .1);
+        logger = new Logger(options, logPath, particlesPath, true);
 
-    // printf("Best particle f(mc1a_best) = %lf\n", mc1a_best.getCostFunctionValue());
+        if (combination.algorithm == "Swarm")
+        {
+            if (combination.task == "Task1")
+            {
+                Swarm s1a(options, logger);
 
-    log->saveToFileAndClose();
-    delete options->optimizationExerciseConfig;
-    delete options->stopCriterionConfig;
-    delete options;
-    delete log;
+                double chi = 0.72984, c1 = 2.05, c2 = 2.05;
+                double w = chi;
+                c1 = chi * c1;
+                c2 = chi * c2;
+
+                SwarmParticle s1a_best = s1a.findTheBestParticle(w, c1, c2);
+                printf("Best particle f(s1a_best) = %lf\n", s1a_best.getCostFunctionValue());
+            }
+            else
+            {
+                // TODO add task2 for swarm
+            }
+        }
+        else
+        {
+            if (combination.task == "TASK1")
+            {
+                MonteCarlo mc1a(options, logger);
+                MonteCarloParticle mc1a_best = mc1a.findTheBestParticle(.01, .1);
+
+                printf("Best particle f(mc1a_best) = %lf\n", mc1a_best.getCostFunctionValue());
+            }
+            else
+            {
+                //TODO add task 2 for monte carlo
+            }
+        }
+
+        logger->saveToFileAndClose();
+        delete options->optimizationExerciseConfig;
+        delete options->stopCriterionConfig;
+        delete options;
+        delete logger;
+    }  
 
     return 0;
 }

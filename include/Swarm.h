@@ -35,7 +35,7 @@ public:
 
 private:
     vector<double> getPositionOfBetterParticle(SwarmParticle& p_1, SwarmParticle& p_2);
-
+    void psoLogger(const int& iteration, const double& cost);
     int amountOfParticles;
     int vectorDim;
     vector<SwarmParticle> swarm;

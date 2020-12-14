@@ -158,34 +158,15 @@ SwarmParticle Swarm::findTheBestParticle(float criterionStopValue, float w, floa
 
 #pragma omp master
             {
-                double cost = globalBestParticle.first.getCostFunctionValue();
-                if(options->verbose)
+
+                if (options->verbose)
+                {
+                    double cost = globalBestParticle.first.getCostFunctionValue();
                     printf("Swarm::findTheBestParticle: iteration = %d, globalBestParticle.first = %lf\n",
-                        iteration_number, cost);
-
-                /// LOGGER AREA
-                if(log->isLoggerActive)
-                {
-                log->stream << iteration_number << ',' << cost << ',' << globalBestParticle.first.getParticleId() << '\n'; 
+                           iteration_number, cost);
+                    //log
+                    psoLogger(iteration_number, cost);
                 }
-
-                if(log->isLoggerActive) //only for n=2
-                {
-                    if(log->isLogAllData)
-                    {
-                       for(auto p : swarm)
-                        {
-                           log->sendAllParticlesStream(iteration_number,p.getParticleId(),p.getPositionVector()[0], p.getPositionVector()[1], p.getSpeedVector()[0], p.getSpeedVector()[1], p.getCostFunctionValue());
-                        }
-                        log->saveParticleStreamBuffer();
-                    }
-                    else if(log->isLogOnlyBest)
-                    {
-                    SwarmParticle p = globalBestParticle.first;
-                    log->sendToParticlesStream(iteration_number, cost, p.getPositionVector()[0], p.getPositionVector()[1], p.getSpeedVector()[0], p.getSpeedVector()[1]);
-                    }
-                }
-                /// LOGGER AREA
 
                 iteration_number++;
 
@@ -243,8 +224,13 @@ SwarmParticle Swarm::findTheBestParticle(float criterionStopValue, float w, floa
             computeGbest(&singleParticle);
         }
         if(options->verbose)
+        {
+            double cost = globalBestParticle.first.getCostFunctionValue();
             printf("Swarm::findTheBestParticle: iteration = %d, globalBestParticle.first = %lf\n",
                 iteration_number, globalBestParticle.first.getCostFunctionValue());
+            //log
+            psoLogger(iteration_number, cost);
+        }
         iteration_number++;
     }
 
@@ -267,4 +253,29 @@ vector<double> Swarm::getPositionOfBetterParticle(SwarmParticle& p_1, SwarmParti
         return p_1.getPositionVector();
     else
         return p_2.getPositionVector();
+}
+
+void Swarm::psoLogger(const int &iteration, const double &cost)
+{
+    if (log->isLoggerActive)
+    {
+        log->stream << iteration << ',' << cost << ',' << globalBestParticle.first.getParticleId() << '\n';
+    }
+
+    if (log->isLoggerActive) //only for n=2
+    {
+        if (log->isLogAllData)
+        {
+            for (auto p : swarm)
+            {
+                log->sendAllParticlesStream(iteration, p.getParticleId(), p.getPositionVector()[0], p.getPositionVector()[1], p.getSpeedVector()[0], p.getSpeedVector()[1], p.getCostFunctionValue());
+            }
+            log->saveParticleStreamBuffer();
+        }
+        else if (log->isLogOnlyBest)
+        {
+            SwarmParticle p = globalBestParticle.first;
+            log->sendToParticlesStream(iteration, cost, p.getPositionVector()[0], p.getPositionVector()[1], p.getSpeedVector()[0], p.getSpeedVector()[1]);
+        }
+    }
 }
