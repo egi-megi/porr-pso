@@ -10,7 +10,7 @@ Task 2
 <img src ="https://latex.codecogs.com/gif.latex?\min_{x}&space;\left&space;(&space;f_1(x)=\sum_{i=1}^{n-1}&space;\left&space;[&space;100(x_{i&plus;1}-x_i^2)^2&space;&plus;&space;(1-x_i)^2)&space;\right&space;]&space;\right&space;),&space;-40\leq&space;x_i\leq&space;40">
 </p>
 
-# Results for PSO, Task 1
+# Task 1 - PSO
 <p align="center">
 <img src = "https://github.com/egi-megi/rojCzastek_Szczepanski_Jurkiewicz_Pikulinski/blob/master/plots/scatter_gif.gif">
 </p>
