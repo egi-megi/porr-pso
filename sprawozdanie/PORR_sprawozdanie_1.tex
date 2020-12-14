@@ -124,11 +124,11 @@ getpid},
 
 \section{Wstęp teoretyczny}
  
-W ramach projektu zrealizowano wersję sekwencyjną i równoległą (OpenMP) algorytmów optymalizacji rojem cząstek (PSO) i poszukiwań losowych (Monte Carlo). Implementację przetestowano rozwiązując dwa zadania optymalizacji, w tym - standardową funkcję testową algorytmów optymalizacyjnych - funkcję Rosenbrocka. Sprawozdanie rozpoczynamy krótkim wstępem teoretycznym wraz z uwagami dotyczącymi specyficznych rozwiązań naszej implementacji. Dalej, przedstawiamy najważniejsze elementy wersji równoległych algorytmów. Kolejna część sprawozdania prezentuje wykonane testy numeryczne i płynące z nich wnioski.
+W ramach projektu zrealizowano wersję sekwencyjną i równoległą (OpenMP) algorytmów optymalizacji rojem cząstek (PSO) i poszukiwań losowych (Monte Carlo). Implementację przetestowano rozwiązując dwa zadania optymalizacji, w tym - standardową funkcję testową algorytmów optymalizacyjnych - funkcję Rosenbrocka. Sprawozdanie rozpoczyna się krótkim wstępem teoretycznym wraz z uwagami dotyczącymi specyficznych rozwiązań naszej implementacji. Dalej, przedstawiono najważniejsze elementy wersji równoległych algorytmów. Kolejna część sprawozdania prezentuje wykonane testy numeryczne i płynące z nich wnioski.
 
 \subsection{Algorytm optymalizacji cząstek (PSO)} 
 
-Algorytm optymalizacji cząstek (PSO, ang. {\it Particle Swarm Optimization}) został zainspirowany stadnym zachowanie zwierząt, np. ławic ryb czy kluczy ptaków. Na kierunek ruchu pojedynczego osobnika - cząstki - wpływa ruch pozostałych osobników w stadzie - populacji. Przyjmijmy, że stado szuka współrzędnej $\vect{x} \in \mathcal{D}^{n}$, dla której funkcja celu $f\left(\vect{x}\right)$ przyjmuje minimalną wartość. Matematycznie, zachowanie $j$-tej cząstki w $k$-elementowej populacji możemy zapisać następująco
+Algorytm optymalizacji cząstek (PSO, ang. {\it Particle Swarm Optimization}) został zainspirowany stadnym zachowanie zwierząt, np. ławic ryb czy kluczy ptaków. Na kierunek ruchu pojedynczego osobnika -- cząstki -- wpływa ruch pozostałych osobników w stadzie -- populacji. Przyjmijmy, że stado szuka współrzędnej $\vect{x} \in \mathcal{D}^{n}$, dla której funkcja celu $f\left(\vect{x}\right)$ przyjmuje minimalną wartość. Matematycznie, zachowanie $j$-tej cząstki w $k$-elementowej populacji możemy zapisać następująco
 \begin{equation}
 \begin{cases}
 \vect{v}_{i + 1, j} = \omega \vect{v}_{i, j} + c_{1} \epsilon_{1} \left(\vect{p}_{i, j} - \vect{x}_{i, j}\right) + c_{2} \epsilon_{2} \left(\vect{q}_{i} - \vect{x}_{i, j}\right) \\
@@ -139,7 +139,7 @@ gdzie $\vect{x}_{i, j}$ i $\vect{v}_{i, j}$ to odpowiednio wektory położenia i
 
 Zmienne losowe $\epsilon_{1}$ i $\epsilon_{2}$ odzwierciedlają biologiczną genezę modelu. Przyjmują wartości z zakresu $\epsilon_{i}, \epsilon{j} \in \left[0, \ 1\right]$ i w poszczególnych generacjach decydują w jakim stopniu trajektoria danej cząstki zostanie skierowana ku położeniom $\vect{p}_{i, j}, \ \vect{q}_{i}$. W przyjętym przez nas modelu zmienne losowe mają rozkład jednostajny. Warto także wspomnieć, że waga $\omega$ nazywana jest w literaturze \cite{BrattonKennedy} inercją, co~pomaga zinterpretować jej wpływ na ruch cząstki. Należy uważać na dobór jej wartości - zbyt duża wartość może prowadzić do niestabilności rozwiązań.
 
-Dostępne są różne propozycje doboru wag modelu. Zachowanie roju zależy jednak także od kształtu funkcji celu i uniwersalne zestawy wag na ogół nie będą optymalne do rozwiązania dowolnego problemu. W związku z tym niezbędne może się okazać modyfikowanie ich wartości dla poszczególnych zadań optymalizacji. W naszych testach jako wartości wyjściowe wag przyjęliśmy wartości zaproponowane w \cite{BrattonKennedy} i wynikające z tzw. \quotedblbase constriction method\textquotedblright.
+Dostępne są różne propozycje doboru wag modelu. Zachowanie roju zależy jednak także od kształtu funkcji celu i uniwersalne zestawy wag na ogół nie będą optymalne do rozwiązania dowolnego problemu. W związku z tym niezbędne może się okazać modyfikowanie ich wartości dla poszczególnych zadań optymalizacji. W przedstawionych w tym sprawozdaniu testach jako wartości wyjściowe wag przyjęto wartości zaproponowane w \cite{BrattonKennedy} i wynikające z tzw. \quotedblbase constriction method\textquotedblright.
 
 Przestrzeń poszukiwań $\mathcal{D}^{n}$ może być ograniczona - w zaproponowanych w projekcie zadaniach mamy do czynienia z ograniczeniami kostkowymi. W przypadku tak postawionej optymalizacji z ograniczeniami powstaje pytanie co zrobić, jeżeli nowa pozycja cząsteczki, po losowaniu prędkości, znajduje się poza ograniczonym obszarem. Najprostszym rozwiązaniem wydaje się losowanie nowego położenia cząsteczki (nowej prędkości) aż będzie ono spełniało zadane ograniczenie. Takie podejście może być jednak bardzo nieefektywne. Trudno jest określić z góry liczbę losowań konieczną do znalezienia zgodnych położeń.
 
@@ -151,7 +151,7 @@ Algorytm kończy działanie po spełnieniu kryterium stopu, którego testowane w
 
 \subsection{Algorytm Monte Carlo} 
 
-Metoda Monte Carlo opiera się na losowości wyboru położenia cząsteczek bez uwzględniania najlepszego globalnego położenia w całym roju. Cząsteczki zmieniają swoje położenie niezależnie od siebie. Położenie najlepszej cząsteczki $\vect{x}_{min}$ (o najmniejszej funkcji kosztu $f_{min} = f\left(\vect{x}_{min}\right)$) wyszukiwane jest tylko w celu znalezienia ostatecznego wyniku optymalizacji. Położenia cząstki w kolejnych generacjach w tym algorytmie możemy opisać zgodnie z następującym schematem
+Metoda Monte Carlo opiera się na losowości wyboru położenia cząsteczek bez uwzględniania najlepszego globalnego położenia w całym roju. Cząsteczki zmieniają swoje położenie niezależnie od siebie. Położenie najlepszej cząsteczki $\vect{x}_{min}$ (o najmniejszej funkcji kosztu $f_{min} = f\left(\vect{x}_{min}\right)$) wyszukiwane jest tylko w celu znalezienia ostatecznego wyniku optymalizacji. Położenia cząstki w kolejnych generacjach w tym algorytmie można opisać zgodnie z następującym schematem
 \begin{equation}
 \vect{\overline{x}}_{i + 1, j} = \vect{x}_{i, j} + \sigma\vect{\xi},
 \end{equation}
@@ -163,7 +163,7 @@ z < e^{-\frac{f\left(\vect{\overline{x}}_{i + 1, j}\right) - f\left(\vect{x}_{i,
 \end{equation}
 to nowe położenie, pomimo większej wartości funkcji celu, zostanie zaakceptowane ($T$ to parametr). Jeżeli nierówność (\ref{eq:mc_nie}) nie będzie spełniona, to cząstka w danej generacji nie zmieni swojego położenia $\vect{x}_{i + 1, j} = \vect{x}_{i, j}$. 
 
-Literatura wskazuje, że na ogół lepiej jest wylosować wiele cząsteczek z całego zakresu i wykonać mniej iteracji niż oczekiwać spełnienia kryterium stopu przez jedną z małej grupy cząstek. Przy dużym wymiarze wektora położenia może się okazać, że początkowo wylosowane cząsteczki nie znajdą się~w~basenach atrakcji wszystkich interesujących minimów. Wtedy przejście cząsteczek do innych basenów atrakcji może trwać wiele generacji i zależne będzie od wielkości parametru $T$.
+Literatura wskazuje, że na ogół lepiej jest wylosować wiele cząsteczek z całego zakresu i wykonać mniej iteracji niż oczekiwać spełnienia kryterium stopu przez jedną cząsteczkę pochodzącą z małej grupy cząstek. Przy dużym wymiarze wektora położenia może się okazać, że początkowo wylosowane cząsteczki nie znajdą się~w~basenach atrakcji wszystkich interesujących minimów. Wtedy przejście cząsteczek do innych basenów atrakcji może trwać wiele generacji i zależne będzie od wielkości parametru $T$.
 
 Należy zwrócić uwagę, że w podejściu Monte Carlo cząsteczki nie komunikują się - nie widzą swoich położeń i wartości funkcji celu nawzajem. Tym samym brak jest im inteligencji obserwowanej w PSO. Trajektoria każdej z cząsteczek w tym algorytmie zależy tylko od wylosowanych wartości zmiennych losowych.
 
