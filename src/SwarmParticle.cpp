@@ -100,9 +100,6 @@ void SwarmParticle::computePosition(float w, float speedConstant1, float speedCo
     computeSpeed(w, speedConstant1, speedConstant2, gen);
     newPositionVector = PositionVectorOperator::add(positionVectors, tempSpeedVectors);
 
-    if (!config->isPositionInRange(newPositionVector))
-        throw "Particle out of the box constraints!";
-
     speedVectors = tempSpeedVectors;
     positionVectors = newPositionVector;
 }

@@ -1,14 +1,14 @@
 #ifndef ROJCZASTEK_SZCZEPANSKI_JURKIEWICZ_PIKULINSKI_OPTIONS_H
 #define ROJCZASTEK_SZCZEPANSKI_JURKIEWICZ_PIKULINSKI_OPTIONS_H
 
-
-
 #include "OptimizationExercisesConfig.h"
 #include "StopCriterionConfig.h"
 
 #include <sstream>
 
+class StopCriterionConfig;
 class Logger;
+
 class Options
 {
 public:

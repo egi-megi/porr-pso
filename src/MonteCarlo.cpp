@@ -117,10 +117,10 @@ MonteCarloParticle MonteCarlo::findTheBestParticle(float criterionStopValue,
                         printf("MonteCarlo::findTheBestParticle: iteration = %d, globalBestParticle.first = %lf\n",
                             iteration_number, globalBestParticle.first.getCostFunctionValue());
                     iteration_number++;
-                }
 
-                if (!configStop->computeStopCriterion(criterionStopValue, globalBestParticle))
-                    foundSolution = true;
+                    if (!configStop->computeStopCriterion(criterionStopValue, globalBestParticle))
+                        foundSolution = true;
+                }
             }       
         }
     }

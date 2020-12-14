@@ -6,6 +6,8 @@
 #include <vector>
 #include <istream>
 
+class Particle;
+
 class StopCriterionConfig
 {
 public:

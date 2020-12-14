@@ -24,7 +24,7 @@ bool OptimizationExercisesConfig::isPositionInRange(std::vector<double> position
     {
         if (positionVector[i] < lowerLimitPositionVector || positionVector[i] > upperLimitPositionVector)
         {
-            printf("Position i = %d: %lf\n", i, positionVector[i]);
+            printf("Position i = %d: %.16lf\n", i, positionVector[i]);
             return false;
         }
     }
