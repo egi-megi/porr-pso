@@ -13,24 +13,7 @@
 class Logger
 {
 public:
-    /// class stores parameters: amountOfParticles, vectorDimension, stopCriterion
-    /// weight, speedConstant1, speedConstant2, ompSizeOfChunk
-    // class ParamStruct
-    // {
-    //     public:
-
-    //     int amountOfParticles;
-    //     int vectorDim;
-    //     float stopCriterion;
-    //     float weight;
-    //     float speedConst1;
-    //     float speedConst2;
-    //     int ompChunkSize;
-
-    //     ParamStruct(const int& amount, const int& dim, const float& stop,
-    //                 const float& w, const float& s1, const float& s2, const int& chunk, Logger* obj);
-    // };
-
+    
     Options *options;
 
     //streams
