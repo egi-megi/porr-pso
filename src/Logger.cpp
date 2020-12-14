@@ -61,7 +61,7 @@ std::string Logger::currentDateTime()
    char buf[80];
    tstruct = *localtime(&now);
 
-   strftime(buf, sizeof(buf), "%Y-%m-%d_%X", &tstruct);
+   strftime(buf, sizeof(buf), "%Y-%m-%d_%H-%M-%S", &tstruct);
    return buf;
 }
 

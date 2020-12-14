@@ -10,11 +10,6 @@
 #include "include/InputParser.h"
 #include "include/Logger.h"
 
-
-#include <iostream>
-
-#include <iostream>
-
 #include <iostream>
 
 int main(int argc, char* argv[])
@@ -23,7 +18,7 @@ int main(int argc, char* argv[])
     options->optimizationExerciseConfig = new ConfigEx1();
     options->stopCriterionConfig = new ConfigStopCriterionAcademic();
     
-    //InputParser::parse(options, argc, argv);
+    InputParser::parse(options, argc, argv);
 
     // algorithm, task, stop condition, paraller or serial
      std::vector<std::string> taskTypes = {"s1aP","s1nP","mc1aP","mc1nP","s2aP","s2nP","mc2aP","mc2nP",

@@ -15,5 +15,6 @@ out
 build
 
 plots/*
-*png
+logs/*
+*.png
 
