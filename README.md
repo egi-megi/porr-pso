@@ -11,9 +11,6 @@ Task 2
 </p>
 
 # Results for PSO, for n=2
-
-Tu dodac gif
-<<<<<<< HEAD
-
-=======
->>>>>>> 5694b1b2c3519b8498f6c9770e0317c9445ecf4f
+<p align="center">
+<img src = "https://github.com/egi-megi/rojCzastek_Szczepanski_Jurkiewicz_Pikulinski/blob/mergeDatalog/gifs/scatter_gif.gif">
+</p>
