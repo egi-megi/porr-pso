@@ -62,3 +62,12 @@ bool Particle::isReady() const
 {
     return ready;
 }
+void Particle::setId(const int& id) 
+{
+    particleId = id;
+}
+
+int Particle::getParticleId() 
+{
+    return particleId;
+}
