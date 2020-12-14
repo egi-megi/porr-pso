@@ -105,17 +105,20 @@ SwarmParticle Swarm::findTheBestParticle(float criterionStopValue, float w, floa
         {
             if(options->communication == Options::CommunicationType::LOCAL_BEST)
             {
-                swarm[0].setLocalBestParticleVisiblePosition(
-                    getPositionOfBetterParticle(
-                        swarm[amountOfParticles - 1], swarm[1]
-                    )
-                );
-                swarm[amountOfParticles - 1].setLocalBestParticleVisiblePosition(
-                    getPositionOfBetterParticle(
-                        swarm[amountOfParticles - 2],
-                        swarm[0]
-                    )
-                );
+#pragma omp master
+                {
+                    swarm[0].setLocalBestParticleVisiblePosition(
+                        getPositionOfBetterParticle(
+                            swarm[amountOfParticles - 1], swarm[1]
+                        )
+                    );
+                    swarm[amountOfParticles - 1].setLocalBestParticleVisiblePosition(
+                        getPositionOfBetterParticle(
+                            swarm[amountOfParticles - 2],
+                            swarm[0]
+                        )
+                    );
+                {
 #pragma omp for schedule(static)
                 for(int i = 1; i < amountOfParticles - 1; i++)
                     swarm[i].setLocalBestParticleVisiblePosition(
