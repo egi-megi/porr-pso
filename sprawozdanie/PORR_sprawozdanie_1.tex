@@ -149,6 +149,17 @@ Ostatecznie, w implementacji metody, zdecydowano się na wybór kolejnego warian
 
 Algorytm kończy działanie po spełnieniu kryterium stopu, którego testowane w projekcie rodzaje zostały opisane w sekcji \ref{sec:stop}.
 
+\subsubsection*{Algorytm PSO o lokalnej topologii}
+Istnieją wariacje przedstawionego wyżej algorytmu. Jedną z nich, która została zaimplementowana jako dodatkowa opcja, jest algorytm optymalizacji cząstek o lokalnej topologii. Oznacza to, że~w~przeciwieństwie do podstawowej wersji algorytmu, cząsteczki nie znają współrzędnej najlepszego położenia $\vect{q}_{i}$ dla całej populacji, lecz widzą jedynie najlepsze położenie z pewnego podzbioru - stąd nazwa lokalnej topologii. Warto wspomnieć, że stosując analogiczną nomenklaturę do pokazanego na~początku algorytmu możemy nazwać go PSO o globalnej topologii.
+
+W literaturze pojawiają się róże schematy grafów widoczności poszczególnych cząstek \cite{aguirre2007copso, BrattonKennedy}. Najprostszym i jednym z najstarszych schematów jest pierścień. Różnice w komunikacji między cząsteczkami w podejściu o globalnej i lokalnej topologii pokazano na rys. \ref{fig:topologia}. W związku z potraktowaniem tej opcji jako dodatkowego rozszerzenia nie jest ona uwzględniana we wszystkich przeprowadzonych dalej w pracy testach.
+
+\begin{figure}[h]
+\centerline{\includegraphics[width=\dimexpr.9\textwidth-1em]{grafiki/topologie.pdf}}
+\captionof{figure}{Topologie widoczności rozwiązań i komunikacji między cząsteczkami.}
+\label{fig:topologia}
+\end{figure}
+
 \subsection{Algorytm Monte Carlo} 
 
 Metoda Monte Carlo opiera się na losowości wyboru położenia cząsteczek bez uwzględniania najlepszego globalnego położenia w całym roju. Cząsteczki zmieniają swoje położenie niezależnie od siebie. Położenie najlepszej cząsteczki $\vect{x}_{min}$ (o najmniejszej funkcji kosztu $f_{min} = f\left(\vect{x}_{min}\right)$) wyszukiwane jest tylko w celu znalezienia ostatecznego wyniku optymalizacji. Położenia cząstki w kolejnych generacjach w tym algorytmie można opisać zgodnie z następującym schematem
