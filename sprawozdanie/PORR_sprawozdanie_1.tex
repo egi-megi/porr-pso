@@ -145,7 +145,7 @@ Przestrzeń poszukiwań $\mathcal{D}^{n}$ może być ograniczona - w zaproponowa
 
 Inny pomysł to pozwolenie cząstce na wydostanie się poza ograniczony obszar. Gdy taka cząstka znajdzie się poza dozwolonym obszarem, nie bierze się pod uwagę jej położenia przy obliczaniu globalnie najlepszego znanego położenia $\vect{q}_{i}$, ani sama cząstka nie zapisuje do pamięci $\vect{p}_{i, j}$ niedozwolonych położeń. Wraz z kolejnymi iteracjami siła przyciągania roju powinna spowodować powrót cząstki do~obszaru dozwolonego.
 
-Ostatecznie, w implementacji metody, zdecydowano się na wybór kolejnego wariantu, w którym wektory prędkości $\vect{v}_{i + 1, j}$ są odpowiednio przeskalowywane, aby wynikające z nich położenie cząstki znajdowało się na brzegu obszaru dozwolonego. Jest to prosta operacja matematyczna o liniowej złożoności $\mathcal{O}\left(n\right)$.
+Ostatecznie, w implementacji metody, zdecydowano się na wybór kolejnego wariantu, w którym wektory prędkości $\vect{v}_{i + 1, j}$ powodujące wyjście cząstki poza dozwolony obszar są odpowiednio przeskalowywane, aby wynikające z nich nowe położenia cząstek brzegowo spełniały ograniczenia. Jest to~prosta operacja matematyczna o liniowej złożoności $\mathcal{O}\left(n\right)$.
 
 Algorytm kończy działanie po spełnieniu kryterium stopu, którego testowane w projekcie rodzaje zostały opisane w sekcji \ref{sec:stop}.
 
@@ -354,21 +354,29 @@ OpenMP			  & 4.5							        \\ \hline
 
 \section{Kryterium stopu} \label{sec:stop}
 
-Przyjęto dwa rodzaju warunków stopu nazywane dalej warunkiem akademickim oraz warunkiem normalnym. Warunek akademicka zakłada, że znana jest wartość minimum funkcji celu. W takim przypadku możemy uzależnić zakończenie optymalizacji od znalezienia położenia, które daje wynik dostatecznie bliski optymalnej wartości funkcji celu. W normalnych warunkach nie znamy wartości optimum, dlatego musimy zastosować inne kryteria zakończenia optymalizacji. Warunek akademicki jest czysto testowy i w większości dalej przeprowadzonych testów numerycznych będziemy się nim posługiwać.
+Przyjęto dwa rodzaju warunków stopu nazywane dalej warunkiem akademickim oraz warunkiem normalnym. Warunek akademicki zakłada, że znana jest wartość minimum funkcji celu. W takim przypadku możemy uzależnić zakończenie optymalizacji od znalezienia położenia, które daje wynik dostatecznie bliski optymalnej wartości funkcji celu. W normalnych warunkach nie znamy wartości optimum, dlatego musimy zastosować inne kryteria zakończenia optymalizacji. Warunek akademicki jest czysto testowy i w większości dalej przeprowadzonych testów numerycznych będziemy się nim posługiwać.
 
 W przypadku akademickiego warunku stopu wyliczana jest różnica pomiędzy wartością funkcji kosztu, a znanym a prori minimum funkcji. Następnie ta wartość porównywana jest z zadaną, satysfakcjonującą nas wartością przybliżenia optimum. Jeśli wyliczona różnica osiąga wartość równą bądź mniejszą niż podana, to optymalizacja kończy się i jako wynik podaje najlepsze położenie cząsteczki.
 
-Normalny warunek stopu obliczany jest na podstawie zmian wartości funkcji celu najlepszych cząsteczek w $k$ ostatnich generacjach. Jeżeli zmiany są poniżej pewnego ustalonego poziomu, to algorytm optymalizacyjny kończy swoje działanie. W niekorzystnych przypadkach warunek może kończyć optymalizację zdecydowanie za szybko w związku z czym otrzymane wyniki należy traktować z należytą niepewnością. Inne algorytmy dot. warunku normalnego wraz z porównaniem ich działania można znaleźć w \cite{karinZielinski}.
+Normalny warunek stopu obliczany jest na podstawie zmian wartości funkcji celu najlepszych cząsteczek w $k$ ostatnich generacjach. Jeżeli zmiany są poniżej pewnego ustalonego poziomu $\tau$, to algorytm optymalizacyjny kończy swoje działanie. W niekorzystnych przypadkach warunek może kończyć optymalizację zdecydowanie za szybko w związku z czym otrzymane wyniki należy traktować z należytą niepewnością. Inne algorytmy dot. warunku normalnego wraz z porównaniem ich działania można znaleźć w \cite{karinZielinski}.
 
-\subsection*{Testy numeryczna kryteriów stopu}
+\subsection*{Test numeryczny normalnego kryterium stopu}
 
-Warunek normalny stopu przetestowano dla obu algorytmów, dla obu zadań.
+Dobór parametrów $k$ i $\tau$, które doprowadzą rozwiązanie zadania optymalizacji do zadowalającego przybliżenia optimum, jest bardzo trudny. W realiach optymalizacyjnych kształt i własności funkcji celu mogą być nieznane lub trudne do określenia. W tak niepewnym środowisku musimy znaleźć kompromis między długą i prawdopodobnie dokładną optymalizacją zmiennej decyzyjnej, a krótkim działaniem programu dającym jedynie zgrubne przybliżenie punktu optymalnego.
+
+Trudności w zastosowaniu zaproponowanego wyżej normalnego kryterium stopu łatwo zaobserwować podczas stosowania algorytmu poszukiwań losowych. Jego praca, szczególnie w przypadku dużych wymiarów zadania, charakteryzuje się częstym tworzeniem wielu generacji cząstek, których położenia nie są lepsze od aktualnie znanego najlepszego punktu w przestrzeni. Tym samym, szybko dochodzi do~sytuacji, w której warunek normalny kończy działanie optymalizatora. Na rys. \ref{fig:warunek:mc} pokazano przykładowy przebieg optymalizacji - wartość funkcji celu w funkcji liczby generacji. Pokazana optymalizacja zadania $2$. zakończyła się kryterium stopu akademickiego (wartość funkcji celu poniżej $0.001$), lecz na wykresie oznaczono kółkami punkty zakończenia pracy optymalizatora w przypadku zastosowania warunku normalnego o oznaczonych parametrach.
+
+\begin{figure}[h]
+\centerline{\includegraphics[width=\dimexpr.9\textwidth-1em]{grafiki/warunek_stopu.pdf}}
+\captionof{figure}{Zakończenie optymalizacji normalnym kryterium stopu.}
+\label{fig:warunek:mc}
+\end{figure}
 
 \section{Rozwiązanie zadań dla różnych wymiarów $n$}
 
 \section{Ocena skalowalności}
 
-Zbadano skalowalność implementacji oraz przyspieszenie wynikające z użycia obliczeń równoległych. Wykonano $4$ testy - dla każdej metody zbadano czasy wykonywania obliczeń przy optymalizacji zadania $1$. oraz zadania$2$. Opcje konfiguracyjne algorytmów i ustawienia ilości cząsteczek oraz wymiarów zadań były stałe podczas pojedynczego testu. Zmianom ulegała liczba dostępnych wątków programu.
+Zbadano skalowalność implementacji oraz przyspieszenie wynikające z użycia obliczeń równoległych. Wykonano $4$ testy - dla każdej metody zbadano czasy wykonywania obliczeń przy optymalizacji zadania $1$. oraz zadania $2$. Opcje konfiguracyjne algorytmów i ustawienia ilości cząsteczek oraz wymiarów zadań były stałe podczas pojedynczego testu. Zmianom ulegała liczba dostępnych wątków programu.
 
 W każdym teście położenia początkowe cząsteczek wylosowane zostały z obszaru ograniczonego nierównościami $-40 \leq x_i \leq -30 \quad i = 1, \ ...\, \ n$, aby uniknąć sytuacji, w której pewne cząstki w swojej początkowej konfiguracji spełniają kryterium stopu lub znajdują się bardzo blisko poszukiwanego rozwiązania. W testach użyto kryterium stopu akademickiego z warunkiem zakończenia $f\left(\vect{x}^{*}\right) < 0.01$.
 
