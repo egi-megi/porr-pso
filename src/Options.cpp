@@ -4,9 +4,9 @@ Options::Options()
 {
     optimizationExerciseConfig = nullptr;
     stopCriterionConfig = nullptr;
-    stopCriterionThreshold  = 0.2;
-    amountOfParticles = 1000;
-    dimension = 25;
+    stopCriterionThreshold  = 0.001;
+    amountOfParticles = 20;
+    dimension = 2;
 
     verbose = true;
     timing = true;
@@ -33,6 +33,7 @@ void Options::prepareAndActivateReadLogger()
     {
         isSaveStartPosition = false;
         openInputFile();
+        loadStartPositionFromFile();
     }
 }
 

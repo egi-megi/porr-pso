@@ -47,10 +47,9 @@ int main(int argc, char* argv[])
         logger = new Logger(options, logPath, particlesPath, true);
         
         // run if this is the first run with the same parameters (dimension and particlesNumber) to log start position of particles
-        //options->prepareAndActivateWriteLogger();
-        options->prepareAndActivateReadLogger();
-        options->loadStartPositionFromFile();
-
+        options->prepareAndActivateWriteLogger();
+        //options->prepareAndActivateReadLogger();
+   
         if (combination.algorithm == "Swarm")
         {
             if (combination.task == "Task1")
