@@ -387,22 +387,30 @@ Trudności w zastosowaniu zaproponowanego wyżej normalnego kryterium stopu łat
 
 \section{Rozwiązanie zadań dla różnych wymiarów $n$}
 
+W celu przetestowania i porównania algorytmów oraz ich implementacji rozwiązano zadania $1$. i $2$. w różnych wariantach. Zadania zostały rozwiązane zarówno przez wersje sekwencyjne programów, jak i wersje równoległe - utworzone z wykorzystaniem OpenMP. Wersje równoległe zostały uruchomione z dostępnym $6$ wątkami. Sprawdzono działanie programów w optymalizacji problemów o różnej złożoności, tj. każde z zadań zostało rozwiązane dla następujących wymiarów ($n$): $2, \ 10, \ 20, \ 50, \ 100$. Aby ograniczyć działanie programu do czasów wykonywania poniżej $10$ minut, konieczne było w przypadkach o większym wymiarze problemu zwiększenie liczby cząsteczek.
+
+W tabeli \ref{tab:rozw_zad1}. oraz tabeli \ref{tab:rozw_zad2}. przedstawiono wyniki serii testów odpowiednio dla zadania $1$. i $2$. Każdy test został wykonany co najmniej $10$ razy, aby móc uśrednić stochastyczny charakter algorytmów. W tabeli opracowano wyniki w postaci średniego, maksymalnego i minimalnego czasu wykonywania programu. Dołączono także wartość wariancji zebranych danych.
+
+Podczas uruchamiania algorytmu PSO użyto ustawień $\omega = \chi$, $c_1 = \chi c_1^*$, $c_2 = \chi c_2^*$, gdzie $\chi = 0.72984$, $c_1^* = c_2^* = 2.05$. W przypadku algorytmu Monte Carlo wybrano nastawy $\sigma = 0.1$, $T = 0.01$. W każdym przypadku położenia początkowe cząsteczek losowane z rozkładu jednostajnego na całym dozwolonym obszarze. Jako kryterium stopu przyjęto kryterium typu akademickiego z warunkiem zakończenia obliczeń $f\left(\vect{x}^{*}\right) < 0.01$.
+
+\renewcommand{\arraystretch}{2}
 \begin{table}[h]
-\begin{adjustwidth}{-1cm}{}
+\scriptsize
+\begin{adjustwidth}{-1.76cm}{}
 \centering
 \begin{tabular}{|c|c|c|l|l|l|l|l|l|l|l|l|l|}
 \hline
-\multicolumn{3}{|c|}{Wymiar}                                      & \multicolumn{2}{c|}{2}                             & \multicolumn{2}{c|}{10}                            & \multicolumn{2}{c|}{20}                            & \multicolumn{2}{c|}{50}                            & \multicolumn{2}{c|}{100}                            \\ \hline
+\multicolumn{3}{|c|}{Wymiar}                                      & \multicolumn{2}{c|}{2}                             & \multicolumn{2}{c|}{10}                            & \multicolumn{2}{c|}{20}                            & \multicolumn{2}{c|}{50}                            & \multicolumn{2}{c|}{100}                           \\ \hline
 \multicolumn{3}{|c|}{Algorytm}                                    & \multicolumn{1}{c|}{PSO} & \multicolumn{1}{c|}{MC} & \multicolumn{1}{c|}{PSO} & \multicolumn{1}{c|}{MC} & \multicolumn{1}{c|}{PSO} & \multicolumn{1}{c|}{MC} & \multicolumn{1}{c|}{PSO} & \multicolumn{1}{c|}{MC} & \multicolumn{1}{c|}{PSO} & \multicolumn{1}{c|}{MC} \\ \hline
-\multicolumn{3}{|c|}{Liczba cząsteczek}                           &                          &                         &                          &                         &                          &                         &                          &                         &                          &                         \\ \hline
-\multirow{8}{*}{Czas} & \multirow{4}{*}{Sekwencyjnie} & Średnia   &                          &                         &                          &                         &                          &                         &                          &                         &                          &                         \\ \cline{3-13} 
-                      &                               & Minimum   &                          &                         &                          &                         &                          &                         &                          &                         &                          &                         \\ \cline{3-13} 
-                      &                               & Maksimum  &                          &                         &                          &                         &                          &                         &                          &                         &                          &                         \\ \cline{3-13} 
-                      &                               & Wariancja &                          &                         &                          &                         &                          &                         &                          &                         &                          &                         \\ \cline{2-13} 
-                      & \multirow{4}{*}{Równolegle}   & Średnia   &                          &                         &                          &                         &                          &                         &                          &                         &                          &                         \\ \cline{3-13} 
-                      &                               & Minimum   &                          &                         &                          &                         &                          &                         &                          &                         &                          &                         \\ \cline{3-13} 
-                      &                               & Maksimum  &                          &                         &                          &                         &                          &                         &                          &                         &                          &                         \\ \cline{3-13} 
-                      &                               & Wariancja &                          &                         &                          &                         &                          &                         &                          &                         &                          &                         \\ \hline
+\multicolumn{3}{|c|}{Liczba cząsteczek}                           & $10^{2}$                 & $10^{2}$                & $10^{2}$                 & $10^{2}$                & $10^{3}$                 & $10^{3}$                & $10^{3}$                 & $10^{3}$                & $10^{3}$                 & $10^{3}$                \\ \hline
+\multirow{8}{*}{Czas} & \multirow{4}{*}{Sekwencyjnie} & Średnia   & $2.3 \ 10^{-4}$          & $3.0 \ 10^{-3}$         & $2.4 \ 10^{-3}$          & $2.9 \ 10^{-1}$         & $2.9 \ 10^{-2}$          & $8.4 \ 10^{0}$          & $1.5 \ 10^{2}$           & $3.1 \ 10^{1}$          & $4.9 \ 10^{2}$           & $8.6 \ 10^{1}$          \\ \cline{3-13} 
+                      &                               & Minimum   & $1.9 \ 10^{-4}$          & $2.8 \ 10^{-3}$         & $2.8 \ 10^{-3}$          & $2.2 \ 10^{-1}$         & $2.6 \ 10^{-2}$          & $7.5 \ 10^{0}$          & $8.3 \ 10^{1}$           & $2.8 \ 10^{1}$          & $2.3 \ 10^{2}$           & $8.0 \ 10^{1}$          \\ \cline{3-13} 
+                      &                               & Maksimum  & $5.0 \ 10^{-4}$          & $3.4 \ 10^{-3}$         & $3.1 \ 10^{-3}$          & $3.5 \ 10^{-1}$         & $3.1 \ 10^{-2}$          & $9.1 \ 10^{0}$          & $2.4 \ 10^{2}$           & $3.3 \ 10^{1}$          & $7.4 \ 10^{2}$           & $9.3 \ 10^{1}$          \\ \cline{3-13} 
+                      &                               & Wariancja & $6.6 \ 10^{-9}$          & $5.4 \ 10^{-8}$         & $4.6 \ 10^{-8}$          & $1.4 \ 10^{-3}$         & $1.1 \ 10^{-6}$          & $2.0 \ 10^{-1}$         & $2.2 \ 10^{3}$           & $1.8 \ 10^{0}$          & $2.2 \ 10^{2}$           & $1.6 \ 10^{1}$          \\ \cline{2-13} 
+                      & \multirow{4}{*}{Równolegle}   & Średnia   & $7.3 \ 10^{-5}$          & $2.5 \ 10^{-4}$         & $6.6 \ 10^{-4}$          & $5.5 \ 10^{-2}$         & $9.7 \ 10^{-3}$          & $9.7 \ 10^{-1}$         & $3.4 \ 10^{1}$           & $5.1 \ 10^{0}$          & $8.2 \ 10^{1}$           & $1.4 \ 10^{1}$          \\ \cline{3-13} 
+                      &                               & Minimum   & $5.3 \ 10^{-5}$          & $2.4 \ 10^{-4}$         & $4.8 \ 10^{-4}$          & $4.7 \ 10^{-2}$         & $4.7 \ 10^{-3}$          & $3.8 \ 10^{-1}$         & $7.6 \ 10^{0}$           & $4.9 \ 10^{0}$          & $5.9 \ 10^{1}$           & $1.3 \ 10^{1}$          \\ \cline{3-13} 
+                      &                               & Maksimum  & $1.6 \ 10^{-4}$          & $2.6 \ 10^{-4}$         & $4.6 \ 10^{-3}$          & $7.9 \ 10^{-2}$         & $5.6 \ 10^{-2}$          & $1.6 \ 10^{0}$          & $5.7 \ 10^{1}$           & $5.4 \ 10^{0}$          & $1.2 \ 10^{2}$           & $1.5 \ 10^{1}$          \\ \cline{3-13} 
+                      &                               & Wariancja & $6.3 \ 10^{-10}$         & $4.5 \ 10^{-11}$        & $5.4 \ 10^{-7}$          & $6.4 \ 10^{-5}$         & $1.2 \ 10^{-4}$          & $2.5 \ 10^{-1}$         & $2.4 \ 10^{2}$           & $1.9 \ 10^{-2}$         & $5.4 \ 10^{2}$           & $1.4 \ 10^{-1}$         \\ \hline
 \end{tabular}
 \end{adjustwidth}
 \caption{Rozwiązania zadania $1$. dla różnych wymiarów $n$ i ustawień.}
@@ -410,13 +418,14 @@ Trudności w zastosowaniu zaproponowanego wyżej normalnego kryterium stopu łat
 \end{table}
 
 \begin{table}[h]
-\begin{adjustwidth}{-1cm}{}
+\scriptsize
+\begin{adjustwidth}{-1.76cm}{}
 \centering
 \begin{tabular}{|c|c|c|l|l|l|l|l|l|l|l|l|l|}
 \hline
-\multicolumn{3}{|c|}{Wymiar}                                      & \multicolumn{2}{c|}{2}                             & \multicolumn{2}{c|}{10}                            & \multicolumn{2}{c|}{20}                            & \multicolumn{2}{c|}{50}                            & \multicolumn{2}{c|}{100}                            \\ \hline
+\multicolumn{3}{|c|}{Wymiar}                                      & \multicolumn{2}{c|}{2}                             & \multicolumn{2}{c|}{10}                            & \multicolumn{2}{c|}{20}                            & \multicolumn{2}{c|}{50}                            & \multicolumn{2}{c|}{100}                           \\ \hline
 \multicolumn{3}{|c|}{Algorytm}                                    & \multicolumn{1}{c|}{PSO} & \multicolumn{1}{c|}{MC} & \multicolumn{1}{c|}{PSO} & \multicolumn{1}{c|}{MC} & \multicolumn{1}{c|}{PSO} & \multicolumn{1}{c|}{MC} & \multicolumn{1}{c|}{PSO} & \multicolumn{1}{c|}{MC} & \multicolumn{1}{c|}{PSO} & \multicolumn{1}{c|}{MC} \\ \hline
-\multicolumn{3}{|c|}{Liczba cząsteczek}                           &                          &                         &                          &                         &                          &                         &                          &                         &                          &                         \\ \hline
+\multicolumn{3}{|c|}{Liczba cząsteczek}                           & $10^{2}$                 & $10^{2}$                & $10^{2}$                 & $10^{2}$                & $10^{3}$                 & $10^{3}$                & $10^{3}$                 & $10^{3}$                & $10^{3}$                 & $10^{3}$                \\ \hline
 \multirow{8}{*}{Czas} & \multirow{4}{*}{Sekwencyjnie} & Średnia   &                          &                         &                          &                         &                          &                         &                          &                         &                          &                         \\ \cline{3-13} 
                       &                               & Minimum   &                          &                         &                          &                         &                          &                         &                          &                         &                          &                         \\ \cline{3-13} 
                       &                               & Maksimum  &                          &                         &                          &                         &                          &                         &                          &                         &                          &                         \\ \cline{3-13} 
@@ -430,6 +439,7 @@ Trudności w zastosowaniu zaproponowanego wyżej normalnego kryterium stopu łat
 \caption{Rozwiązania zadania $2$. dla różnych wymiarów $n$ i ustawień.}
 \label{tab:rozw_zad2}
 \end{table}
+\renewcommand{\arraystretch}{1}
 
 \section{Ocena skalowalności}
 
