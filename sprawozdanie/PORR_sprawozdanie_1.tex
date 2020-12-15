@@ -381,13 +381,13 @@ Wyniki testu paralelizacji algorytmu Monte Carlo dla zadania $1$. oraz $2$. poka
 \begin{minipage}[b]{\dimexpr.5\textwidth-1em}
   \centering
   \includegraphics[width=1\linewidth]{grafiki/skalowalnosc_PSO_z1.pdf}
-  \captionof{figure}{Test skalowalności algorytmu PSO na przykładzie optymalizacji zadania $1$. o $n = 20$ wymiarach. Użyto $100000$ cząstek.}
+  \captionof{figure}{Test skalowalności algorytmu PSO na przykładzie optymalizacji zadania $1$. o $n = 20$ wymiarach. Użyto $10^{5}$ cząstek.}
   \label{fig:skalowalnosc:PSO1}
 \end{minipage} \hfill
 \begin{minipage}[b]{\dimexpr.5\textwidth-1em}
   \centering
   \includegraphics[width=1\linewidth]{grafiki/skalowalnosc_PSO_z2.pdf}
-  \captionof{figure}{Test skalowalności algorytmu PSO na przykładzie optymalizacji zadania $2$. o $n = 10$ wymiarach. Użyto $100000$ cząstek.}
+  \captionof{figure}{Test skalowalności algorytmu PSO na przykładzie optymalizacji zadania $2$. o $n = 10$ wymiarach. Użyto $10^{5}$ cząstek.}
   \label{fig:skalowalnosc:PSO2}
 \end{minipage}
 \end{figure}
@@ -397,13 +397,13 @@ Wyniki testu paralelizacji algorytmu Monte Carlo dla zadania $1$. oraz $2$. poka
 \begin{minipage}[b]{\dimexpr.5\textwidth-1em}
   \centering
   \includegraphics[width=1\linewidth]{grafiki/skalowalnosc_MC_z1.pdf}
-  \captionof{figure}{Test skalowalności algorytmu MC na przykładzie optymalizacji zadania $1$. o $n = 10$ wymiarach. Użyto $100000$ cząstek.}
+  \captionof{figure}{Test skalowalności algorytmu MC na przykładzie optymalizacji zadania $1$. o $n = 10$ wymiarach. Użyto $10^{5}$ cząstek.}
   \label{fig:skalowalnosc:MC1}
 \end{minipage} \hfill
 \begin{minipage}[b]{\dimexpr.5\textwidth-1em}
   \centering
   \includegraphics[width=1\linewidth]{grafiki/skalowalnosc_MC_z2.pdf}
-  \captionof{figure}{Test skalowalności algorytmu MC na przykładzie optymalizacji zadania $2$. o $n = 4$ wymiarach. Użyto $10000$ cząstek.}
+  \captionof{figure}{Test skalowalności algorytmu MC na przykładzie optymalizacji zadania $2$. o $n = 4$ wymiarach. Użyto $10^{4}$ cząstek.}
   \label{fig:skalowalnosc:MC2}
 \end{minipage}
 \end{figure}
@@ -411,6 +411,18 @@ Wyniki testu paralelizacji algorytmu Monte Carlo dla zadania $1$. oraz $2$. poka
 \section{Porównanie trajektorii dla $n = 2$}
 
 \section{Profil zbieżności algorytmów}
+
+Postanowiono również porównać zbieżność omawianych metod na przykładowym zadaniu. W tym teście także dodano wariant metody PSO - metodę lokalną (oznaczaną na wykresach jako \textit{PSO Local}). Dane wykorzystane w tym badaniu pochodziły z prób optymalizacji zadania $2.$ (funkcja Rosenbrocka) o wymiarze $n = 4$ i ustalonej liczbie cząsteczek $10^{4}$. Ostateczny profil zbieżności dla każdej z metod powstał z normalizacji liczby iteracji do $100$ oraz uśrednienia tak znormalizowanych przebiegów zbieżności z $10$ prób.
+
+W testach z metodą PSO (zarówno wariant globalny jak i lokalny) użyto następujących parametrów $\omega = \chi$, $c_1 = \chi c_1^*$, $c_2 = \chi c_2^*$, gdzie $\chi = 0.72984$, $c_1^* = c_2^* = 2.05$. Algorytm poszukiwań losowych działał natomiast z ustawieniami $\sigma = 0.1$, $T = 0.01$. Pozycje początkowe cząstek losowano z ograniczeniem $-40 \leq x_i \leq -30 \quad i = 1, \ ...\, \ n$. Obie metody włączane były w wersji równoległej z~$6$~wątkami.
+
+Tak utworzony profil zbieżności przedstawiono na rys. \ref{fig:zbieznosc}. Widoczna jest znaczna różnica w początkowym zachowaniu algorytmu lokalnego PSO. Po około $30$ iteracjach profil zbieżności jest niemal identyczny dla każdego z podejść. Należy jednak pamiętać, że wykres ten nie odzwierciedla różnic w czasie obliczeń. Pod tym względem najlepszą metodą była metoda globalna PSO, a najsłabszą podejście Monte Carlo.
+
+\begin{figure}[h]
+\centerline{\includegraphics[width=\dimexpr.9\textwidth-1em]{grafiki/zbieznosc_porownanie.pdf}}
+\captionof{figure}{Porównanie zbieżności algorytmów dla przykładowego zadania optymalizacji.}
+\label{fig:zbieznosc}
+\end{figure}
 
 \section{Wnioski} 
 
