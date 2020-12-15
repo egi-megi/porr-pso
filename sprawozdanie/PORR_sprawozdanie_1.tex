@@ -26,6 +26,8 @@
 \usepackage[font=small,format=plain,labelfont=bf,up,textfont=it,up]{caption}
 \usepackage{BeamerColor}
 \usepackage{listings}
+\usepackage{multirow}
+\usepackage{changepage}
 
 \definecolor{mycolor1}{RGB}{0,0,128}
 \definecolor{lightgray}{gray}{0.9}
@@ -384,6 +386,50 @@ Trudności w zastosowaniu zaproponowanego wyżej normalnego kryterium stopu łat
 \end{figure}
 
 \section{Rozwiązanie zadań dla różnych wymiarów $n$}
+
+\begin{table}[h]
+\begin{adjustwidth}{-1cm}{}
+\centering
+\begin{tabular}{|c|c|c|l|l|l|l|l|l|l|l|l|l|}
+\hline
+\multicolumn{3}{|c|}{Wymiar}                                      & \multicolumn{2}{c|}{2}                             & \multicolumn{2}{c|}{10}                            & \multicolumn{2}{c|}{20}                            & \multicolumn{2}{c|}{50}                            & \multicolumn{2}{c|}{100}                            \\ \hline
+\multicolumn{3}{|c|}{Algorytm}                                    & \multicolumn{1}{c|}{PSO} & \multicolumn{1}{c|}{MC} & \multicolumn{1}{c|}{PSO} & \multicolumn{1}{c|}{MC} & \multicolumn{1}{c|}{PSO} & \multicolumn{1}{c|}{MC} & \multicolumn{1}{c|}{PSO} & \multicolumn{1}{c|}{MC} & \multicolumn{1}{c|}{PSO} & \multicolumn{1}{c|}{MC} \\ \hline
+\multicolumn{3}{|c|}{Liczba cząsteczek}                           &                          &                         &                          &                         &                          &                         &                          &                         &                          &                         \\ \hline
+\multirow{8}{*}{Czas} & \multirow{4}{*}{Sekwencyjnie} & Średnia   &                          &                         &                          &                         &                          &                         &                          &                         &                          &                         \\ \cline{3-13} 
+                      &                               & Minimum   &                          &                         &                          &                         &                          &                         &                          &                         &                          &                         \\ \cline{3-13} 
+                      &                               & Maksimum  &                          &                         &                          &                         &                          &                         &                          &                         &                          &                         \\ \cline{3-13} 
+                      &                               & Wariancja &                          &                         &                          &                         &                          &                         &                          &                         &                          &                         \\ \cline{2-13} 
+                      & \multirow{4}{*}{Równolegle}   & Średnia   &                          &                         &                          &                         &                          &                         &                          &                         &                          &                         \\ \cline{3-13} 
+                      &                               & Minimum   &                          &                         &                          &                         &                          &                         &                          &                         &                          &                         \\ \cline{3-13} 
+                      &                               & Maksimum  &                          &                         &                          &                         &                          &                         &                          &                         &                          &                         \\ \cline{3-13} 
+                      &                               & Wariancja &                          &                         &                          &                         &                          &                         &                          &                         &                          &                         \\ \hline
+\end{tabular}
+\end{adjustwidth}
+\caption{Rozwiązania zadania $1$. dla różnych wymiarów $n$ i ustawień.}
+\label{tab:rozw_zad1}
+\end{table}
+
+\begin{table}[h]
+\begin{adjustwidth}{-1cm}{}
+\centering
+\begin{tabular}{|c|c|c|l|l|l|l|l|l|l|l|l|l|}
+\hline
+\multicolumn{3}{|c|}{Wymiar}                                      & \multicolumn{2}{c|}{2}                             & \multicolumn{2}{c|}{10}                            & \multicolumn{2}{c|}{20}                            & \multicolumn{2}{c|}{50}                            & \multicolumn{2}{c|}{100}                            \\ \hline
+\multicolumn{3}{|c|}{Algorytm}                                    & \multicolumn{1}{c|}{PSO} & \multicolumn{1}{c|}{MC} & \multicolumn{1}{c|}{PSO} & \multicolumn{1}{c|}{MC} & \multicolumn{1}{c|}{PSO} & \multicolumn{1}{c|}{MC} & \multicolumn{1}{c|}{PSO} & \multicolumn{1}{c|}{MC} & \multicolumn{1}{c|}{PSO} & \multicolumn{1}{c|}{MC} \\ \hline
+\multicolumn{3}{|c|}{Liczba cząsteczek}                           &                          &                         &                          &                         &                          &                         &                          &                         &                          &                         \\ \hline
+\multirow{8}{*}{Czas} & \multirow{4}{*}{Sekwencyjnie} & Średnia   &                          &                         &                          &                         &                          &                         &                          &                         &                          &                         \\ \cline{3-13} 
+                      &                               & Minimum   &                          &                         &                          &                         &                          &                         &                          &                         &                          &                         \\ \cline{3-13} 
+                      &                               & Maksimum  &                          &                         &                          &                         &                          &                         &                          &                         &                          &                         \\ \cline{3-13} 
+                      &                               & Wariancja &                          &                         &                          &                         &                          &                         &                          &                         &                          &                         \\ \cline{2-13} 
+                      & \multirow{4}{*}{Równolegle}   & Średnia   &                          &                         &                          &                         &                          &                         &                          &                         &                          &                         \\ \cline{3-13} 
+                      &                               & Minimum   &                          &                         &                          &                         &                          &                         &                          &                         &                          &                         \\ \cline{3-13} 
+                      &                               & Maksimum  &                          &                         &                          &                         &                          &                         &                          &                         &                          &                         \\ \cline{3-13} 
+                      &                               & Wariancja &                          &                         &                          &                         &                          &                         &                          &                         &                          &                         \\ \hline
+\end{tabular}
+\end{adjustwidth}
+\caption{Rozwiązania zadania $2$. dla różnych wymiarów $n$ i ustawień.}
+\label{tab:rozw_zad2}
+\end{table}
 
 \section{Ocena skalowalności}
 
