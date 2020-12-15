@@ -41,7 +41,7 @@
 \usepackage{siunitx}
 \usepackage{cases}
 \usepackage{lmodern}
-\usepackage{floatrow}
+%\usepackage{floatrow}
 \usepackage{bm}
 \newcommand{\matr}[1]{\mathbf{#1}}
 \newcommand{\vect}[1]{\bm{\mathbf{#1}}}
@@ -338,6 +338,7 @@ int threadsCompleted = 0;
 Testy przeprowadzono na komputerze, którego najważniejsze parametry zapisano w tabeli \ref{tab:parametry}.
 
 \begin{table}[h]
+\centering
 \begin{tabular}{|l|l|}
 \hline
 Procesor          & Intel® Core™ i5-9600KF \\ \hline
@@ -367,18 +368,51 @@ Warunek normalny stopu przetestowano dla obu algorytmów, dla obu zadań.
 
 \section{Ocena skalowalności}
 
+Zbadano skalowalność implementacji oraz przyspieszenie wynikające z użycia obliczeń równoległych. Wykonano $4$ testy - dla każdej metody zbadano czasy wykonywania obliczeń przy optymalizacji zadania $1$. oraz zadania$2$. Opcje konfiguracyjne algorytmów i ustawienia ilości cząsteczek oraz wymiarów zadań były stałe podczas pojedynczego testu. Zmianom ulegała liczba dostępnych wątków programu.
+
+W każdym teście położenia początkowe cząsteczek wylosowane zostały z obszaru ograniczonego nierównościami $-40 \leq x_i \leq -30 \quad i = 1, \ ...\, \ n$, aby uniknąć sytuacji, w której pewne cząstki w swojej początkowej konfiguracji spełniają kryterium stopu lub znajdują się bardzo blisko poszukiwanego rozwiązania. W testach użyto kryterium stopu akademickiego z warunkiem zakończenia $f\left(\vect{x}^{*}\right) < 0.01$.
+
+Wyniki testu paralelizacji algorytmu optymalizacji rojem cząstek dla optymalizacji zadania $1$. oraz $2$. pokazano odpowiednio na rys. \ref{fig:skalowalnosc:PSO1} i rys. \ref{fig:skalowalnosc:PSO2}. W testach użyto ustawień $\omega = \chi$, $c_1 = \chi c_1^*$, $c_2 = \chi c_2^*$, gdzie $\chi = 0.72984$, $c_1^* = c_2^* = 2.05$.
+
+Wyniki testu paralelizacji algorytmu Monte Carlo dla zadania $1$. oraz $2$. pokazano odpowiednio na rys. \ref{fig:skalowalnosc:MC1} i rys. \ref{fig:skalowalnosc:MC2}. Rozwiązując zadanie $1$ użyto ustawień $\sigma = 1$, $T = 0.01$, a podczas rozwiązywania zadania $2$ parametry algorytmu ustawiono na $\sigma = 0.1$, $T = 0.01$.
+
+\begin{figure}[h]
+\centering
+\begin{minipage}[b]{\dimexpr.5\textwidth-1em}
+  \centering
+  \includegraphics[width=1\linewidth]{grafiki/skalowalnosc_PSO_z1.pdf}
+  \captionof{figure}{Test skalowalności algorytmu PSO na przykładzie optymalizacji zadania $1$. o $n = 20$ wymiarach. Użyto $100000$ cząstek.}
+  \label{fig:skalowalnosc:PSO1}
+\end{minipage} \hfill
+\begin{minipage}[b]{\dimexpr.5\textwidth-1em}
+  \centering
+  \includegraphics[width=1\linewidth]{grafiki/skalowalnosc_PSO_z2.pdf}
+  \captionof{figure}{Test skalowalności algorytmu PSO na przykładzie optymalizacji zadania $2$. o $n = 10$ wymiarach. Użyto $100000$ cząstek.}
+  \label{fig:skalowalnosc:PSO2}
+\end{minipage}
+\end{figure}
+
+\begin{figure}[h]
+\centering
+\begin{minipage}[b]{\dimexpr.5\textwidth-1em}
+  \centering
+  \includegraphics[width=1\linewidth]{grafiki/skalowalnosc_MC_z1.pdf}
+  \captionof{figure}{Test skalowalności algorytmu MC na przykładzie optymalizacji zadania $1$. o $n = 10$ wymiarach. Użyto $100000$ cząstek.}
+  \label{fig:skalowalnosc:MC1}
+\end{minipage} \hfill
+\begin{minipage}[b]{\dimexpr.5\textwidth-1em}
+  \centering
+  \includegraphics[width=1\linewidth]{grafiki/skalowalnosc_MC_z2.pdf}
+  \captionof{figure}{Test skalowalności algorytmu MC na przykładzie optymalizacji zadania $2$. o $n = 4$ wymiarach. Użyto $10000$ cząstek.}
+  \label{fig:skalowalnosc:MC2}
+\end{minipage}
+\end{figure}
+
 \section{Porównanie trajektorii dla $n = 2$}
 
 \section{Profil zbieżności algorytmów}
 
 \section{Wnioski} 
-
-\begin{figure}[h]
-	\begin{floatrow}
-		\ffigbox[\FBwidth]{\includegraphics[width=0.9\textwidth]{grafiki/wykres_h.PNG}}{\caption{Podpis.}
-		\label{fig:pid:sym_auto}}
-	\end{floatrow}
-\end{figure}
 
 \bibliography{PORR_sprawozdanie_1}{}
 \bibliographystyle{plain}
