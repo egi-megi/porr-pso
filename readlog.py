@@ -16,7 +16,7 @@ def stringToDate(dateStr):
     d = d.replace(".txt",'')
     return datetime.datetime.strptime(d,'%Y%m%d%H%M%S')
 
-#MAIN LOG ANALYSIS
+#WCZYTANIE GLOWNEGO LOGU
 
 rysujeFunkcjeKosztu = False
 
@@ -66,16 +66,18 @@ if(rysujeFunkcjeKosztu):
 # Funkcje ktore optymalizujemy
 
 
-
 N = 100 # resolution for given range x_min - x_max
 
-area_min = -40
-area_max = 40
-
+#ograniczenie 
+half = 40
+area_min = -half
+area_max = half
 x=np.linspace(area_min, area_max, N, endpoint=True)
 y=np.linspace(area_min, area_max, N, endpoint=True)
 
 meshList = list(itertools.product(x, y))
+
+#funkcje ogolne, wielowymiarowe
 
 def task1(particlesList):
     suma = 0
@@ -86,6 +88,14 @@ def task1(particlesList):
         product = product * math.cos(particlesList[i] / (i + 1))
 
     return 1.0 / 40.0 * suma + 1 - product
+
+def task2(particlesList):
+    costFunctionValue = 0
+    for i in range(0,len(particlesList)-1):    
+        costFunctionValue = costFunctionValue + (math.pow((particlesList[i + 1] - math.pow(particlesList[i], 2)), 2) * 100 + math.pow((1 - particlesList[i]), 2))
+    return costFunctionValue
+    
+#zmodyfikowane do przekrojow
 
 def funkcja1(x,n):
 
@@ -98,60 +108,64 @@ def funkcja1(x,n):
 
     return 1/40 * suma + 1 - prod
 
-# #tylko dla n=2
-# def funkcja2(x, xi):
 
-#     return 100*math.pow((xi-math.pow(x,2)),2) + math.pow((1-x),2)
+def funkcja2(x, xi):
+    return 100*math.pow((xi-math.pow(x,2)),2) + math.pow((1-x),2)
 
-#2d
+#przekroj resenbrocka
+
+funk2=[]
+
+for i in range(0,N-1):
+   funk2.append(funkcja2(x[i],x[i+1]))
+
+# plt.plot(x[0:len(funk2)], funk2)
+# plt.title("Zad 2 - Funkcja rosenbrocka - przekrój")
+# plt.show()
+
+# wykres  naszej funkcji - poziomice/heatmapa oraz przekroj
 
 
-# plt.figure(1)
-# figure(num=None, figsize=(15, 6), dpi=200, facecolor='w', edgecolor='k')
+plt.figure(1)
+figure(num=None, figsize=(15, 6), dpi=200, facecolor='w', edgecolor='k')
 
-# plt.subplot(121)
-res_2d = [task1([i]) for i in x]
-# plt.plot(x, res_2d)
+#obliczenia
+#przekroj
+res_2d_task1 = [task1([i]) for i in x] #TASK1
+# res_2d_task2 = [task2([i]) for i in x] #TASK2
 
-xx, yy = np.meshgrid(x, y)
-
-arr = np.empty((N*N,1), float)
+arr_task1 = np.empty((N*N,1), float)
+# arr_task2 = np.empty((N*N,1), float)
 
 for i in range(0, len(meshList)):
-    arr[i,0] = task1(meshList[i])
+    arr_task1[i,0] = task1(meshList[i])
 
-z = np.reshape(arr,(N,N))
+# for i in range(0, len(meshList)):
+#     arr_task2[i,0] = task2(meshList[i])
 
-#grid_z2 = griddata(points, values, (grid_x, grid_y), method='cubic')
 
-# plt.subplot(122)
-#plt.imshow(z, vmin=z.min(), vmax=z.max(), origin='lower', extent=[x.min(), x.max(), y.min(), y.max()])
-# plt.contour(x, y, z)
-# plt.colorbar()
-# plt.savefig("PSO_koszt4.svg")  
+plt.subplot(121)
+plt.plot(x[0:len(res_2d_task1)], res_2d_task1)
+plt.title("Zad 1 - przekrój x1=0")
+plt.xlabel("x2")
+plt.ylabel("z")
 
-a = 0
+z1 = np.reshape(arr_task1,(N,N))
+#z2 = np.reshape(arr_task2,(N,N))
+
+plt.subplot(122)
+
+plt.imshow(z1, vmin=z1.min(), vmax=z1.max(), origin='lower', extent=[x.min(), x.max(), y.min(), y.max()])
+# plt.contour(x, y, z1) #TASK2
+plt.title("Zad 1 - wykres dla n=2")
+plt.xlabel("x1")
+plt.ylabel("x2")
+cbar = plt.colorbar()
+cbar.set_label("wartość funkcji kosztu")
+# plt.savefig("Zad1_2d_heatmap_.svg")  
 
 plt.figure(2)
 
-plt.contour(x, y, z)
-cbar = plt.colorbar()
-cbar.set_label("koszt izolinie")
-
-# plt.figure(1)
-# plt.plot(x_range, y)
-# plt.title(f"Wykres dla n ={n}")
-# plt.show()
-
-# y=[]
-
-# for i in range(0,N-1):
-#    y.append(funkcja2(x_range[i],x_range[i+1]))
-
-# plt.figure(2)
-# plt.plot(x_range[0:len(y)], y)
-# plt.title(f"Wykres dla n ={n}")
-# plt.show()
 
 
 ######################################################################
@@ -226,4 +240,66 @@ plt.show()
 #     cbar.set_label("koszt")
 #     plt.savefig(f"plots/plot_{i}.png")
 
-# os.system("ffmpeg -r 5 -i plots/plot_%d.png -vcodec mpeg4 -y plots/scatter3.mp4")
+marker_size=25
+
+plt.figure(9)
+for i in range(iterations):
+    # plt.clf()
+    plt.xlim(-40, 40)
+    plt.ylim(-40, 40)
+    plt.xticks(np.arange(-40,50,10))
+    plt.yticks(np.arange(-40,50,10))
+    plt.scatter(arr[i,:,2], arr[i,:,3], marker_size, c=arr[i,:,6],vmin=0, vmax=costMax)
+
+
+    # plt.savefig(f"plots/plot_{i}.png")
+plt.title(f"PSO n={dim}, l.czastek{partNum}, l.iteracji{iterations}")
+plt.xlabel("x1")
+plt.ylabel("x2")
+cbar= plt.colorbar()
+cbar.set_label("koszt")
+plt.show()
+
+# get positions of particles with certain id or certain ids
+
+def getBestSolutionHistory(dataArray, idVector):
+    pass
+
+
+
+def getParticleHistory(dataArray, id):
+    for i in range(0, (dataArray.shape)[0]):
+        # particlesList.append(dataArray[i][np.where(dataArray[i][:,1] == id)])
+        array = dataArray[i][np.where(dataArray[i][:,1] == id)]
+        global particlesArray
+        particlesArray = np.append(particlesArray, array, axis=0)
+
+
+particlesArray = np.empty((0,cols), float)
+getParticleHistory(arr,5)    
+
+marker_size = 50
+
+for i in range (0,partNum):
+
+    particlesArray = np.empty((0,cols), float)
+    getParticleHistory(arr,i)  
+    plt.figure(i)
+    plt.xlim(-40, 40)
+    plt.ylim(-40, 40)
+    plt.xticks(np.arange(-40,50,10))
+    plt.yticks(np.arange(-40,50,10))
+    plt.imshow(z, vmin=z.min(), vmax=z.max(), origin='lower', extent=[x.min(), x.max(), y.min(), y.max()], alpha=0.35, zorder = 0)
+    plt.plot(particlesArray[:,2],particlesArray[:,3],'b', zorder=1)
+    plt.scatter(particlesArray[:,2],particlesArray[:,3], marker_size, c=particlesArray[:,6],vmin=0, vmax=costMax, zorder=2)
+    plt.title(f"PSO n={dim}, id.czastki{i}, l.iteracji{iterations}")
+    plt.xlabel("x1")
+    plt.ylabel("x2")
+    cbar= plt.colorbar()
+    cbar.set_label("koszt")
+    plt.show()
+
+
+a=0
+#os.system("ffmpeg -r 5 -i plots/plot_%d.png -vcodec mpeg4 -y plots/scatter3.mp4")
+os.system("convert -delay 20 -loop 0 plots/plot_{0..33}.png plots/scatter4.gif") 
