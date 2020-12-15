@@ -34,7 +34,11 @@ void MonteCarlo::makeMonteCarlo()
     rand_engine.seed((omp_get_thread_num() + 1) * time(NULL));
 #pragma omp for
     for(int i = 0; i < amountOfParticles; i++)
-        v_particles[i] = MonteCarloParticle(options, rand_engine);
+    {
+        MonteCarloParticle particle = MonteCarloParticle(options, rand_engine);
+        particle.setId(i);
+        v_particles[i] = particle;
+    }
 }
 
     globalBestParticle.first = v_particles[0];

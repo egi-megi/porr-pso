@@ -43,7 +43,7 @@ int main(int argc, char* argv[])
         {
             options->stopCriterionConfig = new ConfigStopCriterionNormal(0.01); // TODO add treshold variable
         }
-
+        //options->verbose = false;
         logger = new Logger(options, logPath, particlesPath, true);
         
         // run if this is the first run with the same parameters (dimension and particlesNumber) to log start position of particles
@@ -73,7 +73,6 @@ int main(int argc, char* argv[])
         {
             if (combination.task == "Task1")
             {
-                options->stopCriterionThreshold = 0.15;
                 MonteCarlo mc1a(options, logger);
                 MonteCarloParticle mc1a_best = mc1a.findTheBestParticle(.01, .1);
 
