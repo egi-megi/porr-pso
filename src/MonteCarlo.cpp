@@ -118,7 +118,7 @@ MonteCarloParticle MonteCarlo::findTheBestParticle(float criterionStopValue,
                     {
                         double cost = globalBestParticle.first.getCostFunctionValue();
                         printf("MonteCarlo::findTheBestParticle: iteration = %d, globalBestParticle.first = %lf\n",
-                               iteration_number, globalBestParticle.first.getCostFunctionValue());
+                               iteration_number, cost);
                         //log
                         monteCarloLogger(iteration_number, cost);
                     }

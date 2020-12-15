@@ -90,15 +90,19 @@ int main(int argc, char* argv[])
 
         logger = new Logger(options, logPath, particlesPath, true, false);
 
-        Swarm s1a(options, logger);
+        // Swarm s1a(options, logger);
 
-        double chi = 0.72984, c1 = 2.05, c2 = 2.05;
-        double w = chi;
-        c1 = chi * c1;
-        c2 = chi * c2;
+        // double chi = 0.72984, c1 = 2.05, c2 = 2.05;
+        // double w = chi;
+        // c1 = chi * c1;
+        // c2 = chi * c2;
 
-        SwarmParticle s1a_best = s1a.findTheBestParticle(w, c1, c2);
-        printf("Best particle f(s1a_best) = %lf\n", s1a_best.getCostFunctionValue());
+        // SwarmParticle s1a_best = s1a.findTheBestParticle(w, c1, c2);
+        // printf("Best particle f(s1a_best) = %lf\n", s1a_best.getCostFunctionValue());
+
+        MonteCarlo m1a(options, logger);
+        MonteCarloParticle m1a_best = m1a.findTheBestParticle(.1, .5);
+        printf("Best particle f(m1a_best) = %lf\n", m1a_best.getCostFunctionValue());
 
         logger->saveToFileAndClose();
         delete options->stopCriterionConfig;
