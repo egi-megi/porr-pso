@@ -3,86 +3,86 @@ from matplotlib import pyplot as plt
 import datetime
 import os
 
-def stringToDate(dateStr):
-    d = dateStr.replace('-','')
-    d = d.replace('_','')
-    d = d.replace(':','')
-    d = d.replace(".txt",'')
-    return datetime.datetime.strptime(d,'%Y%m%d%H%M%S')
+# def stringToDate(dateStr):
+#     d = dateStr.replace('-','')
+#     d = d.replace('_','')
+#     d = d.replace(':','')
+#     d = d.replace(".txt",'')
+#     return datetime.datetime.strptime(d,'%Y%m%d%H%M%S')
 
-# keywords = ["$INFO$", "$DATE$", "$PARAMS$", "$TYPE$", "$DATA$"]
+# # keywords = ["$INFO$", "$DATE$", "$PARAMS$", "$TYPE$", "$DATA$"]
 
-#MAIN LOG ANALYSIS
+# #MAIN LOG ANALYSIS
 
-fileName = "log_10_2_0.001_2020-12-14_01:32:29_s1a.txt"
-fileNamePattern = fileName.split("_")
+# fileName = "log_10_2_0.001_2020-12-14_01:32:29_s1a.txt"
+# fileNamePattern = fileName.split("_")
 
-name = fileNamePattern[0]
-partNum = fileNamePattern[1]
-dim = fileNamePattern[2]
-stop = fileNamePattern[3]
-date = fileNamePattern[4]
-time = fileNamePattern[5]
-taskType = fileNamePattern[6]
+# name = fileNamePattern[0]
+# partNum = fileNamePattern[1]
+# dim = fileNamePattern[2]
+# stop = fileNamePattern[3]
+# date = fileNamePattern[4]
+# time = fileNamePattern[5]
+# taskType = fileNamePattern[6]
 
-pyDate = stringToDate(date+time)
+# pyDate = stringToDate(date+time)
 
-with open("logs/"+fileName, "r") as f:
-    logContent = f.readlines()
+# with open("logs/"+fileName, "r") as f:
+#     logContent = f.readlines()
 
-#remove ends of line
-logContent = [x.rstrip() for x in logContent] 
+# #remove ends of line
+# logContent = [x.rstrip() for x in logContent] 
 
-iterations = []
-costs = []
-bestIds = []
+# iterations = []
+# costs = []
+# bestIds = []
 
-for elem in logContent:
-    currentline = elem.split(",")
-    iterations.append(int(currentline[0]))
-    costs.append(float(currentline[1]))
-    bestIds.append(int(currentline[2]))
+# for elem in logContent:
+#     currentline = elem.split(",")
+#     iterations.append(int(currentline[0]))
+#     costs.append(float(currentline[1]))
+#     bestIds.append(int(currentline[2]))
 
-#plot
+# #plot
 
-plt.figure(0)
-myTitle = f"PSO_OpenMP: n={dim}, l.czastek{partNum}, stop={stop}"
-plt.plot(iterations, costs)
-plt.xticks(np.arange(0, max(iterations)+2, 5.0))
-plt.xlabel("iteracje")
-plt.ylabel("koszt")
-plt.title(myTitle)
-plt.savefig("PSO_koszt2.png")    
+# plt.figure(0)
+# myTitle = f"PSO_OpenMP: n={dim}, l.czastek{partNum}, stop={stop}"
+# plt.plot(iterations, costs)
+# plt.xticks(np.arange(0, max(iterations)+2, 5.0))
+# plt.xlabel("iteracje")
+# plt.ylabel("koszt")
+# plt.title(myTitle)
+# plt.savefig("PSO_koszt2.png")    
 
 ######################################################################
 # Funkcje ktore optymalizujemy
 
-# import math
+import math
 
-# N = 100 # resolution for given range x_min - x_max
-# x_min = -10
-# x_max = 10
+N = 100 # resolution for given range x_min - x_max
+x_min = -10
+x_max = 10
 
-# x_range=np.linspace(x_min, x_max, N, endpoint=True)
+x_range=np.linspace(x_min, x_max, N, endpoint=True)
 
-# def funkcja1(x,n):
+def funkcja1(x,n):
 
-#     suma = np.sum(math.pow(x,2))   
-#     x = np.repeat(x,n)
-#     n = np.arange(1,n+1,1)
-#     x2 = x/n
-#     arg = [math.cos(i) for i in x2]    
-#     prod = np.prod(arg)   
+    suma = np.sum(math.pow(x,2))   
+    x = np.repeat(x,n)
+    n = np.arange(1,n+1,1)
+    x2 = x/n
+    arg = [math.cos(i) for i in x2]    
+    prod = np.prod(arg)   
 
-#     return 1/40 * suma + 1 - prod
+    return 1/40 * suma + 1 - prod
 
 # #tylko dla n=2
 # def funkcja2(x, xi):
 
 #     return 100*math.pow((xi-math.pow(x,2)),2) + math.pow((1-x),2)
 
-# n=2
-# y = [funkcja1(x, n) for x in x_range]
+n=2
+y = [funkcja1(x, n) for x in x_range]
 
 # plt.figure(1)
 # plt.plot(x_range, y)

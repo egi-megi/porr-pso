@@ -33,6 +33,11 @@ std::vector<double> Particle::getPositionVector()
     return positionVectors;
 }
 
+void Particle::setPositionVector(std::vector<double> posVector) 
+{
+    positionVectors = posVector;
+}
+
 double Particle::getCoefficientForBoundedPosition(std::vector<double> &v_positionProposition,
     std::vector<double> &v_positionDelta)
 {

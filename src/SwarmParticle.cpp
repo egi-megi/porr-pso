@@ -36,6 +36,31 @@ SwarmParticle::SwarmParticle(Options* mOptions, Swarm *s,
     ready = true;
 }
 
+SwarmParticle::SwarmParticle(Options *mOptions, Swarm *s, std::default_random_engine *gen, std::vector<double> _positionVector) 
+{
+    options = mOptions;
+
+    vectorDim = options->dimension;
+    speedVectors.resize(vectorDim, 0.0);
+    tempSpeedVectors.resize(vectorDim, 0.0);
+    positionVectors.resize(vectorDim, 0.0);
+
+    config = options->optimizationExerciseConfig;
+
+    positionVectors = _positionVector; //position loaded from file  
+    positionVectorsParticlePbest = positionVectors;
+    setStartSpeed(*gen);
+
+    computeCostFunctionValue();
+    costFunctionValuePbest = costFunctionValue;
+
+    swarm = s;
+
+    communication = options->communication;
+
+    ready = true;
+}
+
 std::vector<double> SwarmParticle::getSpeedVector() 
 {
     return speedVectors;

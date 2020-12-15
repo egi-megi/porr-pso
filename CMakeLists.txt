@@ -43,7 +43,8 @@ add_executable(rojCzastek_Szczepanski_Jurkiewicz_Pikulinski main.cpp
     src/MonteCarlo.cpp include/MonteCarlo.h
     src/Options.cpp include/Options.h
     src/InputParser.cpp include/InputParser.h
-    src/Timer.cpp include/Timer.h)
+    src/Timer.cpp include/Timer.h
+    src/AutoTest.cpp include/AutoTest.h)
 
 if(APPLE)
     target_link_libraries(rojCzastek_Szczepanski_Jurkiewicz_Pikulinski PRIVATE OpenMP::OpenMP_CXX -L/usr/local/opt/libomp/lib/)

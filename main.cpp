@@ -9,91 +9,31 @@
 #include "include/MonteCarlo.h"
 #include "include/InputParser.h"
 #include "include/Logger.h"
+#include "include/AutoTest.h"
 
 #include <iostream>
-
-//TODO clean code for auto testing - move it to options or new file
-
-enum class TEST
-{
-    S1AP = 0,
-    S1NP, //1
-    MC1AP,
-    MC1NP,
-    S2AP,
-    S2NP,
-    MC2AP,
-    MC2NP,
-    S1AS,
-    S1NS,
-    MC1AS,
-    MC1NS,
-    S2AS,
-    S2NS,
-    MC2AS,
-    MC2NS //15
-};
-
-typedef std::vector<std::string> Parameters;
-struct Combination
-{   
-    std::string algorithm;
-    std::string task;
-    std::string stopCondition;
-    std::string cpuBehaviour;
-
-    Combination(Parameters params) : algorithm(params[0]), task(params[1]), stopCondition(params[2]), cpuBehaviour(params[3]){};
-};
-
-Combination getTestCombination(TEST val) 
-{   
-    Parameters params;
-
-    switch (val) {
-	case TEST::S1AP: params = Parameters {"Swarm", "Task1", "Academic", "Parallel"}; break;
-    case TEST::S1NP: params = Parameters {"Swarm", "Task1", "Normal", "Parallel"}; break;
-    case TEST::MC1AP: params = Parameters {"MonteCarlo", "Task1", "Academic", "Parallel"}; break;
-    case TEST::MC1NP: params = Parameters {"MonteCarlo", "Task1", "Normal", "Parallel"}; break;
-    case TEST::S2AP: params = Parameters {"Swarm", "Task2", "Academic", "Parallel"}; break;
-    case TEST::S2NP: params = Parameters {"Swarm", "Task2", "Normal", "Parallel"}; break;
-    case TEST::MC2AP: params = Parameters {"MonteCarlo", "Task2", "Academic", "Parallel"}; break;
-    case TEST::MC2NP: params = Parameters {"MonteCarlo", "Task2", "Normal", "Parallel"}; break;
-    case TEST::S1AS: params = Parameters {"Swarm", "Task1", "Academic", "Serial"}; break;
-    case TEST::S1NS: params = Parameters {"Swarm", "Task1", "Normal", "Serial"}; break;
-    case TEST::MC1AS: params = Parameters {"MonteCarlo", "Task1", "Academic", "Serial"}; break;
-    case TEST::MC1NS: params = Parameters {"MonteCarlo", "Task1", "Normal", "Serial"}; break;
-    case TEST::S2AS: params = Parameters {"Swarm", "Task2", "Academic", "Serial"}; break;
-    case TEST::S2NS: params = Parameters {"Swarm", "Task2", "Normal", "Serial"}; break;
-    case TEST::MC2AS: params = Parameters {"MonteCarlo", "Task2", "Academic", "Serial"}; break;
-    case TEST::MC2NS: params = Parameters {"MonteCarlo", "Task2", "Normal", "ParaSerialllel"}; break;
-    }
-    return Combination (params);
-} 
-
 
 int main(int argc, char* argv[])
 {
     Logger* logger;
-    Options* options = new Options();
-    options->optimizationExerciseConfig = new ConfigEx1();
+    Options* options;
 
-    InputParser::parse(options, argc, argv);
+    // taskTypes legend: algorithm, task, stop condition, parallel or serial
 
-    // algorithm, task, stop condition, parallel or serial
-    // s = 0, task1 = 0, a = 0, P = 0 
-
-    std::vector<std::string> taskTypes = {"s1aP","s1nP","mc1aP","mc1nP","s2aP","s2nP","mc2aP","mc2nP",
-                                           "s1aS","s1nS","mc1aS","mc1nS","s2aS","s2nS","mc2aS","mc2nS"};
-                 
-    std::vector<int> chosenTests{0};//tests ids you want to run
+    std::vector<int> chosenTests{static_cast<int>(TEST::S1AP)};//tests ids you want to run
 
     for (auto testId : chosenTests)
     {
 
-        Combination combination = getTestCombination(static_cast<TEST>(testId));
+        Combination combination (static_cast<TEST>(testId));
+       
+        options = new Options();
+        options->optimizationExerciseConfig = new ConfigEx1();
 
-        std::string logPath = "logs/log_" + options->optionsToString(true) + "_" + taskTypes[testId] + ".txt";
-        std::string particlesPath = "logs/particlesLog_" + options->optionsToString(true) + "_" + taskTypes[testId] + ".txt";
+        std::string logPath = "../logs/log_" + options->optionsToString(true) + "_" + combination.taskTypes[testId] + ".txt";
+        std::string particlesPath = "../logs/particlesLog_" + options->optionsToString(true) + "_" + combination.taskTypes[testId] + ".txt";
+ 
+        InputParser::parse(options, argc, argv); // TODO parser needs to be solved in loop differently
 
         if (combination.stopCondition == "Academic")
         {
@@ -101,10 +41,15 @@ int main(int argc, char* argv[])
         }
         else
         {
-            options->stopCriterionConfig = new ConfigStopCriterionNormal(0.1); // TODO add treshold variable
+            options->stopCriterionConfig = new ConfigStopCriterionNormal(0.01); // TODO add treshold variable
         }
 
         logger = new Logger(options, logPath, particlesPath, true);
+        
+        // run if this is the first run with the same parameters (dimension and particlesNumber) to log start position of particles
+        //options->prepareAndActivateWriteLogger();
+        options->prepareAndActivateReadLogger();
+        options->loadStartPositionFromFile();
 
         if (combination.algorithm == "Swarm")
         {
@@ -127,8 +72,9 @@ int main(int argc, char* argv[])
         }
         else
         {
-            if (combination.task == "TASK1")
+            if (combination.task == "Task1")
             {
+                options->stopCriterionThreshold = 0.15;
                 MonteCarlo mc1a(options, logger);
                 MonteCarloParticle mc1a_best = mc1a.findTheBestParticle(.01, .1);
 

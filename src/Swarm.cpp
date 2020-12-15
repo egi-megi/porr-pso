@@ -44,18 +44,28 @@ Swarm::Swarm(Options* mOptions, Logger *_log) :
 #ifdef OPEN_MP_SWARM
 void Swarm::makeSwarm()
 {
-#pragma omp parallel
-    {
+//#pragma omp parallel
+    //{
         std::default_random_engine rand_engine;
         rand_engine.seed((omp_get_thread_num() + 1) * time(NULL));
-#pragma omp for
+//#pragma omp for
         for (int i = 0; i < amountOfParticles; i++)
-        {
+        {           
+            if(options->isSaveStartPosition) // SAVES TO FILE - GENERATES NEW
+            {
             SwarmParticle particle(options, this, &rand_engine);
             particle.setId(i);
+            options->addStartPositionToBuffer(particle.getPositionVector(), i);
             swarm[i] = particle;
+            }
+            else                             // LOADS FROM FILE
+            {
+            SwarmParticle particle(options, this, &rand_engine, options->particlesFromFile[i]);
+            particle.setId(i);
+            swarm[i] = particle;            
+            }                       
         }
-    }
+    //}
 
     globalBestParticle.first = swarm[0];
     for (int i = 1; i < amountOfParticles; i++)
@@ -167,8 +177,9 @@ SwarmParticle Swarm::findTheBestParticle(float criterionStopValue, float w, floa
                     //log
                     psoLogger(iteration_number, cost);
                 }
-
+                if(iteration_number == 0 && options->isSaveStartPosition) options->readBufferAndCloseFile();
                 iteration_number++;
+ 
 
                 if (!configStop->computeStopCriterion(criterionStopValue, globalBestParticle))
                     foundSolution = true;

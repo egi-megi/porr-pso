@@ -19,6 +19,8 @@ class SwarmParticle : public Particle
 public:
     SwarmParticle() = default;
     SwarmParticle(Options *mOptions, Swarm *s, std::default_random_engine *gen);
+    SwarmParticle(Options *mOptions, Swarm *s, std::default_random_engine *gen, std::vector<double> positionVector);
+    
     virtual ~SwarmParticle() = default;
 
     std::vector<double> getSpeedVector();

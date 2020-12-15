@@ -22,6 +22,7 @@ public:
     double getCostFunctionValue() const;
     double getCostFunctionValue(std::vector<double> &v_position) const;
     std::vector<double> getPositionVector();
+    void setPositionVector(std::vector<double> posVector);
     bool isReady() const;
 
 protected:
