@@ -656,11 +656,11 @@ Tak utworzony profil zbieżności przedstawiono na rys. \ref{fig:zbieznosc}. Wid
 
 \section{Wnioski} 
 
-Niestety nie ma możliwości wykonać obu zadań dla obu algorytmów dokładnie z tymi samymi ustawieniami tak, aby w łatwy sposób porównać ich działanie. Wraz z zwiększaniem wymiaru zadania zwiększano również liczbę cząstek, co, jak zauważono, pozytywnie wpływało na czas obliczeń. Oprócz liczby cząsteczek przeszukujących zadany obszar zmianom ulegały parametry algorytmów. Ich dobieranie wykonywane było na zasadzie prób i błędów.
+Niestety nie ma możliwości wykonać obu zadań dla obu algorytmów dokładnie z tymi samymi ustawieniami tak, aby w łatwy sposób porównać ich działanie. Wraz z zwiększaniem wymiaru zadania zwiększano również liczbę cząstek, co, jak zauważono, pozytywnie wpływało na czas obliczeń. Oprócz liczby cząsteczek przeszukujących zadany obszar zmianom ulegały parametry algorytmów. Ich~dobieranie wykonywane było na zasadzie prób i błędów.
 
 Tak jak można było przypuszczać zarówno dla zadania $1$, jak i $2$. dla obu rodzajów algorytmów zrównoleglenie fragmentów kodu przyspieszyło działanie programu (rys. \ref{fig:skalowalnosc:PSO1}, rys. \ref{fig:skalowalnosc:PSO2}, rys. \ref{fig:skalowalnosc:MC1} i rys. \ref{fig:skalowalnosc:MC2}). Okazało się również, że przyspieszenie to następuje dla liczby wątków nie większej niż liczba rdzeni, czyli $6$. Gdy obliczenia wykonywane są na większej liczbie wątków niż liczba rdzeni, czas szukania najlepszej cząstki jest porównywalny z czasem szukania tej cząstki na $6$ rdzeniach. Nie widać natomiast, aby po przekroczeniu granicy $6$ wątków następowały jakieś większe problemy w komunikacji między wątkami.
 
-Największe przyspieszenie, niezależnie od rodzaju zadania czy rodzaju algorytmu, występuje pomiędzy użyciem $1$ a $2$ wątków. Przy włączeniu kolejnych wątków (aż do $6$ granicznych) różnica w czasie obliczeń jest coraz mniejsza.
+Największe przyspieszenie, niezależnie od rodzaju zadania czy rodzaju algorytmu, występuje pomiędzy użyciem $1$ a $2$ wątków. Przy włączeniu kolejnych wątków (aż do $6$ granicznych) różnica w~czasie obliczeń jest coraz mniejsza.
 
 Dla algorytmu Monte Carlo przy dłuższym czasie wykonywania obliczeń, korzyść ze zrównleglenia jest większa niż dla PSO. Jest to zapewne wynikiem tego, że cząsteczki w algorytmie Monte Carlo nie muszą się ze sobą \quotedblbase komunikować\textquotedblright. W algorytmie PSO, po każdej iteracji, następuje policzenie najlepszej cząsteczki dla całego roju. W tym momencie wszystkie watki muszą czekać z kolejnymi obliczeniami. Proces ten ma na tyle duże znaczenie, że przy zrównolegleniu 6 wątkami czas wykonania obliczeń przy użyciu obu algorytmów nie wiele się różni, w przeciwieństwie do czasu obliczeń tylko na 1 wątku.
 
