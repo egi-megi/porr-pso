@@ -417,7 +417,9 @@ Podczas uruchamiania algorytmu PSO użyto ustawień $\omega = \chi$, $c_1 = \chi
 \label{tab:rozw_zad1}
 \end{table}
 
-Dla zadania 1 wartość wariancji rośnie wraz ze wzrostem liczby cząsteczek. Do wymiaru $n = 20$ zwykle dla metody PSO wariancja jest mniejsza niż dla metody Monte Carlo. Natomiast dla wymiarów $n = 50$ i $n = 100$ sytuacja jest odwrotna. Średni czas obliczeń między dla wersji równoległej jest od 5 do 10-krotnie większy niż dla wersji sekwencyjnej. Dla cząsteczek o mniejszych wymiarach metoda PSO szybciej znajduje najlepszą cząsteczkę, a dla tych o większy wymiarach -- metoda Monte Carlo. Jest to właściwość niezależna od zrównoleglenia. Wskazuje to na to, że "komunikacja" między cząsteczkami jest czasochłonna niezależnie czy obliczenia prowadzone są jednowątkowo czy wielowątkowo.
+Dla zadania $1$. wartość wariancji rośnie wraz ze wzrostem liczby cząsteczek. Do wymiaru $n = 20$ zwykle dla metody PSO wariancja jest mniejsza niż dla metody Monte Carlo. Natomiast dla wymiarów $n = 50$ i $n = 100$ sytuacja jest odwrotna. Średni czas obliczeń między dla wersji równoległej jest od $5$ do $10$-krotnie większy niż dla wersji sekwencyjnej. Dla cząsteczek o mniejszych wymiarach metoda PSO szybciej znajduje najlepszą cząsteczkę, a dla tych o większy wymiarach -- metoda Monte Carlo. Jest to właściwość niezależna od zrównoleglenia. Wskazuje to na to, że \quotedblbase komunikacja\textquotedblright \ między cząsteczkami jest czasochłonna niezależnie czy obliczenia prowadzone są jednowątkowo czy wielowątkowo.
+
+Dla zadania $2$., tak jak dla zadania $1$., wariancje rosną wraz z wymiarem przestrzeni. Niestety, dla wymiarów $n=20$, $n=50$ i $n=100$ dla metody Monte Carlo i dla wymiaru $n=100$ dla metody PSO nie udało się dobrać parametrów tak, aby zadanie to liczyło się w dostatecznie krótkim czasie.
 
 \begin{table}[h]
 \scriptsize
