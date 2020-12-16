@@ -35,9 +35,9 @@ Task 2
 <img src = "https://github.com/egi-megi/rojCzastek_Szczepanski_Jurkiewicz_Pikulinski/blob/plottingTrajectories/Stare%20Wykresy/PSO_izolinie_cbar_scatter.svg">
 </p>
 
-# Task 2 - Global minimum neighbourhood of Rosenbrock's function
+# Task 2 - Neighbourhood of global minimum of Rosenbrock's function
 <p align="center">
-<img src = "https://github.com/egi-megi/rojCzastek_Szczepanski_Jurkiewicz_Pikulinski/blob/plottingTrajectories/Przedstawienie%20funkcji%20kosztu/Rosenbrock_2d_heatmap_close_min.svg">
+<img src = "https://github.com/egi-megi/rojCzastek_Szczepanski_Jurkiewicz_Pikulinski/blob/plottingTrajectories/Przedstawienie%20funkcji%20kosztu/Rosenbrock_2d_izo_close_minimum.svg">
 </p>
 
 
