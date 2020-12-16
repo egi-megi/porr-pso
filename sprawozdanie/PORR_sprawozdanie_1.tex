@@ -390,12 +390,16 @@ Trudności w zastosowaniu zaproponowanego wyżej normalnego kryterium stopu łat
 
 W celu przetestowania i porównania algorytmów oraz ich implementacji rozwiązano zadania $1$. i $2$. w różnych wariantach. Zadania zostały rozwiązane zarówno przez wersje sekwencyjne programów, jak i wersje równoległe - utworzone z wykorzystaniem OpenMP. Wersje równoległe zostały uruchomione z~dostępnymi $6$ wątkami. Sprawdzono działanie programów w optymalizacji problemów o różnej złożoności, tj. każde z zadań zostało rozwiązane dla następujących wymiarów ($n$): $2, \ 10, \ 20, \ 50, \ 100$. Aby~ograniczyć działanie programu do czasów wykonywania poniżej $10$ minut, konieczne było w przypadkach o większym wymiarze problemu zwiększenie liczby cząsteczek.
 
-W tabeli \ref{tab:rozw_zad1}. oraz tabeli \ref{tab:rozw_zad2}. przedstawiono wyniki serii testów odpowiednio dla zadania $1$. i $2$. Każdy test został wykonany co najmniej $10$ razy, aby móc uśrednić stochastyczny charakter algorytmów. W tabeli opracowano wyniki w postaci średniego, maksymalnego i minimalnego czasu wykonywania programu. Dołączono także wartość wariancji zebranych danych.
+W tabeli \ref{tab:rozw_zad1}. oraz tabeli \ref{tab:rozw_zad2}. przedstawiono wyniki serii testów odpowiednio dla zadania $1$. i $2$. Każdy test został wykonany co najmniej $10$ razy, aby móc uśrednić stochastyczny charakter algorytmów. W tabeli opracowano wyniki w postaci średniego, maksymalnego i minimalnego czasu wykonywania programu. Dołączono także wartość wariancji zebranych danych. Przedstawiony czas mierzony był dla części obliczeniowej programu, tj. dla samych obliczeń bez inicjalizacji potrzebnych zmiennych. Pomiary ograniczone były do czasu wykonywania pętli głównej symulacji.
 
 Podczas uruchamiania algorytmu PSO użyto ustawień $\omega = \chi$, $c_1 = \chi c_1^*$, $c_2 = \chi c_2^*$, gdzie $\chi = 0.72984$, $c_1^* = c_2^* = 2.05$. W przypadku algorytmu Monte Carlo wybrano nastawy $\sigma = 0.1$, $T = 0.01$. W każdym przypadku położenia początkowe cząsteczek losowane z rozkładu jednostajnego na całym dozwolonym obszarze. Jako kryterium stopu przyjęto kryterium typu akademickiego z warunkiem zakończenia obliczeń $f\left(\vect{x}^{*}\right) < 0.01$.
 
+Dla zadania $1$. wartość wariancji rośnie wraz ze wzrostem liczby cząsteczek. Do wymiaru $n = 20$ zwykle dla metody PSO wariancja jest mniejsza niż dla metody Monte Carlo. Natomiast dla wymiarów $n = 50$ i $n = 100$ sytuacja jest odwrotna. Dla cząsteczek o mniejszych wymiarach metoda PSO szybciej znajduje najlepszą cząsteczkę, a dla tych o większy wymiarach -- metoda Monte Carlo. Jest to~właściwość niezależna od zrównoleglenia. Wskazuje to na to, że \quotedblbase komunikacja\textquotedblright \ między cząsteczkami jest czasochłonna niezależnie czy obliczenia prowadzone są jednowątkowo czy wielowątkowo.
+
+Dla zadania $2$., tak jak dla zadania $1$., wariancje rosną wraz z wymiarem przestrzeni. Niestety, dla~wymiarów $n=20$, $n=50$ i $n=100$ dla metody Monte Carlo i dla wymiaru $n=100$ dla metody PSO nie udało się dobrać parametrów tak, aby zadanie to liczyło się w dostatecznie krótkim czasie.
+
 \renewcommand{\arraystretch}{2}
-\begin{table}[h]
+\begin{table}[t]
 \scriptsize
 \begin{adjustwidth}{-1.76cm}{}
 \centering
@@ -404,27 +408,23 @@ Podczas uruchamiania algorytmu PSO użyto ustawień $\omega = \chi$, $c_1 = \chi
 \multicolumn{3}{|c|}{Wymiar}                                      & \multicolumn{2}{c|}{2}                             & \multicolumn{2}{c|}{10}                            & \multicolumn{2}{c|}{20}                            & \multicolumn{2}{c|}{50}                            & \multicolumn{2}{c|}{100}                           \\ \hline
 \multicolumn{3}{|c|}{Algorytm}                                    & \multicolumn{1}{c|}{PSO} & \multicolumn{1}{c|}{MC} & \multicolumn{1}{c|}{PSO} & \multicolumn{1}{c|}{MC} & \multicolumn{1}{c|}{PSO} & \multicolumn{1}{c|}{MC} & \multicolumn{1}{c|}{PSO} & \multicolumn{1}{c|}{MC} & \multicolumn{1}{c|}{PSO} & \multicolumn{1}{c|}{MC} \\ \hline
 \multicolumn{3}{|c|}{Liczba cząsteczek}                           & $10^{2}$                 & $10^{2}$                & $10^{2}$                 & $10^{2}$                & $10^{3}$                 & $10^{3}$                & $10^{3}$                 & $10^{3}$                & $10^{3}$                 & $10^{3}$                \\ \hline
-\multirow{8}{*}{Czas} & \multirow{4}{*}{Sekwencyjnie} & Średnia   & $2.3 \ 10^{-4}$          & $3.0 \ 10^{-3}$         & $2.4 \ 10^{-3}$          & $2.9 \ 10^{-1}$         & $2.9 \ 10^{-2}$          & $8.4 \ 10^{0}$          & $1.5 \ 10^{2}$           & $3.1 \ 10^{1}$          & $4.9 \ 10^{2}$           & $8.6 \ 10^{1}$          \\ \cline{3-13} 
-                      &                               & Minimum   & $1.9 \ 10^{-4}$          & $2.8 \ 10^{-3}$         & $2.8 \ 10^{-3}$          & $2.2 \ 10^{-1}$         & $2.6 \ 10^{-2}$          & $7.5 \ 10^{0}$          & $8.3 \ 10^{1}$           & $2.8 \ 10^{1}$          & $2.3 \ 10^{2}$           & $8.0 \ 10^{1}$          \\ \cline{3-13} 
-                      &                               & Maksimum  & $5.0 \ 10^{-4}$          & $3.4 \ 10^{-3}$         & $3.1 \ 10^{-3}$          & $3.5 \ 10^{-1}$         & $3.1 \ 10^{-2}$          & $9.1 \ 10^{0}$          & $2.4 \ 10^{2}$           & $3.3 \ 10^{1}$          & $7.4 \ 10^{2}$           & $9.3 \ 10^{1}$          \\ \cline{3-13} 
-                      &                               & Wariancja & $6.6 \ 10^{-9}$          & $5.4 \ 10^{-8}$         & $4.6 \ 10^{-8}$          & $1.4 \ 10^{-3}$         & $1.1 \ 10^{-6}$          & $2.0 \ 10^{-1}$         & $2.2 \ 10^{3}$           & $1.8 \ 10^{0}$          & $2.2 \ 10^{2}$           & $1.6 \ 10^{1}$          \\ \cline{2-13} 
-                      & \multirow{4}{*}{Równolegle}   & Średnia   & $7.3 \ 10^{-5}$          & $2.5 \ 10^{-4}$         & $6.6 \ 10^{-4}$          & $5.5 \ 10^{-2}$         & $9.7 \ 10^{-3}$          & $9.7 \ 10^{-1}$         & $3.4 \ 10^{1}$           & $5.1 \ 10^{0}$          & $8.2 \ 10^{1}$           & $1.4 \ 10^{1}$          \\ \cline{3-13} 
-                      &                               & Minimum   & $5.3 \ 10^{-5}$          & $2.4 \ 10^{-4}$         & $4.8 \ 10^{-4}$          & $4.7 \ 10^{-2}$         & $4.7 \ 10^{-3}$          & $3.8 \ 10^{-1}$         & $7.6 \ 10^{0}$           & $4.9 \ 10^{0}$          & $5.9 \ 10^{1}$           & $1.3 \ 10^{1}$          \\ \cline{3-13} 
-                      &                               & Maksimum  & $1.6 \ 10^{-4}$          & $2.6 \ 10^{-4}$         & $4.6 \ 10^{-3}$          & $7.9 \ 10^{-2}$         & $5.6 \ 10^{-2}$          & $1.6 \ 10^{0}$          & $5.7 \ 10^{1}$           & $5.4 \ 10^{0}$          & $1.2 \ 10^{2}$           & $1.5 \ 10^{1}$          \\ \cline{3-13} 
-                      &                               & Wariancja & $6.3 \ 10^{-10}$         & $4.5 \ 10^{-11}$        & $5.4 \ 10^{-7}$          & $6.4 \ 10^{-5}$         & $1.2 \ 10^{-4}$          & $2.5 \ 10^{-1}$         & $2.4 \ 10^{2}$           & $1.9 \ 10^{-2}$         & $5.4 \ 10^{2}$           & $1.4 \ 10^{-1}$         \\ \hline
+\multirow{8}{*}{Czas} & \multirow{4}{*}{Sekwencyjnie} & Średnia   & $2.3 \ 10^{-4}$          & $1.1 \ 10^{-3}$         & $2.4 \ 10^{-3}$          & $2.9 \ 10^{-1}$         & $2.9 \ 10^{-2}$          & $1.1 \ 10^{0}$          & $1.5 \ 10^{2}$           & $3.1 \ 10^{1}$          & $4.9 \ 10^{2}$           & $8.6 \ 10^{1}$          \\ \cline{3-13} 
+                      &                               & Minimum   & $1.9 \ 10^{-4}$          & $3.1 \ 10^{-4}$         & $2.8 \ 10^{-3}$          & $2.2 \ 10^{-1}$         & $2.6 \ 10^{-2}$          & $9.5 \ 10^{-1}$          & $8.3 \ 10^{1}$           & $2.8 \ 10^{1}$          & $2.3 \ 10^{2}$           & $8.0 \ 10^{1}$          \\ \cline{3-13} 
+                      &                               & Maksimum  & $5.0 \ 10^{-4}$          & $1.6 \ 10^{-3}$         & $3.1 \ 10^{-3}$          & $3.5 \ 10^{-1}$         & $3.1 \ 10^{-2}$          & $1.2 \ 10^{0}$          & $2.4 \ 10^{2}$           & $3.3 \ 10^{1}$          & $7.4 \ 10^{2}$           & $9.3 \ 10^{1}$          \\ \cline{3-13} 
+                      &                               & Wariancja & $6.6 \ 10^{-9}$          & $2.0 \ 10^{-7}$         & $4.6 \ 10^{-8}$          & $1.4 \ 10^{-3}$         & $1.1 \ 10^{-6}$          & $2.4 \ 10^{-3}$         & $2.2 \ 10^{3}$           & $1.8 \ 10^{0}$          & $2.2 \ 10^{2}$           & $1.6 \ 10^{1}$          \\ \cline{2-13} 
+                      & \multirow{4}{*}{Równolegle}   & Średnia   & $7.3 \ 10^{-5}$          & $2.1 \ 10^{-4}$         & $6.6 \ 10^{-4}$          & $5.5 \ 10^{-2}$         & $9.7 \ 10^{-3}$          & $1.9 \ 10^{-1}$         & $3.4 \ 10^{1}$           & $5.1 \ 10^{0}$          & $8.2 \ 10^{1}$           & $1.4 \ 10^{1}$          \\ \cline{3-13} 
+                      &                               & Minimum   & $5.3 \ 10^{-5}$          & $2.0 \ 10^{-4}$         & $4.8 \ 10^{-4}$          & $4.7 \ 10^{-2}$         & $4.7 \ 10^{-3}$          & $1.7 \ 10^{-1}$         & $7.6 \ 10^{0}$           & $4.9 \ 10^{0}$          & $5.9 \ 10^{1}$           & $1.3 \ 10^{1}$          \\ \cline{3-13} 
+                      &                               & Maksimum  & $1.6 \ 10^{-4}$          & $3.4 \ 10^{-4}$         & $4.6 \ 10^{-3}$          & $7.9 \ 10^{-2}$         & $5.6 \ 10^{-2}$          & $2.4 \ 10^{-1}$          & $5.7 \ 10^{1}$           & $5.4 \ 10^{0}$          & $1.2 \ 10^{2}$           & $1.5 \ 10^{1}$          \\ \cline{3-13} 
+                      &                               & Wariancja & $6.3 \ 10^{-10}$         & $2.4 \ 10^{-10}$        & $5.4 \ 10^{-7}$          & $6.4 \ 10^{-5}$         & $1.2 \ 10^{-4}$          & $1.9 \ 10^{-4}$         & $2.4 \ 10^{2}$           & $1.9 \ 10^{-2}$         & $5.4 \ 10^{2}$           & $1.4 \ 10^{-1}$         \\ \hline
 \end{tabular}
 \end{adjustwidth}
 \caption{Rozwiązania zadania $1$. dla różnych wymiarów $n$ i ustawień.}
 \label{tab:rozw_zad1}
 \end{table}
 
-Dla zadania $1$. wartość wariancji rośnie wraz ze wzrostem liczby cząsteczek. Do wymiaru $n = 20$ zwykle dla metody PSO wariancja jest mniejsza niż dla metody Monte Carlo. Natomiast dla wymiarów $n = 50$ i $n = 100$ sytuacja jest odwrotna. Średni czas obliczeń między dla wersji równoległej jest od $5$ do $10$-krotnie większy niż dla wersji sekwencyjnej. Dla cząsteczek o mniejszych wymiarach metoda PSO szybciej znajduje najlepszą cząsteczkę, a dla tych o większy wymiarach -- metoda Monte Carlo. Jest to właściwość niezależna od zrównoleglenia. Wskazuje to na to, że \quotedblbase komunikacja\textquotedblright \ między cząsteczkami jest czasochłonna niezależnie czy obliczenia prowadzone są jednowątkowo czy wielowątkowo.
-
-Dla zadania $2$., tak jak dla zadania $1$., wariancje rosną wraz z wymiarem przestrzeni. Niestety, dla wymiarów $n=20$, $n=50$ i $n=100$ dla metody Monte Carlo i dla wymiaru $n=100$ dla metody PSO nie udało się dobrać parametrów tak, aby zadanie to liczyło się w dostatecznie krótkim czasie.
-
-\begin{table}[h]
+\begin{table}[t]
 \scriptsize
-\begin{adjustwidth}{0cm}{}
+\begin{adjustwidth}{.7cm}{}
 \centering
 \begin{tabular}{|c|c|c|l|l|l|l|l|c|l|c|c|c|}
 \hline
@@ -445,6 +445,26 @@ Dla zadania $2$., tak jak dla zadania $1$., wariancje rosną wraz z wymiarem prz
 \label{tab:rozw_zad2}
 \end{table}
 \renewcommand{\arraystretch}{1}
+
+\newpage
+
+\begin{figure}[H]
+\centering
+\begin{minipage}[b]{\dimexpr.5\textwidth-1em}
+  \centering
+  \includegraphics[width=1\linewidth]{grafiki/tabela_zad1_przyspieszenie.pdf}
+  \captionof{figure}{Średnie przyspieszenie implementacji równoległej podczas prób optymalizacji zad. $1$.}
+  \label{fig:przysp:zad1}
+\end{minipage} \hfill
+\begin{minipage}[b]{\dimexpr.5\textwidth-1em}
+  \centering
+  \includegraphics[width=1\linewidth]{grafiki/tabela_zad2_przyspieszenie.pdf}
+  \captionof{figure}{Średnie przyspieszenie implementacji równoległej podczas prób optymalizacji zad. $2$.}
+  \label{fig:przysp:zad2}
+\end{minipage}
+\end{figure}
+
+Na wykresach z rys. \ref{fig:przysp:zad1} i \ref{fig:przysp:zad2} zebrano uzyskane przyspieszenia obliczeń wersji równoległej względem sekwencyjnej w zależności od wymiaru rozwiązywanego zadania. Widoczne jest, że tendencja powiązania przyspieszenia z wymiarem zadania jest zachowana w obu testowanych zadań. Można przypuszczać, że~duże zmiany przyspieszenia w przypadku algorytmu PSO wynikają z większego udziału w całkowitym czasie obliczeń oczekiwania na odblokowanie sekcji krytycznych, w których odbywa się synchronizacja wiedzy na temat najlepszej cząsteczki.
 
 \section{Ocena skalowalności}
 
@@ -611,13 +631,13 @@ Wyniki testu paralelizacji algorytmu Monte Carlo dla zadania $1$. oraz $2$. poka
 \begin{minipage}[b]{\dimexpr.5\textwidth-1em}
   \centering
   \includegraphics[width=1\linewidth]{grafiki/Wykresy2d/zad1_pso_plot_5.png}
-  \captionof{figure}{Położenia najlepszego rozwiązania w każdej z iteracji dla algorytmu PSO dla zadania $1$.}
+  \captionof{figure}{Położenia najlepszego rozwiązania w~każdej z iteracji dla algorytmu PSO dla zadania $1$.}
   \label{fig:najepszeRozwiazanie:PSO1}
 \end{minipage} \hfill
 \begin{minipage}[b]{\dimexpr.5\textwidth-1em}
   \centering
   \includegraphics[width=1\linewidth]{grafiki/Wykresy2d/Zad1_MC_plot_5.png}
-  \captionof{figure}{Położenia najlepszego rozwiązania w każdej z iteracji dla algorytmu MC dla zadania $1$.}
+  \captionof{figure}{Położenia najlepszego rozwiązania w~każdej z iteracji dla algorytmu MC dla zadania $1$.}
   \label{fig:najepszeRozwiazanie:MC1}
 \end{minipage}
 \end{figure}
@@ -642,7 +662,7 @@ Z wykresów trajektorii dla cząsteczki o wymiarze $n=2$ widać, ze cząsteczki 
 
 \section{Profil zbieżności algorytmów}
 
-Postanowiono również porównać zbieżność omawianych metod na przykładowym zadaniu. W tym teście także dodano wariant metody PSO - metodę lokalną (oznaczaną na wykresach jako \textit{PSO Local}). Dane wykorzystane w tym badaniu pochodziły z prób optymalizacji zadania $2.$ (funkcja Rosenbrocka) o wymiarze $n = 4$ i ustalonej liczbie cząsteczek $10^{4}$. Ostateczny profil zbieżności dla każdej z metod powstał z normalizacji liczby iteracji do $100$ oraz uśrednienia tak znormalizowanych przebiegów zbieżności z $10$ prób.
+Postanowiono również porównać zbieżność omawianych metod na przykładowym zadaniu. W tym teście dodano także wariant metody PSO - metodę lokalną (oznaczaną na wykresach jako \textit{PSO Local}). Dane wykorzystane w tym badaniu pochodziły z prób optymalizacji zadania $2.$ (funkcja Rosenbrocka) o wymiarze $n = 4$ i ustalonej liczbie cząsteczek $10^{4}$. Ostateczny profil zbieżności dla każdej z metod powstał z normalizacji liczby iteracji do $100$ oraz uśrednienia tak znormalizowanych przebiegów zbieżności z $10$ prób.
 
 W testach z metodą PSO (zarówno wariant globalny jak i lokalny) użyto następujących parametrów $\omega = \chi$, $c_1 = \chi c_1^*$, $c_2 = \chi c_2^*$, gdzie $\chi = 0.72984$, $c_1^* = c_2^* = 2.05$. Algorytm poszukiwań losowych działał natomiast z ustawieniami $\sigma = 0.1$, $T = 0.01$. Pozycje początkowe cząstek losowano z ograniczeniem $-40 \leq x_i \leq -30 \quad i = 1, \ ...\, \ n$. Obie metody włączane były w wersji równoległej z~$6$~wątkami.
 
@@ -654,6 +674,7 @@ Tak utworzony profil zbieżności przedstawiono na rys. \ref{fig:zbieznosc}. Wid
 \label{fig:zbieznosc}
 \end{figure}
 
+\vspace{-.8cm}
 \section{Wnioski} 
 
 Niestety nie ma możliwości wykonać obu zadań dla obu algorytmów dokładnie z tymi samymi ustawieniami tak, aby w łatwy sposób porównać ich działanie. Wraz z zwiększaniem wymiaru zadania zwiększano również liczbę cząstek, co, jak zauważono, pozytywnie wpływało na czas obliczeń. Oprócz liczby cząsteczek przeszukujących zadany obszar zmianom ulegały parametry algorytmów. Ich~dobieranie wykonywane było na zasadzie prób i błędów.
@@ -662,7 +683,7 @@ Tak jak można było przypuszczać zarówno dla zadania $1$, jak i $2$. dla obu 
 
 Największe przyspieszenie, niezależnie od rodzaju zadania czy rodzaju algorytmu, występuje pomiędzy użyciem $1$ a $2$ wątków. Przy włączeniu kolejnych wątków (aż do $6$ granicznych) różnica w~czasie obliczeń jest coraz mniejsza.
 
-Dla algorytmu Monte Carlo przy dłuższym czasie wykonywania obliczeń, korzyść ze zrównleglenia jest większa niż dla PSO. Jest to zapewne wynikiem tego, że cząsteczki w algorytmie Monte Carlo nie muszą się ze sobą \quotedblbase komunikować\textquotedblright. W algorytmie PSO, po każdej iteracji, następuje policzenie najlepszej cząsteczki dla całego roju. W tym momencie wszystkie watki muszą czekać z kolejnymi obliczeniami. Proces ten ma na tyle duże znaczenie, że przy zrównolegleniu 6 wątkami czas wykonania obliczeń przy użyciu obu algorytmów nie wiele się różni, w przeciwieństwie do czasu obliczeń tylko na 1 wątku.
+Dla algorytmu Monte Carlo przy dłuższym czasie wykonywania obliczeń, korzyść ze zrównleglenia jest większa niż dla PSO. Jest to zapewne wynikiem tego, że cząsteczki w algorytmie Monte Carlo nie muszą się ze sobą \quotedblbase komunikować\textquotedblright. W algorytmie PSO, po każdej iteracji, następuje policzenie najlepszej cząsteczki dla całego roju. W tym momencie wszystkie watki muszą czekać z kolejnymi obliczeniami. Proces ten ma na tyle duże znaczenie, że przy zrównolegleniu 6 wątkami czas wykonania obliczeń przy użyciu obu algorytmów nie wiele się różni, w przeciwieństwie do czasu obliczeń tylko na~1~wątku.
 
 \bibliography{PORR_sprawozdanie_1}{}
 \bibliographystyle{plain}
