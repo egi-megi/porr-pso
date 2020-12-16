@@ -12,5 +12,32 @@ Task 2
 
 # Task 1 - PSO
 <p align="center">
-<img src = "https://github.com/egi-megi/rojCzastek_Szczepanski_Jurkiewicz_Pikulinski/blob/master/plots/scatter_gif.gif">
+<img src = "https://github.com/egi-megi/rojCzastek_Szczepanski_Jurkiewicz_Pikulinski/blob/plottingTrajectories/PSO_zad1_ANIM.gif">
 </p>
+
+# Task 1 - Monte Carlo
+<p align="center">
+<img src = "https://github.com/egi-megi/rojCzastek_Szczepanski_Jurkiewicz_Pikulinski/blob/plottingTrajectories/MC_zad1_ANIM_faster.gif">
+</p>
+
+# Task 2 - PSO
+<p align="center">
+<img src = "https://github.com/egi-megi/rojCzastek_Szczepanski_Jurkiewicz_Pikulinski/blob/plottingTrajectories/PSO_zad2_ANIM.gif">
+</p>
+
+# Task 2 - Monte Carlo<p align="center">
+<p align="center">
+<img src = "https://github.com/egi-megi/rojCzastek_Szczepanski_Jurkiewicz_Pikulinski/blob/plottingTrajectories/MC_zad2_ANIM.gif">
+</p>
+
+# Task 1 - Isolines of cost function 
+<p align="center">
+<img src = "https://github.com/egi-megi/rojCzastek_Szczepanski_Jurkiewicz_Pikulinski/blob/plottingTrajectories/Stare%20Wykresy/PSO_izolinie_cbar_scatter.svg">
+</p>
+
+# Task 2 - Global minimum neighbourhood of Rosenbrock's function
+<p align="center">
+<img src = "https://github.com/egi-megi/rojCzastek_Szczepanski_Jurkiewicz_Pikulinski/blob/plottingTrajectories/Przedstawienie%20funkcji%20kosztu/Rosenbrock_2d_heatmap_close_min.svg">
+</p>
+
+
