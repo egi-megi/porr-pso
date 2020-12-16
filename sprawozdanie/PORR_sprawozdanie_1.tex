@@ -28,6 +28,7 @@
 \usepackage{listings}
 \usepackage{multirow}
 \usepackage{changepage}
+\usepackage{float}
 
 \definecolor{mycolor1}{RGB}{0,0,128}
 \definecolor{lightgray}{gray}{0.9}
@@ -489,7 +490,7 @@ Wyniki testu paralelizacji algorytmu Monte Carlo dla zadania $1$. oraz $2$. poka
 
 \section{Porównanie trajektorii dla $n = 2$}
 
-\begin{figure}[h]
+\begin{figure}[H]
 \centering
 \begin{minipage}[b]{\dimexpr.5\textwidth-1em}
   \centering
@@ -505,7 +506,7 @@ Wyniki testu paralelizacji algorytmu Monte Carlo dla zadania $1$. oraz $2$. poka
 \end{minipage}
 \end{figure}
 
-\begin{figure}[h]
+\begin{figure}[H]
 \centering
 \begin{minipage}[b]{\dimexpr.5\textwidth-1em}
   \centering
@@ -518,6 +519,154 @@ Wyniki testu paralelizacji algorytmu Monte Carlo dla zadania $1$. oraz $2$. poka
   \includegraphics[width=1\linewidth]{grafiki/Wykresy2d/MC_Zad2_startPositions.png}
   \captionof{figure}{Pozycje startowe cząsteczek dla algorytmu MC dla zadania $2$}
   \label{fig:pozycjeStartowe:MC2}
+\end{minipage}
+\end{figure}
+
+%Funkcja kosztu - zad1 i zad2
+\begin{figure}[H]
+\centerline{\includegraphics[width=\dimexpr.9\textwidth-1em]{grafiki//Wykresy2d/Zad1_2d_heatmap.png}}
+\captionof{figure}{Wartość funkcji kosztu dla zad$1$}
+\label{fig:zad1:koszt2d}
+\end{figure}
+
+\begin{figure}[H]
+\centerline{\includegraphics[width=\dimexpr.9\textwidth-1em]{grafiki//Wykresy2d/Rosenbrock_2d_heatmap_close_min.png}}
+\captionof{figure}{Wartość funkcji kosztu dla zad$2$ - obszar blisko minimum globalnego}
+\label{fig:zad1:koszt2d}
+\end{figure}
+
+%Pozycje startowe
+\begin{figure}[H]
+\centering
+\begin{minipage}[b]{\dimexpr.5\textwidth-1em}
+  \centering
+  \includegraphics[width=1\linewidth]{grafiki/Wykresy2d/PSO_zad1_startPositions.png}
+  \captionof{figure}{Pozycje startowe cząsteczek dla algorytmu PSO dla zadania $1$}
+  \label{fig:pozycjeStartowe:PSO1}
+\end{minipage} \hfill
+\begin{minipage}[b]{\dimexpr.5\textwidth-1em}
+  \centering
+  \includegraphics[width=1\linewidth]{grafiki/Wykresy2d/MC_Zad1_startPositions.png}
+  \captionof{figure}{Pozycje startowe cząsteczek dla algorytmu MC dla zadania $1$}
+  \label{fig:pozycjeStartowe:MC1}
+\end{minipage}
+\end{figure}
+
+\begin{figure}[H]
+\centering
+\begin{minipage}[b]{\dimexpr.5\textwidth-1em}
+  \centering
+  \includegraphics[width=1\linewidth]{grafiki/Wykresy2d/PSO_Zad2_startPositions.png}
+  \captionof{figure}{Pozycje startowe cząsteczek dla algorytmu PSO dla zadania $2$}
+  \label{fig:pozycjeStartowe:PSO2}
+\end{minipage} \hfill
+\begin{minipage}[b]{\dimexpr.5\textwidth-1em}
+  \centering
+  \includegraphics[width=1\linewidth]{grafiki/Wykresy2d/MC_Zad2_startPositions.png}
+  \captionof{figure}{Pozycje startowe cząsteczek dla algorytmu MC dla zadania $2$}
+  \label{fig:pozycjeStartowe:MC2}
+\end{minipage}
+\end{figure}
+
+% Położenia dla wszystkich iteracji
+
+\begin{figure}[H]
+\centering
+\begin{minipage}[b]{\dimexpr.5\textwidth-1em}
+  \centering
+  \includegraphics[width=1\linewidth]{grafiki/Wykresy2d/PSO_zad1_scatter_allIters.png}
+  \captionof{figure}{Położenia wszystkich cząsteczek dla algorytmu PSO dla zadania $1$}
+  \label{fig:położeniaWszystkich:PSO1}
+\end{minipage} \hfill
+\begin{minipage}[b]{\dimexpr.5\textwidth-1em}
+  \centering
+  \includegraphics[width=1\linewidth]{grafiki/Wykresy2d/MC_Zad1_scatter_allIters.png}
+  \captionof{figure}{Położenia wszystkich cząsteczek dla algorytmu MC dla zadania $1$}
+  \label{fig:położeniaWszystkich:MC1}
+\end{minipage}
+\end{figure}
+
+\begin{figure}[H]
+\centering
+\begin{minipage}[b]{\dimexpr.5\textwidth-1em}
+  \centering
+  \includegraphics[width=1\linewidth]{grafiki/Wykresy2d/PSO_Zad2_scatter_allIters.png}
+  \captionof{figure}{Położenia wszystkich cząsteczek dla algorytmu PSO dla zadania $2$}
+  \label{fig:położeniaWszystkich:PSO2}
+\end{minipage} \hfill
+\begin{minipage}[b]{\dimexpr.5\textwidth-1em}
+  \centering
+  \includegraphics[width=1\linewidth]{grafiki/Wykresy2d/MC_Zad2_scatter_allIters.png}
+  \captionof{figure}{Położenia wszystkich cząsteczek dla algorytmu MC dla zadania $2$}
+  \label{fig:położeniaWszystkich:MC2}
+\end{minipage}
+\end{figure}
+
+% Trajektoria wybranej cząstki
+
+\begin{figure}[H]
+\centering
+\begin{minipage}[b]{\dimexpr.5\textwidth-1em}
+  \centering
+  \includegraphics[width=1\linewidth]{grafiki/Wykresy2d/zad1_pso_plot_5.png}
+  \captionof{figure}{Trajektoria wybranej cząstki dla algorytmu PSO dla zadania $1$}
+  \label{fig:trajektoriaWybrana:PSO1}
+\end{minipage} \hfill
+\begin{minipage}[b]{\dimexpr.5\textwidth-1em}
+  \centering
+  \includegraphics[width=1\linewidth]{grafiki/Wykresy2d/Zad1_MC_plot_5.png}
+  \captionof{figure}{Trajektoria wybranej cząstki dla algorytmu MC dla zadania $1$}
+  \label{fig:trajektoriaWybrana:MC1}
+\end{minipage}
+\end{figure}
+
+\begin{figure}[H]
+\centering
+\begin{minipage}[b]{\dimexpr.5\textwidth-1em}
+  \centering
+  \includegraphics[width=1\linewidth]{grafiki/Wykresy2d/Zad2_PSO_plot_6.png}
+  \captionof{figure}{Trajektoria wybranej cząstki dla algorytmu PSO dla zadania $2$}
+  \label{fig:trajektoriaWybrana:PSO2}
+\end{minipage} \hfill
+\begin{minipage}[b]{\dimexpr.5\textwidth-1em}
+  \centering
+  \includegraphics[width=1\linewidth]{grafiki/Wykresy2d/Zad2_MC_plot_6.png}
+  \captionof{figure}{Trajektoria wybranej cząstki dla algorytmu MC dla zadania $2$}
+  \label{fig:trajektoriaWybrana:MC2}
+\end{minipage}
+\end{figure}
+
+% Położenia najlepszego rozwiązania dla kazdej iteracji
+
+\begin{figure}[H]
+\centering
+\begin{minipage}[b]{\dimexpr.5\textwidth-1em}
+  \centering
+  \includegraphics[width=1\linewidth]{grafiki/Wykresy2d/zad1_pso_plot_5.png}
+  \captionof{figure}{Położenia najlepszego rozwiązania w każdej z iteracji dla algorytmu PSO dla zadania $1$}
+  \label{fig:najepszeRozwiazanie:PSO1}
+\end{minipage} \hfill
+\begin{minipage}[b]{\dimexpr.5\textwidth-1em}
+  \centering
+  \includegraphics[width=1\linewidth]{grafiki/Wykresy2d/Zad1_MC_plot_5.png}
+  \captionof{figure}{Położenia najlepszego rozwiązania w każdej z iteracji dla algorytmu MC dla zadania $1$}
+  \label{fig:najepszeRozwiazanie:MC1}
+\end{minipage}
+\end{figure}
+
+\begin{figure}[H]
+\centering
+\begin{minipage}[b]{\dimexpr.5\textwidth-1em}
+  \centering
+  \includegraphics[width=1\linewidth]{grafiki/Wykresy2d/Zad2_PSO_plot_6.png}
+  \captionof{figure}{Położenia najlepszego rozwiązania w każdej z iteracji dla algorytmu PSO dla zadania $2$}
+  \label{fig:najepszeRozwiazanie:PSO2}
+\end{minipage} \hfill
+\begin{minipage}[b]{\dimexpr.5\textwidth-1em}
+  \centering
+  \includegraphics[width=1\linewidth]{grafiki/Wykresy2d/Zad2_MC_plot_6.png}
+  \captionof{figure}{Położenia najlepszego rozwiązania w każdej z iteracji dla algorytmu MC dla zadania $2$}
+  \label{fig:najepszeRozwiazanie:MC2}
 \end{minipage}
 \end{figure}
 
@@ -539,14 +688,13 @@ Tak utworzony profil zbieżności przedstawiono na rys. \ref{fig:zbieznosc}. Wid
 
 \section{Wnioski} 
 
-Niestety nie ma możliwości wykonać obu zadań dla obu algorytmów dokładnie z tymi samymi ustawieniami. W zależności od liczby wymiarów liczba cząstek musi być inna. Okazało sie także, że stałe użyte w algorytmach także nie zawsze były takie same. Ich dobieranie wykonywane było na zasadzie prób.
+Niestety nie ma możliwości wykonać obu zadań dla obu algorytmów dokładnie z tymi samymi ustawieniami tak, aby w łatwy sposób porównać ich działanie. Wraz z zwiększaniem wymiaru zadania zwiększano również liczbę cząstek, co, jak zauważono, pozytywnie wpływało na czas obliczeń. Oprócz liczby cząsteczek przeszukujących zadany obszar zmianom ulegały parametry algorytmów. Ich dobieranie wykonywane było na zasadzie prób i błędów.
 
-Tak jak można było przypuszczać zarówno dla zadania 1 jak i 2 dla obu rodzajów algorytmów zrównoleglenie fragmentów kodu przyspieszyło działanie programu (rys. \ref{fig:skalowalnosc:PSO1}, rys. \ref{fig:skalowalnosc:PSO2}, rys. \ref{fig:skalowalnosc:MC1} i rys. \ref{fig:skalowalnosc:MC2}). Okazało się również, że przyspieszenie to następuje dla liczby wątków nie większej niż liczba rdzeni, czyli 6. Gdy obliczenia wykonywane są na większej liczbie wątków niż liczba rdzeni czas szukania najlepszej cząstki jest porównywalny z czasem szukania tej cząstki na 6 rdzeniach. Nie widać natomiast, aby po przekroczeniu tych granicznych 6 wątków następowały jakieś większe problemy w komunikacji między wątkami.
+Tak jak można było przypuszczać zarówno dla zadania $1$, jak i $2$. dla obu rodzajów algorytmów zrównoleglenie fragmentów kodu przyspieszyło działanie programu (rys. \ref{fig:skalowalnosc:PSO1}, rys. \ref{fig:skalowalnosc:PSO2}, rys. \ref{fig:skalowalnosc:MC1} i rys. \ref{fig:skalowalnosc:MC2}). Okazało się również, że przyspieszenie to następuje dla liczby wątków nie większej niż liczba rdzeni, czyli $6$. Gdy obliczenia wykonywane są na większej liczbie wątków niż liczba rdzeni, czas szukania najlepszej cząstki jest porównywalny z czasem szukania tej cząstki na $6$ rdzeniach. Nie widać natomiast, aby po przekroczeniu granicy $6$ wątków następowały jakieś większe problemy w komunikacji między wątkami.
 
-Największe przyspieszenie, niezależnie od rodzaju zadania czy rodzaju algorytmu, występuje pomiędzy użyciem 1 a 2 wątków. Przy włączeniu kolejnych wątków (aż do 6 granicznych) różnica wczasie obliczeń jest coraz mniejsza.
+Największe przyspieszenie, niezależnie od rodzaju zadania czy rodzaju algorytmu, występuje pomiędzy użyciem $1$ a $2$ wątków. Przy włączeniu kolejnych wątków (aż do $6$ granicznych) różnica w czasie obliczeń jest coraz mniejsza.
 
-Dla algorytmu Monte Carlo przy dłuższym czasie wykonywania obliczeń, korzyść ze zrównleglenia jest większa niż dla PSO. Jest to zapewnie wynikiem tego, że cząsteczki w algorytmie Monte Carlo nie muszą się ze sobą "komunikować". W algorytmie PSO, po każdej iteracji, następuje policzenie najlepszej cząsteczki dla całego roju. W tym momencie wszystkie watki muszą czekać z kolejnymi obliczeniami. Proces ten ma na tyle duże znaczenie, że przy zrównolegleniu 6 wątkami czas wykonania obliczeń przy użyciu obu algorytmów nie wiele się różni, w przeciwieństwie do czasu obliczeń tylko na 1 wątku.
-
+Dla algorytmu Monte Carlo przy dłuższym czasie wykonywania obliczeń, korzyść ze zrównleglenia jest większa niż dla PSO. Jest to zapewne wynikiem tego, że cząsteczki w algorytmie Monte Carlo nie muszą się ze sobą \quotedblbase komunikować\textquotedblright. W algorytmie PSO, po każdej iteracji, następuje policzenie najlepszej cząsteczki dla całego roju. W tym momencie wszystkie watki muszą czekać z kolejnymi obliczeniami. Proces ten ma na tyle duże znaczenie, że przy zrównolegleniu 6 wątkami czas wykonania obliczeń przy użyciu obu algorytmów nie wiele się różni, w przeciwieństwie do czasu obliczeń tylko na 1 wątku.
 
 \bibliography{PORR_sprawozdanie_1}{}
 \bibliographystyle{plain}
