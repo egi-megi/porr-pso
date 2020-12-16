@@ -488,6 +488,38 @@ Wyniki testu paralelizacji algorytmu Monte Carlo dla zadania $1$. oraz $2$. poka
 \section{Porównanie trajektorii dla $n = 2$}
 Z wykresów trajektorii dla cząsteczki o wymiarze $n=2$ widać, ze cząsteczki obliczane z użyciem algorytmu PSO bardzo ładnie schodzą się w stronę globalnego minimum. Dla metody Monte Carlo takiej obserwacji nie można poczynić. Jednocześnie widać, że Przy obliczeniach dla metody PSO potrzebne jest mniej iteracji niż przy metodzie Monte Carlo aby otrzymać satysfakcjonujący wynik.
 
+\begin{figure}[h]
+\centering
+\begin{minipage}[b]{\dimexpr.5\textwidth-1em}
+  \centering
+  \includegraphics[width=1\linewidth]{grafiki/Wykresy2d/PSO_zad1_startPositions.png}
+  \captionof{figure}{Pozycje startowe cząsteczek dla algorytmu PSO dla zadania $1$}
+  \label{fig:pozycjeStartowe:PSO1}
+\end{minipage} \hfill
+\begin{minipage}[b]{\dimexpr.5\textwidth-1em}
+  \centering
+  \includegraphics[width=1\linewidth]{grafiki/Wykresy2d/MC_Zad1_startPositions.png}
+  \captionof{figure}{Pozycje startowe cząsteczek dla algorytmu MC dla zadania $1$}
+  \label{fig:pozycjeStartowe:MC1}
+\end{minipage}
+\end{figure}
+
+\begin{figure}[h]
+\centering
+\begin{minipage}[b]{\dimexpr.5\textwidth-1em}
+  \centering
+  \includegraphics[width=1\linewidth]{grafiki/Wykresy2d/PSO_Zad2_startPositions.png}
+  \captionof{figure}{Pozycje startowe cząsteczek dla algorytmu PSO dla zadania $2$}
+  \label{fig:pozycjeStartowe:PSO2}
+\end{minipage} \hfill
+\begin{minipage}[b]{\dimexpr.5\textwidth-1em}
+  \centering
+  \includegraphics[width=1\linewidth]{grafiki/Wykresy2d/MC_Zad2_startPositions.png}
+  \captionof{figure}{Pozycje startowe cząsteczek dla algorytmu MC dla zadania $2$}
+  \label{fig:pozycjeStartowe:MC2}
+\end{minipage}
+\end{figure}
+
 \section{Profil zbieżności algorytmów}
 
 Postanowiono również porównać zbieżność omawianych metod na przykładowym zadaniu. W tym teście także dodano wariant metody PSO - metodę lokalną (oznaczaną na wykresach jako \textit{PSO Local}). Dane wykorzystane w tym badaniu pochodziły z prób optymalizacji zadania $2.$ (funkcja Rosenbrocka) o wymiarze $n = 4$ i ustalonej liczbie cząsteczek $10^{4}$. Ostateczny profil zbieżności dla każdej z metod powstał z normalizacji liczby iteracji do $100$ oraz uśrednienia tak znormalizowanych przebiegów zbieżności z $10$ prób.
