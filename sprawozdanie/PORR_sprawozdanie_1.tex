@@ -29,6 +29,8 @@
 \usepackage{multirow}
 \usepackage{changepage}
 
+\usepackage{float}
+
 \definecolor{mycolor1}{RGB}{0,0,128}
 \definecolor{lightgray}{gray}{0.9}
 \definecolor{lightlightgray}{gray}{0.95}
@@ -486,42 +488,23 @@ Wyniki testu paralelizacji algorytmu Monte Carlo dla zadania $1$. oraz $2$. poka
 \end{figure}
 
 \section{Porównanie trajektorii dla $n = 2$}
-
-\begin{figure}[h]
-\centering
-\begin{minipage}[b]{\dimexpr.5\textwidth-1em}
-  \centering
-  \includegraphics[width=1\linewidth]{grafiki/Wykresy2d/zad1_pso_plot_BEST.svg}
-  \captionof{figure}{Trajektoria najlepszej cząsteczki o wymierze $n=2$ dla zadania $1$ dla metody PSO.}
-  \label{fig:skalowalnosc:PSO1}
-\end{minipage} \hfill
-\begin{minipage}[b]{\dimexpr.5\textwidth-1em}
-  \centering
-  \includegraphics[width=1\linewidth]{grafiki/Wykresy2d/zad1_MC_plot_BEST.svg}
-  \captionof{figure}{Trajektoria najlepszej cząsteczki o wymierze $n=2$ dla zadania $1$ dla metody Monte Carlo.}
-  \label{fig:skalowalnosc:PSO2}
-\end{minipage}
-\end{figure}
-
-\begin{figure}[h]
-\centering
-\begin{minipage}[b]{\dimexpr.5\textwidth-1em}
-  \centering
-  \includegraphics[width=1\linewidth]{grafiki/Wykresy2d/zad2_pso_plot_BEST.svg}
-  \captionof{figure}{Trajektoria najlepszej cząsteczki o wymierze $n=2$ dla zadania $2$ dla metody PSO.}
-  \label{fig:skalowalnosc:MC1}
-\end{minipage} \hfill
-\begin{minipage}[b]{\dimexpr.5\textwidth-1em}
-  \centering
-  \includegraphics[width=1\linewidth]{grafiki/Wykresy2d/zad2_MC_plot_BEST.svg}
-  \captionof{figure}{Trajektoria najlepszej cząsteczki o wymierze $n=2$ dla zadania $2$ dla metody Monte Carlo.}
-  \label{fig:skalowalnosc:MC2}
-\end{minipage}
-\end{figure}
-
 Z wykresów trajektorii dla cząsteczki o wymiarze $n=2$ widać, ze cząsteczki obliczane z użyciem algorytmu PSO bardzo ładnie schodzą się w stronę globalnego minimum. Dla metody Monte Carlo takiej obserwacji nie można poczynić. Jednocześnie widać, że Przy obliczeniach dla metody PSO potrzebne jest mniej iteracji niż przy metodzie Monte Carlo aby otrzymać satysfakcjonujący wynik.
 
-\begin{figure}[h]
+%Funkcja kosztu - zad1 i zad2
+\begin{figure}[H]
+\centerline{\includegraphics[width=\dimexpr.9\textwidth-1em]{grafiki//Wykresy2d/Zad1_2d_heatmap.png}}
+\captionof{figure}{Wartość funkcji kosztu dla zad$1$}
+\label{fig:zad1:koszt2d}
+\end{figure}
+
+\begin{figure}[H]
+\centerline{\includegraphics[width=\dimexpr.9\textwidth-1em]{grafiki//Wykresy2d/Rosenbrock_2d_heatmap_close_min.png}} 
+\captionof{figure}{Wartość funkcji kosztu dla zad$2$ - obszar blisko minimum globalnego, przekrój $x_2=0$}
+\label{fig:zad1:koszt2d}
+\end{figure}
+
+%Pozycje startowe
+\begin{figure}[H]
 \centering
 \begin{minipage}[b]{\dimexpr.5\textwidth-1em}
   \centering
@@ -537,7 +520,7 @@ Z wykresów trajektorii dla cząsteczki o wymiarze $n=2$ widać, ze cząsteczki 
 \end{minipage}
 \end{figure}
 
-\begin{figure}[h]
+\begin{figure}[H]
 \centering
 \begin{minipage}[b]{\dimexpr.5\textwidth-1em}
   \centering
@@ -552,6 +535,109 @@ Z wykresów trajektorii dla cząsteczki o wymiarze $n=2$ widać, ze cząsteczki 
   \label{fig:pozycjeStartowe:MC2}
 \end{minipage}
 \end{figure}
+
+% Położenia dla wszystkich iteracji
+
+\begin{figure}[H]
+\centering
+\begin{minipage}[b]{\dimexpr.5\textwidth-1em}
+  \centering
+  \includegraphics[width=1\linewidth]{grafiki/Wykresy2d/PSO_zad1_scatter_allIters.png}
+  \captionof{figure}{Położenia wszystkich cząsteczek dla algorytmu PSO dla zadania $1$}
+  \label{fig:położeniaWszystkich:PSO1}
+\end{minipage} \hfill
+\begin{minipage}[b]{\dimexpr.5\textwidth-1em}
+  \centering
+  \includegraphics[width=1\linewidth]{grafiki/Wykresy2d/MC_Zad1_scatter_allIters.png}
+  \captionof{figure}{Położenia wszystkich cząsteczek dla algorytmu MC dla zadania $1$}
+  \label{fig:położeniaWszystkich:MC1}
+\end{minipage}
+\end{figure}
+
+\begin{figure}[H]
+\centering
+\begin{minipage}[b]{\dimexpr.5\textwidth-1em}
+  \centering
+  \includegraphics[width=1\linewidth]{grafiki/Wykresy2d/PSO_Zad2_scatter_allIters.png}
+  \captionof{figure}{Położenia wszystkich cząsteczek dla algorytmu PSO dla zadania $2$}
+  \label{fig:położeniaWszystkich:PSO2}
+\end{minipage} \hfill
+\begin{minipage}[b]{\dimexpr.5\textwidth-1em}
+  \centering
+  \includegraphics[width=1\linewidth]{grafiki/Wykresy2d/MC_Zad2_scatter_allIters.png}
+  \captionof{figure}{Położenia wszystkich cząsteczek dla algorytmu MC dla zadania $2$}
+  \label{fig:położeniaWszystkich:MC2}
+\end{minipage}
+\end{figure}
+
+% Trajektoria wybranej cząstki
+
+\begin{figure}[H]
+\centering
+\begin{minipage}[b]{\dimexpr.5\textwidth-1em}
+  \centering
+  \includegraphics[width=1\linewidth]{grafiki/Wykresy2d/zad1_pso_plot_5.png}
+  \captionof{figure}{Trajektoria wybranej cząstki dla algorytmu PSO dla zadania $1$}
+  \label{fig:trajektoriaWybrana:PSO1}
+\end{minipage} \hfill
+\begin{minipage}[b]{\dimexpr.5\textwidth-1em}
+  \centering
+  \includegraphics[width=1\linewidth]{grafiki/Wykresy2d/Zad1_MC_plot_5.png}
+  \captionof{figure}{Trajektoria wybranej cząstki dla algorytmu MC dla zadania $1$}
+  \label{fig:trajektoriaWybrana:MC1}
+\end{minipage}
+\end{figure}
+
+\begin{figure}[H]
+\centering
+\begin{minipage}[b]{\dimexpr.5\textwidth-1em}
+  \centering
+  \includegraphics[width=1\linewidth]{grafiki/Wykresy2d/Zad2_PSO_plot_6.png}
+  \captionof{figure}{Trajektoria wybranej cząstki dla algorytmu PSO dla zadania $2$}
+  \label{fig:trajektoriaWybrana:PSO2}
+\end{minipage} \hfill
+\begin{minipage}[b]{\dimexpr.5\textwidth-1em}
+  \centering
+  \includegraphics[width=1\linewidth]{grafiki/Wykresy2d/Zad2_MC_plot_6.png}
+  \captionof{figure}{Trajektoria wybranej cząstki dla algorytmu MC dla zadania $2$}
+  \label{fig:trajektoriaWybrana:MC2}
+\end{minipage}
+\end{figure}
+
+% Położenia najlepszego rozwiązania dla kazdej iteracji
+
+\begin{figure}[H]
+\centering
+\begin{minipage}[b]{\dimexpr.5\textwidth-1em}
+  \centering
+  \includegraphics[width=1\linewidth]{grafiki/Wykresy2d/zad1_pso_plot_5.png}
+  \captionof{figure}{Położenia najlepszego rozwiązania w każdej z iteracji dla algorytmu PSO dla zadania $1$}
+  \label{fig:najepszeRozwiazanie:PSO1}
+\end{minipage} \hfill
+\begin{minipage}[b]{\dimexpr.5\textwidth-1em}
+  \centering
+  \includegraphics[width=1\linewidth]{grafiki/Wykresy2d/Zad1_MC_plot_5.png}
+  \captionof{figure}{Położenia najlepszego rozwiązania w każdej z iteracji dla algorytmu MC dla zadania $1$}
+  \label{fig:najepszeRozwiazanie:MC1}
+\end{minipage}
+\end{figure}
+
+\begin{figure}[H]
+\centering
+\begin{minipage}[b]{\dimexpr.5\textwidth-1em}
+  \centering
+  \includegraphics[width=1\linewidth]{grafiki/Wykresy2d/Zad2_PSO_plot_6.png}
+  \captionof{figure}{Położenia najlepszego rozwiązania w każdej z iteracji dla algorytmu PSO dla zadania $2$}
+  \label{fig:najepszeRozwiazanie:PSO2}
+\end{minipage} \hfill
+\begin{minipage}[b]{\dimexpr.5\textwidth-1em}
+  \centering
+  \includegraphics[width=1\linewidth]{grafiki/Wykresy2d/Zad2_MC_plot_6.png}
+  \captionof{figure}{Położenia najlepszego rozwiązania w każdej z iteracji dla algorytmu MC dla zadania $2$}
+  \label{fig:najepszeRozwiazanie:MC2}
+\end{minipage}
+\end{figure}
+
 
 \section{Profil zbieżności algorytmów}
 
