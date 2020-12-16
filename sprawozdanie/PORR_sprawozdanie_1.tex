@@ -486,6 +486,39 @@ Wyniki testu paralelizacji algorytmu Monte Carlo dla zadania $1$. oraz $2$. poka
 \end{figure}
 
 \section{Porównanie trajektorii dla $n = 2$}
+
+\begin{figure}[h]
+\centering
+\begin{minipage}[b]{\dimexpr.5\textwidth-1em}
+  \centering
+  \includegraphics[width=1\linewidth]{grafiki/Wykresy2d/zad1_pso_plot_BEST.svg}
+  \captionof{figure}{Trajektoria najlepszej cząsteczki o wymierze $n=2$ dla zadania $1$ dla metody PSO.}
+  \label{fig:skalowalnosc:PSO1}
+\end{minipage} \hfill
+\begin{minipage}[b]{\dimexpr.5\textwidth-1em}
+  \centering
+  \includegraphics[width=1\linewidth]{grafiki/Wykresy2d/zad1_MC_plot_BEST.svg}
+  \captionof{figure}{Trajektoria najlepszej cząsteczki o wymierze $n=2$ dla zadania $1$ dla metody Monte Carlo.}
+  \label{fig:skalowalnosc:PSO2}
+\end{minipage}
+\end{figure}
+
+\begin{figure}[h]
+\centering
+\begin{minipage}[b]{\dimexpr.5\textwidth-1em}
+  \centering
+  \includegraphics[width=1\linewidth]{grafiki/Wykresy2d/zad2_pso_plot_BEST.svg}
+  \captionof{figure}{Trajektoria najlepszej cząsteczki o wymierze $n=2$ dla zadania $2$ dla metody PSO.}
+  \label{fig:skalowalnosc:MC1}
+\end{minipage} \hfill
+\begin{minipage}[b]{\dimexpr.5\textwidth-1em}
+  \centering
+  \includegraphics[width=1\linewidth]{grafiki/Wykresy2d/zad2_MC_plot_BEST.svg}
+  \captionof{figure}{Trajektoria najlepszej cząsteczki o wymierze $n=2$ dla zadania $2$ dla metody Monte Carlo.}
+  \label{fig:skalowalnosc:MC2}
+\end{minipage}
+\end{figure}
+
 Z wykresów trajektorii dla cząsteczki o wymiarze $n=2$ widać, ze cząsteczki obliczane z użyciem algorytmu PSO bardzo ładnie schodzą się w stronę globalnego minimum. Dla metody Monte Carlo takiej obserwacji nie można poczynić. Jednocześnie widać, że Przy obliczeniach dla metody PSO potrzebne jest mniej iteracji niż przy metodzie Monte Carlo aby otrzymać satysfakcjonujący wynik.
 
 \begin{figure}[h]
