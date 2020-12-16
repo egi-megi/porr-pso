@@ -87,14 +87,14 @@ int main(int argc, char* argv[])
             if (combination.task == "Task1")
             {
                 MonteCarlo mc1a(options, logger);
-                MonteCarloParticle mc1a_best = mc1a.findTheBestParticle(.1, .01);
+                MonteCarloParticle mc1a_best = mc1a.findTheBestParticle(2, .01);
 
                 printf("Best particle f(mc1a_best) = %lf\n", mc1a_best.getCostFunctionValue());
             }
             else
             {
                 MonteCarlo mc2a(options, logger);
-                MonteCarloParticle mc2a_best = mc2a.findTheBestParticle(.1, .01);
+                MonteCarloParticle mc2a_best = mc2a.findTheBestParticle(2, .01);
 
                 printf("Best particle f(mc2a_best) = %lf\n", mc2a_best.getCostFunctionValue());
             }

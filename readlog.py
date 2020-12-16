@@ -18,20 +18,25 @@ def stringToDate(dateStr):
 
 #WCZYTANIE GLOWNEGO LOGU
 
+#PARAMTERY USTAWIANE RECZNIE ###########################%%%%%%%
+
 czytajLOG = True
 ext = "png"
-task = "Zad1"
+task = "Zad2"
 alg = "MC"
+iterLimit = 499 # 10particles * 50 iterations {0...499}
 
 # fileNameParticles = "particlesLog_10_2_0.001_2020-12-15_01-44-30_s1aP.txt" #zad1_PSO
-fileNameParticles = "particlesLog_10_2_1.1_2020-12-16_01-28-57_mc1aP.txt" #zad1_MC
+# fileNameParticles = "particlesLog_10_2_0.1_2020-12-16_02-07-04_mc1aP.txt" #zad1_MC
 # fileNameParticles = "particlesLog_10_2_1.1_2020-12-16_01-36-36_s2aP.txt" #zad2_PSO
-# fileNameParticles = "particlesLog_10_2_1.1_2020-12-16_01-46-07_mc2aP.txt" #zad2_MC
+fileNameParticles = "particlesLog_10_2_0.1_2020-12-16_02-36-12_mc2aP.txt" #zad2_MC
 
 # fileName = "log_10_2_0.001_2020-12-15_01-44-30_s1aP.txt" #zad1_PSO
-fileName = "log_10_2_1.1_2020-12-16_01-28-57_mc1aP.txt" #zad1_MC
+# fileName = "log_10_2_0.1_2020-12-16_02-07-04_mc1aP.txt" #zad1_MC
 # fileName = "log_10_2_1.1_2020-12-16_01-36-36_s2aP.txt" #zad2_PSO
-# fileName = "log_10_2_1.1_2020-12-16_01-46-07_mc2aP.txt" #zad2_MC
+fileName = "log_10_2_0.1_2020-12-16_02-36-12_mc2aP.txt" #zad2_MC
+
+################################################################
 
 
 if(czytajLOG):
@@ -58,8 +63,10 @@ if(czytajLOG):
     costs = []
     bestIds = []
 
-    for elem in logContent:
-        currentline = elem.split(",")
+    for i in range (0,len(logContent)):
+        if(i>iterLimit):
+            break
+        currentline = logContent[i].split(",")
         iterations.append(int(currentline[0]))
         costs.append(float(currentline[1]))
         bestIds.append(int(currentline[2]))
@@ -148,13 +155,13 @@ res_2d_task1 = [task1([i]) for i in x] #TASK1
 # res_2d_task2 = [task2([i]) for i in x] #TASK2
 
 arr_task1 = np.empty((N*N,1), float)
-# arr_task2 = np.empty((N*N,1), float)
+arr_task2 = np.empty((N*N,1), float)
 
 for i in range(0, len(meshList)):
     arr_task1[i,0] = task1(meshList[i])
 
-# for i in range(0, len(meshList)):
-#     arr_task2[i,0] = task2(meshList[i])
+for i in range(0, len(meshList)):
+     arr_task2[i,0] = task2(meshList[i])
 
 
 plt.subplot(121)
@@ -163,12 +170,18 @@ plt.title(f"{task} - przekrój x1=0")
 plt.xlabel("x2")
 plt.ylabel("z")
 
+z = 0
 z1 = np.reshape(arr_task1,(N,N))
-#z2 = np.reshape(arr_task2,(N,N))
+z2 = np.reshape(arr_task2,(N,N))
+
+if(task == "Zad1"):
+    z = z1
+else:
+    z = z2
 
 plt.subplot(122)
 
-plt.imshow(z1, vmin=z1.min(), vmax=z1.max(), origin='lower', extent=[x.min(), x.max(), y.min(), y.max()])
+plt.imshow(z, vmin=z.min(), vmax=z.max(), origin='lower', extent=[x.min(), x.max(), y.min(), y.max()])
 # plt.contour(x, y, z1) #TASK2
 plt.title(f"{task} - wykres dla n=2")
 plt.xlabel("x1")
@@ -180,7 +193,7 @@ cbar.set_label("wartość funkcji kosztu")
 plt.clf()
 
 ######################################################################
-#all particles
+#WCZYTANIE WSZYSTKICH CZASTEK
 
 # file: iteracja, id, x, y , vx, vy, cost
 
@@ -205,8 +218,10 @@ logParticles = [x.rstrip() for x in logParticles]
 cols= len(logParticles[0].split(',')) #iteracja, id, x, y , vx, vy, cost
 arr = np.empty((0,cols), float)
 
-for line in logParticles:
-    lineSplit = line.split(",")
+for i in range (0,len(logParticles)):
+    if(i>iterLimit):
+        break
+    lineSplit = logParticles[i].split(",")
     lineFloat = [float(x) for x in lineSplit]
     arr = np.append(arr, np.array([lineFloat]), axis=0)
 
@@ -221,7 +236,7 @@ plt.figure()
 marker_size=50
 plt.xlim(-40, 40)
 plt.ylim(-40, 40)
-plt.scatter(arr[0,:,2], arr[0,:,3], marker_size,c=arr[0,:,6], vmin = 0, vmax = 90)
+plt.scatter(arr[0,:,2], arr[0,:,3], marker_size,c=arr[0,:,6], vmin = 0, vmax = costMax)
 plt.title(f"{task} - {alg}: n={dim}, l.czastek{partNum}")
 plt.xlabel("x1")
 plt.ylabel("x2")
@@ -231,19 +246,19 @@ plt.savefig(f"{alg}_{task}_startPositions.{ext}")
 
 # wykresy do zrobienia gifa
 
-# for i in range(iterations):
-#     plt.clf()
-#     plt.xlim(-40, 40)
-#     plt.ylim(-40, 40)
-#     plt.xticks(np.arange(-40,50,10))
-#     plt.yticks(np.arange(-40,50,10))
-#     plt.scatter(arr[i,:,2], arr[i,:,3], marker_size, c=arr[i,:,6],vmin=0, vmax=costMax)
-#     plt.title(f"{task} - {alg}: n={dim}, l.czastek{partNum}, iter: {i}")
-#     plt.xlabel("x1")
-#     plt.ylabel("x2")
-#     cbar= plt.colorbar()
-#     cbar.set_label("koszt")
-#     plt.savefig(f"plots/plot_{i}.png")
+for i in range(iterations):
+    plt.clf()
+    plt.xlim(-40, 40)
+    plt.ylim(-40, 40)
+    plt.xticks(np.arange(-40,50,10))
+    plt.yticks(np.arange(-40,50,10))
+    plt.scatter(arr[i,:,2], arr[i,:,3], marker_size, c=arr[i,:,6],vmin=0, vmax=costMax)
+    plt.title(f"{task} - {alg}: n={dim}, l.czastek{partNum}, iter: {i}")
+    plt.xlabel("x1")
+    plt.ylabel("x2")
+    cbar= plt.colorbar()
+    cbar.set_label("koszt")
+    plt.savefig(f"plots/plot_{i}.png")
 
 #os.system("convert -delay 20 -loop 0 plots/plot_{0..33}.png plots/scatter4.gif") 
 
@@ -294,25 +309,25 @@ marker_size = 50
 
 #TRAJEKTORIE WSZYSTKIE
 
-# for i in range (0,partNum):
+for i in range (0,partNum):
 
-#     particlesArray = np.empty((0,cols), float)
-#     getParticleHistory(arr,i)  
-#     fig = plt.figure(i)
-#     plt.clf()
-#     plt.xlim(-40, 40)
-#     plt.ylim(-40, 40)
-#     plt.xticks(np.arange(-40,50,10))
-#     plt.yticks(np.arange(-40,50,10))
-#     plt.imshow(z1, vmin=z1.min(), vmax=z1.max(), origin='lower', extent=[x.min(), x.max(), y.min(), y.max()], alpha=0.35, zorder = 0)
-#     plt.plot(particlesArray[:,2],particlesArray[:,3],'b', zorder=1)
-#     plt.scatter(particlesArray[:,2],particlesArray[:,3], marker_size, c=particlesArray[:,6],vmin=0, vmax=costMax, zorder=2)
-#     plt.title(f"{alg} n={dim}, id.czastki{i}, l.iteracji{iterations}")
-#     plt.xlabel("x1")
-#     plt.ylabel("x2")
-#     cbar= plt.colorbar()
-#     cbar.set_label("koszt")
-#     plt.savefig(f"trajectories/{task}_{alg}_plot_{i}.{ext}")
+    particlesArray = np.empty((0,cols), float)
+    getParticleHistory(arr,i)  
+    fig = plt.figure(i)
+    plt.clf()
+    plt.xlim(-40, 40)
+    plt.ylim(-40, 40)
+    plt.xticks(np.arange(-40,50,10))
+    plt.yticks(np.arange(-40,50,10))
+    plt.imshow(z, vmin=z.min(), vmax=z.max(), origin='lower', extent=[x.min(), x.max(), y.min(), y.max()], alpha=0.35, zorder = 0)
+    plt.plot(particlesArray[:,2],particlesArray[:,3],'b', zorder=1)
+    plt.scatter(particlesArray[:,2],particlesArray[:,3], marker_size, c=particlesArray[:,6],vmin=0, vmax=costMax, zorder=2)
+    plt.title(f"{alg} n={dim}, id.czastki{i}, l.iteracji{iterations}")
+    plt.xlabel("x1")
+    plt.ylabel("x2")
+    cbar= plt.colorbar()
+    cbar.set_label("koszt")
+    plt.savefig(f"trajectories/{task}_{alg}_plot_{i}.{ext}")
 
 
 #BEST particles for solution    
@@ -325,10 +340,10 @@ plt.xlim(-40, 40)
 plt.ylim(-40, 40)
 plt.xticks(np.arange(-40,50,10))
 plt.yticks(np.arange(-40,50,10))
-plt.imshow(z1, vmin=z1.min(), vmax=z1.max(), origin='lower', extent=[x.min(), x.max(), y.min(), y.max()], alpha=0.35, zorder = 0)
+plt.imshow(z, vmin=z.min(), vmax=z.max(), origin='lower', extent=[x.min(), x.max(), y.min(), y.max()], alpha=0.35, zorder = 0)
 plt.plot(particlesBestArray[:,2],particlesBestArray[:,3],'b', zorder=1)
 plt.scatter(particlesBestArray[:,2],particlesBestArray[:,3], marker_size, c=particlesBestArray[:,6],vmin=0, vmax=costMax, zorder=2)
-plt.title(f"{alg} n={dim}, najlepsze czastki dla roju, l.iteracji={iterations}")
+plt.title(f"{alg} n={dim}, najlepsze czastki dla iteracji, l.iteracji={iterations}")
 plt.xlabel("x1")
 plt.ylabel("x2")
 cbar= plt.colorbar()
@@ -336,6 +351,6 @@ cbar.set_label("koszt")
 plt.savefig(f"trajectories/{task}_{alg}_plot_BEST.{ext}")
 
 
-a=0
 #os.system("ffmpeg -r 5 -i plots/plot_%d.png -vcodec mpeg4 -y plots/scatter3.mp4")
 #os.system("convert -delay 20 -loop 0 plots/plot_{0..33}.png plots/scatter4.gif") 
+gifCommand = "convert -delay 20 -loop 0 plot_{0..33}.png MC_zad1_ANIM.gif"
