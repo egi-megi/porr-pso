@@ -23,6 +23,21 @@ MonteCarloParticle::MonteCarloParticle(Options* mOptions, std::default_random_en
     ready = true;
 }
 
+MonteCarloParticle::MonteCarloParticle(Options *mOptions, std::default_random_engine &gen, std::vector<double> _positionVector) 
+{
+    options = mOptions;
+
+    vectorDim = options->dimension;
+    positionVectors.resize(vectorDim, 0);
+
+    config = options->optimizationExerciseConfig;
+
+    positionVectors = _positionVector; // load positions from file
+    computeCostFunctionValue();
+    
+    ready = true;
+}
+
 void MonteCarloParticle::computePosition(float sigma, float T, std::default_random_engine &gen)
 {
     std::uniform_real_distribution<double> uniform(-1, 1);

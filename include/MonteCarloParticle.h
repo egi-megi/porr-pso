@@ -9,6 +9,7 @@ class MonteCarloParticle : public Particle
 public:
     MonteCarloParticle() = default;
     MonteCarloParticle(Options *mOptions, std::default_random_engine &gen);
+    MonteCarloParticle(Options *mOptions, std::default_random_engine &gen, std::vector<double> _positionVector);
     virtual ~MonteCarloParticle() = default;
 
     void computePosition(float sigma, float T, std::default_random_engine &gen);

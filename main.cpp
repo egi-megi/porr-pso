@@ -20,15 +20,20 @@ int main(int argc, char* argv[])
 
     // taskTypes legend: algorithm, task, stop condition, parallel or serial
 
-    std::vector<int> chosenTests{static_cast<int>(TEST::S1AP)};//tests ids you want to run
+    std::vector<int> chosenTests{static_cast<int>(TEST::MC2AP)};//tests ids you want to run
 
     for (auto testId : chosenTests)
     {
-
-        Combination combination (static_cast<TEST>(testId));
-       
+        Combination combination (static_cast<TEST>(testId));       
         options = new Options();
-        options->optimizationExerciseConfig = new ConfigEx1();
+        if (combination.task == "Task1")
+        {
+            options->optimizationExerciseConfig = new ConfigEx1();
+        }
+        else
+        {
+            options->optimizationExerciseConfig = new ConfigEx2();
+        }
 
         std::string logPath = "../logs/log_" + options->optionsToString(true) + "_" + combination.taskTypes[testId] + ".txt";
         std::string particlesPath = "../logs/particlesLog_" + options->optionsToString(true) + "_" + combination.taskTypes[testId] + ".txt";
@@ -47,8 +52,8 @@ int main(int argc, char* argv[])
         logger = new Logger(options, logPath, particlesPath, true);
         
         // run if this is the first run with the same parameters (dimension and particlesNumber) to log start position of particles
-        options->prepareAndActivateWriteLogger();
-        //options->prepareAndActivateReadLogger();
+        //options->prepareAndActivateWriteLogger();
+        options->prepareAndActivateReadLogger();
    
         if (combination.algorithm == "Swarm")
         {
@@ -66,7 +71,15 @@ int main(int argc, char* argv[])
             }
             else
             {
-                // TODO add task2 for swarm
+                Swarm s2a(options, logger);
+
+                double chi = 0.72984, c1 = 2.05, c2 = 2.05;
+                double w = chi;
+                c1 = chi * c1;
+                c2 = chi * c2;
+
+                SwarmParticle s2a_best = s2a.findTheBestParticle(w, c1, c2);
+                printf("Best particle f(s2a_best) = %lf\n", s2a_best.getCostFunctionValue());
             }
         }
         else
@@ -74,13 +87,16 @@ int main(int argc, char* argv[])
             if (combination.task == "Task1")
             {
                 MonteCarlo mc1a(options, logger);
-                MonteCarloParticle mc1a_best = mc1a.findTheBestParticle(.01, .1);
+                MonteCarloParticle mc1a_best = mc1a.findTheBestParticle(.1, .01);
 
                 printf("Best particle f(mc1a_best) = %lf\n", mc1a_best.getCostFunctionValue());
             }
             else
             {
-                //TODO add task 2 for monte carlo
+                MonteCarlo mc2a(options, logger);
+                MonteCarloParticle mc2a_best = mc2a.findTheBestParticle(.1, .01);
+
+                printf("Best particle f(mc2a_best) = %lf\n", mc2a_best.getCostFunctionValue());
             }
         }
 

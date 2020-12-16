@@ -4,7 +4,7 @@ Options::Options()
 {
     optimizationExerciseConfig = nullptr;
     stopCriterionConfig = nullptr;
-    stopCriterionThreshold  = 0.001;
+    stopCriterionThreshold  = 1.1;
     amountOfParticles = 10;
     dimension = 2;
 

@@ -28,18 +28,28 @@ MonteCarlo::MonteCarlo(Options *mOptions, Logger* _log) :
 #ifdef OPEN_MP_SWARM
 void MonteCarlo::makeMonteCarlo()
 {
-#pragma omp parallel
-{
+//#pragma omp parallel
+//{
     std::default_random_engine rand_engine;
     rand_engine.seed((omp_get_thread_num() + 1) * time(NULL));
-#pragma omp for
-    for(int i = 0; i < amountOfParticles; i++)
+//#pragma omp for
+    for (int i = 0; i < amountOfParticles; i++)
     {
-        MonteCarloParticle particle = MonteCarloParticle(options, rand_engine);
-        particle.setId(i);
-        v_particles[i] = particle;
+        if (options->isSaveStartPosition) // SAVES TO FILE - GENERATES NEW
+        {
+            MonteCarloParticle particle(options, rand_engine);
+            particle.setId(i);
+            options->addStartPositionToBuffer(particle.getPositionVector(), i);
+            v_particles[i] = particle;
+        }
+        else // LOADS FROM FILE
+        {
+            MonteCarloParticle particle(options, rand_engine, options->particlesFromFile[i]);
+            particle.setId(i);
+            v_particles[i] = particle;
+        }
     }
-}
+//}
 
     globalBestParticle.first = v_particles[0];
     for(int i = 1; i < amountOfParticles; i++)

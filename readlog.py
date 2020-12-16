@@ -19,10 +19,23 @@ def stringToDate(dateStr):
 #WCZYTANIE GLOWNEGO LOGU
 
 czytajLOG = True
+ext = "png"
+task = "Zad1"
+alg = "MC"
+
+# fileNameParticles = "particlesLog_10_2_0.001_2020-12-15_01-44-30_s1aP.txt" #zad1_PSO
+fileNameParticles = "particlesLog_10_2_1.1_2020-12-16_01-28-57_mc1aP.txt" #zad1_MC
+# fileNameParticles = "particlesLog_10_2_1.1_2020-12-16_01-36-36_s2aP.txt" #zad2_PSO
+# fileNameParticles = "particlesLog_10_2_1.1_2020-12-16_01-46-07_mc2aP.txt" #zad2_MC
+
+# fileName = "log_10_2_0.001_2020-12-15_01-44-30_s1aP.txt" #zad1_PSO
+fileName = "log_10_2_1.1_2020-12-16_01-28-57_mc1aP.txt" #zad1_MC
+# fileName = "log_10_2_1.1_2020-12-16_01-36-36_s2aP.txt" #zad2_PSO
+# fileName = "log_10_2_1.1_2020-12-16_01-46-07_mc2aP.txt" #zad2_MC
+
 
 if(czytajLOG):
 
-    fileName = "log_10_2_0.001_2020-12-15_01-44-30_s1aP.txt"#zad1_PSO
     fileNamePattern = fileName.split("_")
 
     name = fileNamePattern[0]
@@ -53,14 +66,14 @@ if(czytajLOG):
 
     #plot
 
-    # plt.figure()
-    # myTitle = f"PSO_OpenMP: n={dim}, l.czastek{partNum}, stop={stop}"
-    # plt.plot(iterations, costs)
-    # plt.xticks(np.arange(0, max(iterations)+2, 5.0))
-    # plt.xlabel("iteracje")
-    # plt.ylabel("koszt")
-    # plt.title(myTitle)
-    # plt.savefig("PSO_koszt3.svg")    
+    plt.figure()
+    myTitle = f"PSO_OpenMP: n={dim}, l.czastek{partNum}, stop={stop}"
+    plt.plot(iterations, costs)
+    plt.xticks(np.arange(0, max(iterations)+2, 5.0))
+    plt.xlabel("iteracje")
+    plt.ylabel("koszt")
+    plt.title(myTitle)
+    plt.savefig(f"{task}-{alg}_koszt.{ext}")    
 
 ######################################################################
 # Funkcje ktore optymalizujemy
@@ -146,7 +159,7 @@ for i in range(0, len(meshList)):
 
 plt.subplot(121)
 plt.plot(x[0:len(res_2d_task1)], res_2d_task1)
-plt.title("Zad 1 - przekrój x1=0")
+plt.title(f"{task} - przekrój x1=0")
 plt.xlabel("x2")
 plt.ylabel("z")
 
@@ -157,12 +170,12 @@ plt.subplot(122)
 
 plt.imshow(z1, vmin=z1.min(), vmax=z1.max(), origin='lower', extent=[x.min(), x.max(), y.min(), y.max()])
 # plt.contour(x, y, z1) #TASK2
-plt.title("Zad 1 - wykres dla n=2")
+plt.title(f"{task} - wykres dla n=2")
 plt.xlabel("x1")
 plt.ylabel("x2")
 cbar = plt.colorbar()
 cbar.set_label("wartość funkcji kosztu")
-# plt.savefig("Zad1_2d_heatmap_.svg")  
+# plt.savefig(f"{task}_2d_heatmap_.{ext}")  
 
 plt.clf()
 
@@ -170,8 +183,6 @@ plt.clf()
 #all particles
 
 # file: iteracja, id, x, y , vx, vy, cost
-
-fileNameParticles = "particlesLog_10_2_0.001_2020-12-15_01-44-30_s1aP.txt"#zad1_PSO
 
 fileNameParticlesSplit = fileNameParticles.split("_") #TODO - put into function
 
@@ -211,12 +222,12 @@ marker_size=50
 plt.xlim(-40, 40)
 plt.ylim(-40, 40)
 plt.scatter(arr[0,:,2], arr[0,:,3], marker_size,c=arr[0,:,6], vmin = 0, vmax = 90)
-plt.title(f"Zad 1 - PSO: n={dim}, l.czastek{partNum}")
+plt.title(f"{task} - {alg}: n={dim}, l.czastek{partNum}")
 plt.xlabel("x1")
 plt.ylabel("x2")
 cbar= plt.colorbar()
 cbar.set_label("koszt czasteczki", labelpad=+5)
-plt.savefig("PSO_zad1_startPositions.svg")    
+plt.savefig(f"{alg}_{task}_startPositions.{ext}")    
 
 # wykresy do zrobienia gifa
 
@@ -227,7 +238,7 @@ plt.savefig("PSO_zad1_startPositions.svg")
 #     plt.xticks(np.arange(-40,50,10))
 #     plt.yticks(np.arange(-40,50,10))
 #     plt.scatter(arr[i,:,2], arr[i,:,3], marker_size, c=arr[i,:,6],vmin=0, vmax=costMax)
-#     plt.title(f"Zad 1 - PSO: n={dim}, l.czastek{partNum}, iter: {i}")
+#     plt.title(f"{task} - {alg}: n={dim}, l.czastek{partNum}, iter: {i}")
 #     plt.xlabel("x1")
 #     plt.ylabel("x2")
 #     cbar= plt.colorbar()
@@ -249,12 +260,12 @@ for i in range(iterations):
 
 
     # plt.savefig(f"plots/plot_{i}.png")
-plt.title(f"PSO n={dim}, l.czastek{partNum}, l.iteracji{iterations}")
+plt.title(f"{alg} n={dim}, l.czastek{partNum}, l.iteracji{iterations}")
 plt.xlabel("x1")
 plt.ylabel("x2")
 cbar= plt.colorbar()
 cbar.set_label("koszt")
-plt.savefig("PSO_zad1_scatter_allIters.svg")    
+plt.savefig(f"{alg}_{task}_scatter_allIters.{ext}")    
 
 # get positions of particles with certain id or certain ids
 
@@ -296,12 +307,12 @@ marker_size = 50
 #     plt.imshow(z1, vmin=z1.min(), vmax=z1.max(), origin='lower', extent=[x.min(), x.max(), y.min(), y.max()], alpha=0.35, zorder = 0)
 #     plt.plot(particlesArray[:,2],particlesArray[:,3],'b', zorder=1)
 #     plt.scatter(particlesArray[:,2],particlesArray[:,3], marker_size, c=particlesArray[:,6],vmin=0, vmax=costMax, zorder=2)
-#     plt.title(f"PSO n={dim}, id.czastki{i}, l.iteracji{iterations}")
+#     plt.title(f"{alg} n={dim}, id.czastki{i}, l.iteracji{iterations}")
 #     plt.xlabel("x1")
 #     plt.ylabel("x2")
 #     cbar= plt.colorbar()
 #     cbar.set_label("koszt")
-#     plt.savefig(f"trajectories/zad1_pso_plot_{i}.svg")
+#     plt.savefig(f"trajectories/{task}_{alg}_plot_{i}.{ext}")
 
 
 #BEST particles for solution    
@@ -317,12 +328,12 @@ plt.yticks(np.arange(-40,50,10))
 plt.imshow(z1, vmin=z1.min(), vmax=z1.max(), origin='lower', extent=[x.min(), x.max(), y.min(), y.max()], alpha=0.35, zorder = 0)
 plt.plot(particlesBestArray[:,2],particlesBestArray[:,3],'b', zorder=1)
 plt.scatter(particlesBestArray[:,2],particlesBestArray[:,3], marker_size, c=particlesBestArray[:,6],vmin=0, vmax=costMax, zorder=2)
-plt.title(f"PSO n={dim}, najlepsze czastki dla roju, l.iteracji={iterations}")
+plt.title(f"{alg} n={dim}, najlepsze czastki dla roju, l.iteracji={iterations}")
 plt.xlabel("x1")
 plt.ylabel("x2")
 cbar= plt.colorbar()
 cbar.set_label("koszt")
-plt.savefig(f"trajectories/zad1_pso_plot_BEST.svg")
+plt.savefig(f"trajectories/{task}_{alg}_plot_BEST.{ext}")
 
 
 a=0
