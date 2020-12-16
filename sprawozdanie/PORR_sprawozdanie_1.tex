@@ -176,7 +176,7 @@ z < e^{-\frac{f\left(\vect{\overline{x}}_{i + 1, j}\right) - f\left(\vect{x}_{i,
 \end{equation}
 to nowe położenie, pomimo większej wartości funkcji celu, zostanie zaakceptowane ($T$ to parametr). Jeżeli nierówność (\ref{eq:mc_nie}) nie będzie spełniona, to cząstka w danej generacji nie zmieni swojego położenia $\vect{x}_{i + 1, j} = \vect{x}_{i, j}$. 
 
-Literatura wskazuje, że na ogół lepiej jest wylosować wiele cząsteczek z całego zakresu i wykonać mniej iteracji niż oczekiwać spełnienia kryterium stopu przez jedną cząsteczkę pochodzącą z małej grupy cząstek. Przy dużym wymiarze wektora położenia może się okazać, że początkowo wylosowane cząsteczki nie znajdą się~w~basenach atrakcji wszystkich interesujących minimów. Wtedy przejście cząsteczek do innych basenów atrakcji może trwać wiele generacji i zależne będzie od wielkości parametru $T$.
+Literatura wskazuje, że na ogół lepiej jest wylosować wiele cząsteczek z całego zakresu i wykonać mniej iteracji niż oczekiwać spełnienia kryterium stopu przez jedną cząsteczkę pochodzącą z małej grupy cząstek. Przy dużym wymiarze wektora położenia może się okazać, że początkowo wylosowane cząsteczki nie znajdą się~w~basenach atrakcji wszystkich interesujących minimów. Wtedy przejście cząsteczek do innych basenów atrakcji może trwać wiele generacji i zależne będzie od wielkości parametru~$T$.
 
 Należy zwrócić uwagę, że w podejściu Monte Carlo cząsteczki nie komunikują się - nie widzą swoich położeń i wartości funkcji celu nawzajem. Tym samym brak jest im inteligencji obserwowanej w PSO. Trajektoria każdej z cząsteczek w tym algorytmie zależy tylko od wylosowanych wartości zmiennych losowych.
 
@@ -371,7 +371,7 @@ Przyjęto dwa rodzaju warunków stopu nazywane dalej warunkiem akademickim oraz 
 
 W przypadku akademickiego warunku stopu wyliczana jest różnica pomiędzy wartością funkcji kosztu, a znanym a prori minimum funkcji. Następnie ta wartość porównywana jest z zadaną, satysfakcjonującą nas wartością przybliżenia optimum. Jeśli wyliczona różnica osiąga wartość równą bądź mniejszą niż podana, to optymalizacja kończy się i jako wynik podaje najlepsze położenie cząsteczki.
 
-Normalny warunek stopu obliczany jest na podstawie zmian wartości funkcji celu najlepszych cząsteczek w $k$ ostatnich generacjach. Jeżeli zmiany są poniżej pewnego ustalonego poziomu $\tau$, to algorytm optymalizacyjny kończy swoje działanie. W niekorzystnych przypadkach warunek może kończyć optymalizację zdecydowanie za szybko w związku z czym otrzymane wyniki należy traktować z należytą niepewnością. Inne algorytmy dot. warunku normalnego wraz z porównaniem ich działania można znaleźć w \cite{karinZielinski}.
+Normalny warunek stopu obliczany jest na podstawie zmian wartości funkcji celu najlepszych cząsteczek w $k$ ostatnich generacjach. Jeżeli zmiany są poniżej pewnego ustalonego poziomu $\tau$, to~algorytm optymalizacyjny kończy swoje działanie. W niekorzystnych przypadkach warunek może kończyć optymalizację zdecydowanie za szybko w związku z czym otrzymane wyniki należy traktować z~należytą niepewnością. Inne algorytmy dot. warunku normalnego wraz z porównaniem ich działania można znaleźć w \cite{karinZielinski}.
 
 \subsection*{Test numeryczny normalnego kryterium stopu}
 
@@ -387,7 +387,7 @@ Trudności w zastosowaniu zaproponowanego wyżej normalnego kryterium stopu łat
 
 \section{Rozwiązanie zadań dla różnych wymiarów $n$}
 
-W celu przetestowania i porównania algorytmów oraz ich implementacji rozwiązano zadania $1$. i $2$. w różnych wariantach. Zadania zostały rozwiązane zarówno przez wersje sekwencyjne programów, jak i wersje równoległe - utworzone z wykorzystaniem OpenMP. Wersje równoległe zostały uruchomione z dostępnym $6$ wątkami. Sprawdzono działanie programów w optymalizacji problemów o różnej złożoności, tj. każde z zadań zostało rozwiązane dla następujących wymiarów ($n$): $2, \ 10, \ 20, \ 50, \ 100$. Aby ograniczyć działanie programu do czasów wykonywania poniżej $10$ minut, konieczne było w przypadkach o większym wymiarze problemu zwiększenie liczby cząsteczek.
+W celu przetestowania i porównania algorytmów oraz ich implementacji rozwiązano zadania $1$. i $2$. w różnych wariantach. Zadania zostały rozwiązane zarówno przez wersje sekwencyjne programów, jak i wersje równoległe - utworzone z wykorzystaniem OpenMP. Wersje równoległe zostały uruchomione z~dostępnymi $6$ wątkami. Sprawdzono działanie programów w optymalizacji problemów o różnej złożoności, tj. każde z zadań zostało rozwiązane dla następujących wymiarów ($n$): $2, \ 10, \ 20, \ 50, \ 100$. Aby~ograniczyć działanie programu do czasów wykonywania poniżej $10$ minut, konieczne było w przypadkach o większym wymiarze problemu zwiększenie liczby cząsteczek.
 
 W tabeli \ref{tab:rozw_zad1}. oraz tabeli \ref{tab:rozw_zad2}. przedstawiono wyniki serii testów odpowiednio dla zadania $1$. i $2$. Każdy test został wykonany co najmniej $10$ razy, aby móc uśrednić stochastyczny charakter algorytmów. W tabeli opracowano wyniki w postaci średniego, maksymalnego i minimalnego czasu wykonywania programu. Dołączono także wartość wariancji zebranych danych.
 
