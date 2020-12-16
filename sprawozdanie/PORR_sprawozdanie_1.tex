@@ -503,6 +503,8 @@ Tak utworzony profil zbieżności przedstawiono na rys. \ref{fig:zbieznosc}. Wid
 
 \section{Wnioski} 
 
+Niestety nie ma możliwości wykonać obu zadań dla obu algorytmów dokładnie z tymi samymi ustawieniami. W zależności od liczby wymiarów liczba cząstek musi być inna. Okazało sie także, że stałe użyte w algorytmach także nie zawsze były takie same. Ich dobieranie wykonywane było na zasadzie prób.
+
 Tak jak można było przypuszczać zarówno dla zadania 1 jak i 2 dla obu rodzajów algorytmów zrównoleglenie fragmentów kodu przyspieszyło działanie programu (rys. \ref{fig:skalowalnosc:PSO1}, rys. \ref{fig:skalowalnosc:PSO2}, rys. \ref{fig:skalowalnosc:MC1} i rys. \ref{fig:skalowalnosc:MC2}). Okazało się również, że przyspieszenie to następuje dla liczby wątków nie większej niż liczba rdzeni, czyli 6. Gdy obliczenia wykonywane są na większej liczbie wątków niż liczba rdzeni czas szukania najlepszej cząstki jest porównywalny z czasem szukania tej cząstki na 6 rdzeniach. Nie widać natomiast, aby po przekroczeniu tych granicznych 6 wątków następowały jakieś większe problemy w komunikacji między wątkami.
 
 Największe przyspieszenie, niezależnie od rodzaju zadania czy rodzaju algorytmu, występuje pomiędzy użyciem 1 a 2 wątków. Przy włączeniu kolejnych wątków (aż do 6 granicznych) różnica wczasie obliczeń jest coraz mniejsza.
