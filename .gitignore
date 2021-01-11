@@ -22,4 +22,5 @@ sprawozdanie/logs/*
 *.pdf
 
 !/sprawozdanie/grafiki/*.pdf
+!/sprawozdanie/grafiki/Wykresy2d/*.png
 
