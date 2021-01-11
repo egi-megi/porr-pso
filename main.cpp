@@ -122,7 +122,7 @@ int main(int argc, char* argv[])
         std::vector<std::string> taskTypes = {"s1aP","s1nP","mc1aP","mc1nP","s2aP","s2nP","mc2aP","mc2nP",
                                             "s1aS","s1nS","mc1aS","mc1nS","s2aS","s2nS","mc2aS","mc2nS"};
                     
-        std::vector<int> chosenTests{0};//tests ids you want to run
+        std::vector<int> chosenTests{4};//tests ids you want to run
 
         for (auto testId : chosenTests)
         {

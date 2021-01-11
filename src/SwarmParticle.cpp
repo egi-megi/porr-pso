@@ -28,7 +28,7 @@ SwarmParticle::SwarmParticle(Options* mOptions, Swarm *s,
 
     computeCostFunctionValue();
     costFunctionValuePbest = costFunctionValue;
-
+    cout<<"COst particle :"<<costFunctionValue<<'\n';
     swarm = s;
 
     communication = options->communication;

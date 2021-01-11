@@ -2,6 +2,7 @@
 
 #include <random>
 #include <vector>
+#include <iostream>
 
 void Particle::setStartPosition(std::default_random_engine &gen)
 {
@@ -10,6 +11,7 @@ void Particle::setStartPosition(std::default_random_engine &gen)
     for (int i = 0; i < vectorDim; i++)
     {
         positionVectors[i] = unif(gen);
+        std::cout<<positionVectors[i]<<"\n";
     }
 }
 
