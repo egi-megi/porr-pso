@@ -457,22 +457,26 @@ Mogłoby się wydawać, że skoro dostępna jest moc obliczeniowa karty graficzn
 
 \section{Porównanie trajektorii dla $n = 2$}
 
-\subsection{Porównanie trajektorii dla $n = 2$ w MPI}
+W tej części sprawozdania przedstawiono wyniki uzyskane dla cząsteczki dwuwymiarowej dla obu zadań i dla obu algorytmów. W pierwszej części (\ref{sec:MPI2}) pokazano wyniki otrzymane dla MPI, a w drugiej  (\ref{sec:CUDA2})-- dla CUDA.
 
-%Funkcja kosztu - zad1 i zad2
+\subsection{Porównanie trajektorii dla $n = 2$ w MPI} \label{sec:MPI2}
+
+Na wykresach \ref{fig:koszt:PSO1} - \ref{fig:koszt:MC2} zostało pokazane jak zmienia się koszt w kolejnych iteracjach dla najlepszych położeń. Z wykresów tych widać, że wartość kosztu osiąga okolice 0 po podobnej liczbie iteracji dla obu algorytmów. Różnica jest minimalna w przypadku zadania 1 -- na rzecz algorytmu PSO, a w przypadku zadania 2 -- na rzecz algorytmu Monte Carlo.
+
+%Funkcja kosztu - zad1 i zad2 dla najlepszej cząsteczki
 \begin{figure}[H]
 \centering
 \begin{minipage}[b]{\dimexpr.5\textwidth-1em}
   \centering
-  \includegraphics[width=1\linewidth]{grafiki2/MPI_PSO_T1/MPI_PSO_T1_koszt.png}
+  \includegraphics[width=1\linewidth]{grafiki2/MPI_PSO_T1/MPI_PSO_T1_koszt_monotoniczny.png}
   \captionof{figure}{Wartość funkcji kosztu dla zadania $1$ dla metody PSO.}
-  \label{fig:pozycjeStartowe:PSO1}
+  \label{fig:koszt:PSO1}
 \end{minipage} \hfill
 \begin{minipage}[b]{\dimexpr.5\textwidth-1em}
   \centering
   \includegraphics[width=1\linewidth]{grafiki2/MPI_MC_T1/MPI_MC_T1_koszt.png}
   \captionof{figure}{Wartość funkcji kosztu dla zadania $1$ dla metody Monte Carlo.}
-  \label{fig:pozycjeStartowe:MC1}
+  \label{fig:koszt:MC1}
 \end{minipage}
 \end{figure}
 
@@ -480,17 +484,20 @@ Mogłoby się wydawać, że skoro dostępna jest moc obliczeniowa karty graficzn
 \centering
 \begin{minipage}[b]{\dimexpr.5\textwidth-1em}
   \centering
-  \includegraphics[width=1\linewidth]{grafiki2/MPI_PSO_T2/MPI_PSO_T2_koszt.png}
+  \includegraphics[width=1\linewidth]{grafiki2/MPI_PSO_T2/MPI_PSO_T2_koszt_monotoniczny.png}
   \captionof{figure}{Wartość funkcji kosztu dla zadania $2$ dla metody PSO.}
-  \label{fig:pozycjeStartowe:PSO2}
+  \label{fig:koszt:PSO2}
 \end{minipage} \hfill
 \begin{minipage}[b]{\dimexpr.5\textwidth-1em}
   \centering
   \includegraphics[width=1\linewidth]{grafiki2/MPI_MC_T2/MPI_MC_T2_koszt.png}
   \captionof{figure}{Wartość funkcji kosztu dla zadania $2$ dla metody Monte Carlo.}
-  \label{fig:pozycjeStartowe:MC2}
+  \label{fig:koszt:MC2}
 \end{minipage}
 \end{figure}
+
+Na kolejnych wykresach \ref{fig:pozycjeStartowe:PSO1} - \ref{fig:pozycjeStartowe:MC2} przedstawiono pozycje startowe przykładowych cząsteczek, a na kolejnych wykresach   \ref{fig:pozycjeStartowe:PSO1} - \ref{fig:pozycjeStartowe:MC2} trajektorię ruchu przykładowych cząsteczek.
+
 
 %Pozycje startowe
 \begin{figure}[H]
@@ -595,22 +602,38 @@ Mogłoby się wydawać, że skoro dostępna jest moc obliczeniowa karty graficzn
 
 
 
-\subsection{Porównanie trajektorii dla $n = 2$ w CUDA}
+\subsection{Porównanie kosztu w CUDA} \label{sec:CUDA2}
 
 %Funkcja kosztu - zad1 i zad2
 \begin{figure}[H]
 \centering
 \begin{minipage}[b]{\dimexpr.5\textwidth-1em}
   \centering
-  \includegraphics[width=1\linewidth]{grafiki2/CUDA/CUDA_PSO_T1_koszt_linear.png}
+  \includegraphics[width=1\linewidth]{grafiki2/CUDA/CUDA_PSO_Task1_koszt_linear.png}
   \captionof{figure}{Wartość funkcji kosztu dla zadania $1$ dla algorytmu PSO.}
-  \label{fig:pozycjeStartowe:PSO1CUDA}
+  \label{fig:koszt:PSO1CUDA}
 \end{minipage} \hfill
 \begin{minipage}[b]{\dimexpr.5\textwidth-1em}
   \centering
-  \includegraphics[width=1\linewidth]{grafiki2/CUDA/CUDA_MC_T1_koszt_linear.png}
+  \includegraphics[width=1\linewidth]{grafiki2/CUDA/CUDA_PSO_Task1_koszt_log.png}
+  \captionof{figure}{Wartość funkcji kosztu w skali logarytmicznej dla zadania $1$ dla algorytmu PSO}
+  \label{fig:koszt:PSO1CUDAlog}
+\end{minipage}
+\end{figure}
+
+\begin{figure}[H]
+\centering
+\begin{minipage}[b]{\dimexpr.5\textwidth-1em}
+  \centering
+  \includegraphics[width=1\linewidth]{grafiki2/CUDA/CUDA_MonteCarlo_Task1_koszt_linear.png}
   \captionof{figure}{Wartość funkcji kosztu dla zadania $1$ dla algorytmu Monte Carlo.}
-  \label{fig:pozycjeStartowe:MC1CUDA}
+  \label{fig:koszt:PMC1CUDA}
+\end{minipage} \hfill
+\begin{minipage}[b]{\dimexpr.5\textwidth-1em}
+  \centering
+  \includegraphics[width=1\linewidth]{grafiki2/CUDA/CUDA_MonteCarlo_Task1_koszt_log.png}
+  \captionof{figure}{Wartość funkcji kosztu w skali logarytmicznej dla zadania $1$ dla algorytmu Monte Carlo}
+  \label{fig:koszt:MC1CUDAlog}
 \end{minipage}
 \end{figure}
 
@@ -618,15 +641,15 @@ Mogłoby się wydawać, że skoro dostępna jest moc obliczeniowa karty graficzn
 \centering
 \begin{minipage}[b]{\dimexpr.5\textwidth-1em}
   \centering
-  \includegraphics[width=1\linewidth]{grafiki2/CUDA/CUDA_PSO_T2_koszt_linear.png}
+  \includegraphics[width=1\linewidth]{grafiki2/CUDA/CUDA_PSO_Task2_koszt_linear.png}
   \captionof{figure}{Wartość funkcji kosztu dla zadania $2$ dla algorytmu PSO.}
-  \label{fig:pozycjeStartowe:PSO2CUDA}
+  \label{fig:koszt:PSO2CUDA}
 \end{minipage} \hfill
 \begin{minipage}[b]{\dimexpr.5\textwidth-1em}
   \centering
-  \includegraphics[width=1\linewidth]{grafiki2/CUDA/CUDA_PSO_T2_koszt_log.png}
+  \includegraphics[width=1\linewidth]{grafiki2/CUDA/CUDA_PSO_Task2_koszt_log.png}
   \captionof{figure}{Wartość funkcji kosztu w skali logarytmicznej dla zadania $2$ dla algorytmu PSO.}
-  \label{fig:pozycjeStartowe:PSO2CUDAlog}
+  \label{fig:koszt:PSO2CUDAlog}
 \end{minipage}
 \end{figure}
 
@@ -634,15 +657,15 @@ Mogłoby się wydawać, że skoro dostępna jest moc obliczeniowa karty graficzn
 \centering
 \begin{minipage}[b]{\dimexpr.5\textwidth-1em}
   \centering
-  \includegraphics[width=1\linewidth]{grafiki2/CUDA/CUDA_MC_T2_koszt_linear.png}
+  \includegraphics[width=1\linewidth]{grafiki2/CUDA/CUDA_MonteCarlo_Task2_koszt_linear.png}
   \captionof{figure}{Wartość funkcji kosztu dla zadania $2$ dla algorytmu Monte Carlo.}
-  \label{fig:pozycjeStartowe:MC2CUDA}
+  \label{fig:koszt:MC2CUDA}
 \end{minipage} \hfill
 \begin{minipage}[b]{\dimexpr.5\textwidth-1em}
   \centering
-  \includegraphics[width=1\linewidth]{grafiki2/CUDA/CUDA_MC_T2_koszt_log.png}
+  \includegraphics[width=1\linewidth]{grafiki2/CUDA/CUDA_MonteCarlo_Task2_koszt_log.png}
   \captionof{figure}{Wartość funkcji kosztu w skali logarytmicznej dla zadania $2$ dla algorytmu Monte Carlo.}
-  \label{fig:pozycjeStartowe:MC2CUDAlog}
+  \label{fig:koszt:MC2CUDAlog}
 \end{minipage}
 \end{figure}
 
