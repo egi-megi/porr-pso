@@ -371,7 +371,7 @@ W kolejnych podrozdziałach opisane zostaną rozwiązania bazujące na technolog
 
 \subsection{Rozwiązanie zadań dla różnych wymiarów $n$ w MPI} \label{sec:table:mpi}
 
-W tabeli \ref{tab:MPI:zad_1} przedstawione zostały pomiary czasu wykonywania zadania dla metody PSO oraz MPI w zadaniu $1$. W przypadku zadania o $n \ = \ 100$ wymiarach konieczne było obniżenie wymagania dot. kryterium stopu do wartości $0.1$.
+W tabeli \ref{tab:MPI:zad_1} przedstawione zostały pomiary czasu wykonywania programu dla metody PSO oraz Monte Carlo w zadaniu $1$. W przypadku zadania o $n \ = \ 100$ wymiarach konieczne było obniżenie wymagania dot. kryterium stopu do wartości $0.1$. Wyniki pomiarów czasu wykonywania programu dla dla zadania $2$. zebrano w tabeli  \ref{tab:MPI:zad_2}. Dla przypadków o wymiarach $n \ = \ 50$ oraz $n \ = \ 100$ nie udało się znaleźć ustawień optymalizatorów, które pozwoliłyby na rozwiązanie zadań w zadowalającym czasie. Problem ten pojawił się już w poprzedniej części raportu i może wskazywać na naturalne trudności obliczeniowe, które nie są związane z konkretną implementacją.
 
 \renewcommand{\arraystretch}{2}
 \begin{table}[t]
@@ -422,7 +422,13 @@ W tabeli \ref{tab:MPI:zad_1} przedstawione zostały pomiary czasu wykonywania za
 \end{table}
 
 \subsection{Rozwiązanie zadań dla różnych wymiarów $n$ w CUDA} \label{sec:table:cuda}
-W tabeli \ref{tab:CUDA} przedstawione zostały pomiary czasu wykonywania zadania dla metody PSO oraz MPI w zadaniu $1$. W przypadku zadania o $n \ = \ 100$ wymiarach konieczne było obniżenie wymagania dot. kryterium stopu do wartości $0.1$.
+W tabeli \ref{tab:CUDA} przedstawione zostały pomiary czasu wykonywania zadań $1$. i $2$. dla metody PSO oraz~Monte Carlo. W przypadku zadania o $n \ = \ 100$ wymiarach konieczne było obniżenie wymagania dot. kryterium stopu do wartości $0.1$. Podobnie jak w poprzednich badaniach, nie udało rozwiązać się wysokowymiarowych zadań optymalizacji funkcji Rosenbrocka.
+
+Wykorzystanie karty graficznej i sposób implementacji algorytmu pozwala na znaczne zwiększenie liczby symulowanych cząsteczek. Dzięki temu udało się rozwiązać testowy przypadek z zadania optymalizacji $1.$ dla $n \ = \ 200$ wymiarów. Do obliczeń wykorzystano rój o wielkości $1 \ 000 \ 000$ cząsteczek, a średni czas obliczeń dla takiego zestawu parametrów wyniósł $7.3 \ s$. Taka liczba cząsteczek byłaby niemożliwa do obsłużenia w rozsądnym czasie w implementacji na CPU.
+
+Możemy także porównać czasy działania programu z akceleracją GPU i innych wersji równoległych - na maszyny z pamięcią globalną oraz lokalną. Widoczne jest, że GPU sprawdza się w zadaniach z~dużą liczbą cząsteczek - dużą ilością danych do przetworzenia. Dla zadań o małej liczbie cząstek i~wymiarów zysk jest znikomy lub wersje programów na GPU działają gorzej niż ich odpowiedniki przeznaczone do obliczeń na CPU. Duża liczba cząsteczek pozwala lepiej ukryć opóźnienia w dostępie do pamięci na karcie graficznej i~zniwelować niską przepustowość magistrali.
+
+Mogłoby się wydawać, że skoro dostępna jest moc obliczeniowa karty graficznej i w konsekwencji przetwarzanie wektorowe, to najlepszą strategią optymalizacji z cząsteczkami jest użycie ich jak największej liczby. Pośrednie wyniki uzyskane podczas testów wskazywały, że może istnieć optymalna liczba lub zagęszczenie cząsteczek, powyżej której zbieżność algorytmów znacznie spada. Efekt ten widoczny był szczególnie w przypadku PSO, które powyżej pewnego zagęszczenia cząsteczek nie dawało lepszych rezultatów.
 
 \renewcommand{\arraystretch}{2}
 \begin{table}[t]
