@@ -26,6 +26,10 @@
 \usepackage[font=small,format=plain,labelfont=bf,up,textfont=it,up]{caption}
 \usepackage{BeamerColor}
 \usepackage{listings}
+\lstset{
+ breaklines        = true,
+ breakatwhitespace = false,
+}
 \usepackage{multirow}
 \usepackage{changepage}
 \usepackage{float}
@@ -125,14 +129,12 @@ getpid},
 {\Large \textbf{Optymalizacja: Metoda optymalizacji rojem cząstek (PSO) i poszukiwań losowych (Monte Carlo) -- MPI i CUDA}}
 \end{center}
 
-
 \section{Wstęp teoretyczny}
- 
-W ramach projektu zrealizowano wersję równoległą dla rzeczywistych i wirtualnych maszyn z~pamięcią lokalną opartą na przesyłaniu komunikatów (MPI) oraz wersję na karcie graficznej (CUDA)~dla algorytmów optymalizacji rojem cząstek (PSO) i poszukiwań losowych (Monte Carlo). W~obu przypadkach programy napisano w języku C++. Implementację przetestowano rozwiązując dwa zadania optymalizacji, w tym - standardową funkcję testową algorytmów optymalizacyjnych - funkcję Rosenbrocka. Opis algorytmu PSO i Monte Carlo został zrobiony w sprawozdaniu pierwszym. Dla~przypomnienia należy nadmienić, że metodę Monte Carlo trochę zmodyfikowano dodając niepełne wyżarzanie. Poniżej przytoczono ponownie wzory zadań do zoptymalizowania. Dalej, przedstawiono najważniejsze kody programów z opisem działania, tabelki z czasami szukania optymalnego położenia cząsteczki, wykresy przyspieszeń dla MPI oraz wykresy trajektorii. Na koniec prezentowane są wnioski płynące z~przeprowadzonych badań.
-
+ W ramach projektu zrealizowano wersję równoległą dla rzeczywistych i wirtualnych maszyn z~pamięcią lokalną opartą na przesyłaniu komunikatów (MPI) oraz wersję na karcie graficznej (CUDA)~dla algorytmów optymalizacji rojem cząstek (PSO) i poszukiwań losowych (Monte Carlo). W~obu przypadkach programy napisano w języku C++. Implementację przetestowano rozwiązując dwa zadania optymalizacji, w tym - standardową funkcję testową algorytmów optymalizacyjnych - funkcję Rosenbrocka. Opis algorytmu PSO i Monte Carlo został zrobiony w sprawozdaniu pierwszym. Dla~przypomnienia należy nadmienić, że metodę Monte Carlo trochę zmodyfikowano dodając niepełne wyżarzanie. Poniżej przytoczono ponownie wzory zadań do zoptymalizowania. Dalej, przedstawiono najważniejsze fragmenty kodów programów z opisem ich działania, tabelki z czasami szukania optymalnego położenia cząsteczki, wykresy przyspieszeń dla MPI oraz wykresy trajektorii. Na koniec prezentowane są~wnioski płynące z~przeprowadzonych badań.
 
 \section{Zadania optymalizacji}
 Zaimplementowane oprogramowanie było testowane poprzez rozwiązywanie następujących zadań optymalizacyjnych.
+
 \subsection{Zadanie 1}
 \begin{equation}
 \min_{x} \left(f_{1}\left(\vect{x}\right) = \frac{1}{40} \sum_{i=1}^{n}\left(x_{i}\right)^{2} + 1 - \prod_{i =1}^{n} \cos\left(\frac{x_{i}}{i}\right)\right)
@@ -152,7 +154,6 @@ gdzie minimum globalne $f_{\mathrm{min}} = 0$ w punkcie $\vect{x} = \vect{0}$.
 gdzie minimum globalne $f_{\mathrm{min}} = 0$ w punkcie $\vect{x} = \vect{1}$.
 
 \section{Sprzęt używany podczas testów} \label{sec:hardware}
-
 Testy przeprowadzono na komputerze, którego najistotniejsze parametry zapisano w tabeli \ref{tab:parametry}. Testy implementacji algorytmów na GPU przeprowadzono z wykorzystaniem karty graficznej \textit{NVIDIA GeFroce GTX 1660}, której niektóre parametry przedstawiono w tabeli \ref{tab:par_gpu}.
 
 \begin{table}[h]
@@ -174,99 +175,100 @@ OpenMP			  & 4.5							        \\ \hline
 \centering
 \begin{tabular}{|l|l|}
 \hline
-Karta graficzna          & NVIDIA GeFroce GTX 1660 \\ \hline
-Seria     & Turing                              \\ \hline
-Compute capability    & 7.5                             \\ \hline
-Ilość pamięci   & 6 GB 192-bit                                 \\ \hline
-Liczba rdzeni CUDA & 1280      \\ \hline
-Wydajność obliczeniowa			  & 5 TFLOPS						        \\ \hline
-Przepustowość pamięci			  & 192.1 GB/s						        \\ \hline
+Karta graficzna        			  & NVIDIA GeFroce GTX 1660 \\ \hline
+Seria     						  & Turing      		    \\ \hline
+Compute capability    			  & 7.5       				\\ \hline
+Ilość pamięci   				  & 6 GB 192-bit   	 	    \\ \hline
+Liczba rdzeni CUDA 				  & 1280    			     \\ \hline
+Wydajność obliczeniowa			  & 5 TFLOPS		         \\ \hline
+Przepustowość pamięci			  & 192.1 GB/s		         \\ \hline
 \end{tabular}
 \caption{Parametry karty graficznej.}
 \label{tab:par_gpu}
 \end{table}
 
-
 \section{Implementacja równoległa w MPI}
-
-W obydwu algorytmach zrównoleglenie polega na podziale liczby cząsteczek pomiędzy procesy. W~przypadku algorytmu Monte Carlo kolejne generacje cząsteczek mogą być obliczane niezależnie -- nie ma konieczności komunikowania się ze sobą procesów. W algorytmie optymalizacji rojem cząstek (PSO) taka komunikacja jest niezbędna. 
-
+W obydwu algorytmach zrównoleglenie polega na podziale liczby cząsteczek pomiędzy procesy. W~przypadku algorytmu Monte Carlo kolejne generacje cząsteczek mogą być obliczane niezależnie -- nie ma konieczności komunikowania się ze sobą procesów. W algorytmie optymalizacji rojem cząstek (PSO) taka komunikacja jest niezbędna i wpływa niekorzystnie na wydajność programu.
 
 \subsection{Implementacja PSO w MPI}
-
-Wszystkie cząsteczki podzielone są pomiędzy procesy. Każdy z procesów losuje wstępne położenie, a następnie oblicza kolejne położenia cząsteczek dla swoje grupy cząsteczek. Po wyliczeniu wstępnego położenia oraz nowej wartości funkcji kosztu wybierana jest najlepsza lokalna cząsteczka, czyli taka cząsteczka z całej grupy przydzielonej danemu procesowi, dla której funkcja kosztu jest najmniejsza. Położenie takiej cząsteczki przesyłane jest do ROOTa (\lstinline[style=mycpp]{MPI_Gather((void *) localBestPosition, dimensions, MPI_DOUBLE, (void *) receivedBestPositions, dimensions, MPI_DOUBLE, ROOT, MPI_COMM_WORLD)}), który to z otrzymanych położeń lokalnych cząsteczek wybiera najlepsze, pod względem minimalizowanej funkcji kosztu, położenie. Następnie sprawdza czy spełniony jest warunek stopu. W kolejnym kroku wysyła do pozostałych procesów informację o najlepszym położeniu (\lstinline[style=mycpp]{MPI_Bcast((void *) computedGlobalBestPosition, dimensions, MPI_DOUBLE, ROOT, MPI_COMM_WORLD)}) oraz informację czy spełniony jest warunek stopu. (\lstinline[style=mycpp]{MPI_Bcast((void *) &stop, 1, MPI_CXX_BOOL, ROOT, MPI_COMM_WORLD)}).
+Wszystkie cząsteczki podzielone są pomiędzy procesy. Każdy z procesów losuje wstępne położenie, a~następnie oblicza kolejne położenia cząsteczek dla swoje grupy cząsteczek. Po wyliczeniu wstępnego położenia oraz nowej wartości funkcji kosztu wybierana jest najlepsza lokalna cząsteczka, czyli taka cząsteczka z całej grupy przydzielonej danemu procesowi, dla której funkcja kosztu jest najmniejsza. Położenie takiej cząsteczki przesyłane jest do procesu \textit{ROOTa} (\lstinline[style=mycpp]{MPI_Gather((void *) localBestPosition, dimensions, MPI_DOUBLE, (void *) receivedBestPositions, dimensions, MPI_DOUBLE, ROOT, MPI_COMM_WORLD)}), który to z otrzymanych najlepszych położeń lokalnych cząsteczek wybiera najlepsze, pod względem minimalizowanej funkcji kosztu, globalne położenie. Następnie sprawdza czy spełniony jest warunek stopu. W kolejnym kroku wysyła do pozostałych procesów informację o najlepszym położeniu (\lstinline[style=mycpp]{MPI_Bcast((void *) computedGlobalBestPosition, dimensions, MPI_DOUBLE, ROOT, MPI_COMM_WORLD)}) oraz informację czy spełniony jest warunek stopu (\lstinline[style=mycpp]{MPI_Bcast((void *) &stop, 1, MPI_CXX_BOOL, ROOT, MPI_COMM_WORLD)}).
 
 \begin{lstlisting}[style=mycpp, label=code:pso_before, caption={Optymalizacja PSO w MPI.}]
-    
-        // Compute new positions (S)
-        for (psoParticle *ps : particles) {
-            ps->computePosition(&rand_engine);
-            ps->computeCostFunctionValue();
-            if (ps->getCostFunctionValue() < localBestParticle->getCostFunctionValue()) {
-                localBestParticle = ps;
-            }
-            if (doLog && dimensions >= 2) {
-                std::vector<double> tempPosition = ps->getPositionVector();
-                fprintf(logFile, "%d_%s_%lf_%lf_%lf\n", iteration, ps->getId().c_str(),
-                        tempPosition[0], tempPosition[1], ps->getCostFunctionValue());
-            }
-        }
-        double *localBestPosition = new double[dimensions];
-        for (int i = 0; i < dimensions; i++) {
-            localBestPosition[i] = localBestParticle->getPositionVector()[i];
-        }
-        // Compute new positions (E)*/
-
-        // Receive local best positions (S)
-        double *receivedBestPositions = NULL;
-        if (processRank == ROOT)
-            receivedBestPositions = new double[numberOfProcesses * dimensions];
-
-        MPI_Gather((void *) localBestPosition, dimensions, MPI_DOUBLE,
-                   (void *) receivedBestPositions, dimensions, MPI_DOUBLE,
-                   ROOT, MPI_COMM_WORLD);
-        // Receive local best positions (E)
-
-	// Compute cost for all received localBestPosition and compute computedGlobalBestPosition
-        if (processRank == ROOT) {
-            for (int i = 0; i < numberOfProcesses * dimensions; i = i + dimensions) {
-                std::vector<double> positionVectors(receivedBestPositions + i, receivedBestPositions + i + dimensions);
-                double cCost;
-                if ((cCost = config->computeCostFunctionValue(positionVectors)) < globalBestPosCost) {
-                    globalBestPosCost = cCost;
-                    std::copy_n(receivedBestPositions + i, dimensions, computedGlobalBestPosition);
-                }
-            }
-            
-            // Compute stop criterion
-            if (globalBestPosCost < stopCriterionValue)
-                stop = true;
-            for (int i = 0; i < dimensions; i++) {
-            }
-        }
-
-        // Broadcast global best position and stop condition
-        MPI_Bcast((void *) computedGlobalBestPosition, dimensions, MPI_DOUBLE, ROOT,
-                  MPI_COMM_WORLD);
-        MPI_Bcast((void *) &stop, 1, MPI_CXX_BOOL, ROOT,
-                  MPI_COMM_WORLD);
-        for (psoParticle *ps : particles) {
-            ps->globalBestPosition = computedGlobalBestPosition;
-        }
-
-        iteration++;
-
-        // Clean just to allocate again in next iteration
-        delete localBestPosition, receivedBestPositions;
-        MPI_Barrier(MPI_COMM_WORLD);
+// Compute new positions (S)
+for (psoParticle *ps : particles)
+{
+    ps->computePosition(&rand_engine);
+    ps->computeCostFunctionValue();
+    if (ps->getCostFunctionValue() < localBestParticle->getCostFunctionValue())
+    {
+        localBestParticle = ps;
     }
+    if (doLog && dimensions >= 2)
+    {
+        std::vector<double> tempPosition = ps->getPositionVector();
+        fprintf(logFile, "%d_%s_%lf_%lf_%lf\n", iteration, ps->getId().c_str(),
+                tempPosition[0], tempPosition[1], ps->getCostFunctionValue());
+    }
+}
+double *localBestPosition = new double[dimensions];
+for (int i = 0; i < dimensions; i++)
+{
+    localBestPosition[i] = localBestParticle->getPositionVector()[i];
+}
+// Compute new positions (E)*/
+
+// Receive local best positions (S)
+double *receivedBestPositions = NULL;
+if (processRank == ROOT)
+    receivedBestPositions = new double[numberOfProcesses * dimensions];
+
+MPI_Gather((void *)localBestPosition, dimensions, MPI_DOUBLE,
+           (void *)receivedBestPositions, dimensions, MPI_DOUBLE,
+           ROOT, MPI_COMM_WORLD);
+// Receive local best positions (E)
+
+// Compute cost for all received localBestPosition and compute computedGlobalBestPosition
+if (processRank == ROOT)
+{
+    for (int i = 0; i < numberOfProcesses * dimensions; i = i + dimensions)
+    {
+        std::vector<double> positionVectors(receivedBestPositions + i, receivedBestPositions + i + dimensions);
+        double cCost;
+        if ((cCost = config->computeCostFunctionValue(positionVectors)) < globalBestPosCost)
+        {
+            globalBestPosCost = cCost;
+            std::copy_n(receivedBestPositions + i, dimensions, computedGlobalBestPosition);
+        }
+    }
+
+    // Compute stop criterion
+    if (globalBestPosCost < stopCriterionValue)
+        stop = true;
+    for (int i = 0; i < dimensions; i++)
+    {
+    }
+}
+
+// Broadcast global best position and stop condition
+MPI_Bcast((void *)computedGlobalBestPosition, dimensions, MPI_DOUBLE, ROOT,
+          MPI_COMM_WORLD);
+MPI_Bcast((void *)&stop, 1, MPI_CXX_BOOL, ROOT,
+          MPI_COMM_WORLD);
+for (psoParticle *ps : particles)
+{
+    ps->globalBestPosition = computedGlobalBestPosition;
+}
+
+iteration++;
+
+// Clean just to allocate again in next iteration
+delete localBestPosition, receivedBestPositions;
+MPI_Barrier(MPI_COMM_WORLD);
+}
 \end{lstlisting}
 
-
 \subsection{Implementacja Monte Carlo w MPI}
-
-W metodzie Monte Carlo cząsteczki również podzielone są pomiędzy procesy. Ale ponieważ nie jest wybierana jedna globalna najlepsza cząsteczka, to nie muszą one się ze sobą w tym celu porozumiewać. W każdym procesie oddzielnie i dla każdej cząsteczki oddzielnie po wyliczeniu (wylosowaniu) kolejnego położenia sprawdzane jest niezależnie czy znaleziono juz dobre rozwiązanie. Jeśli tak, to w takim przypadku potrzebna jest komunikacja w celu zatrzymania pozostałych procesów (\lstinline[style=mycpp]{MPI_Recv(&stopMessage, 1, MPI_INT, settings->getRoot(), communicationType::STOP, MPI_COMM_WORLD, &stopMessageStatus)}). W trakcie wyznaczania nowych położeń cząsteczek sprawdzane jest czy komunikat o znalezieniu najlepszej \lstinline[style=mycpp]{BEST_SOLUTION} cząsteczki spełniającej warunek stopu przyszedł od jakiegokolwiek nadawcy ( \lstinline[style=mycpp]{MPI_Iprobe(MPI_ANY_SOURCE, communicationType::BEST_SOLUTION, MPI_COMM_WORLD, &solutionReceived, &solutionMessageStatus)}) i pobierany jest taki komunikat (\lstinline[style=mycpp]{MPI_Recv(potentialSolution, settings->getDimensions(), MPI_DOUBLE, solutionMessageStatus.MPI_SOURCE, communicationType::BEST_SOLUTION, MPI_COMM_WORLD, &solutionMessageStatus)}). W ten spośób odbierany jest równiez komunikat o skończeniu poszukiwań najlepszej cząsteczki (\lstinline[style=mycpp]{MPI_Recv(&stopMessage, 1, MPI_INT, settings->getRoot(), communicationType::STOP, MPI_COMM_WORLD, &stopMessageStatus)}). Natomiast wysyłane są komunikaty o spełnieniu warunku stopu (\lstinline[style=mycpp]{MPI_Send(&iteration, 1, MPI_INT, dest, communicationType::STOP, MPI_COMM_WORLD)}) oraz z położeniem cząsteczki, dla której wartość funkcji kosztu spełnia warunek stopu (\lstinline[style=mycpp]{MPI_Send(&localBestPosition[0], settings->getDimensions(), MPI_DOUBLE, settings->getRoot(), communicationType::BEST_SOLUTION, MPI_COMM_WORLD)}) do ROOTa.
-                    
+W metodzie Monte Carlo cząsteczki również podzielone są pomiędzy procesy, ale ponieważ nie jest wybierana jedna globalna najlepsza cząsteczka, to nie muszą one się ze sobą w tym celu porozumiewać. W każdym procesie i dla każdej cząsteczki oddzielnie po wyliczeniu (wylosowaniu) kolejnego położenia sprawdzane jest niezależnie czy znaleziono już dostatecznie dobre rozwiązanie. Jeśli tak, to~w~takim przypadku potrzebna jest komunikacja w celu zatrzymania pozostałych procesów (\lstinline[style=mycpp]{MPI_Recv(&stopMessage, 1, MPI_INT, settings->getRoot(), communicationType::STOP, MPI_COMM_WORLD, &stopMessageStatus)}). W trakcie wyznaczania nowych położeń cząsteczek sprawdzane jest czy komunikat o znalezieniu najlepszej \lstinline[style=mycpp]{BEST_SOLUTION} cząsteczki spełniającej warunek stopu przyszedł od jakiegokolwiek nadawcy ( \lstinline[style=mycpp]{MPI_Iprobe(MPI_ANY_SOURCE, communicationType::BEST_SOLUTION, MPI_COMM_WORLD, &solutionReceived, &solutionMessageStatus)}) i w razie konieczności jest on odbierany (\lstinline[style=mycpp]{MPI_Recv(potentialSolution, settings->getDimensions(), MPI_DOUBLE, solutionMessageStatus.MPI_SOURCE, communicationType::BEST_SOLUTION, MPI_COMM_WORLD, &solutionMessageStatus)}). W ten sposób odbierany jest również komunikat o~skończeniu poszukiwań najlepszej cząsteczki (\lstinline[style=mycpp]{MPI_Recv(&stopMessage, 1, MPI_INT, settings->getRoot(), communicationType::STOP, MPI_COMM_WORLD, &stopMessageStatus)}). Procesy wysyłają komunikaty o spełnieniu warunku stopu (\lstinline[style=mycpp]{MPI_Send(&iteration, 1, MPI_INT, dest, communicationType::STOP, MPI_COMM_WORLD)}) oraz z położeniem cząsteczki, dla której wartość funkcji kosztu spełnia warunek stopu (\lstinline[style=mycpp]{MPI_Send(&localBestPosition[0], settings->getDimensions(), MPI_DOUBLE, settings->getRoot(), communicationType::BEST_SOLUTION, MPI_COMM_WORLD)}) do \textit{ROOTa}.
 
 \begin{lstlisting}[style=mycpp, label=code:pso_before, caption={Schemat komunikacji MPI w metodzie Monte Carlo.}]
 while (!stop)
@@ -353,28 +355,26 @@ while (!stop)
     iteration++;
 }
 \end{lstlisting}
-        
-        
+             
 \section{Implementacja w CUDA}
+W implementacji algorytmów do obliczeń na kartach graficznych wykorzystano natywną bibliotekę CUDA w języku \textit{c++} oraz biblioteki wchodzące w jej skład: \textit{Thrust} do prostych operacji na wektorach w pamięci karty graficznej i \textit{cuRAND} do generowania pseudolosowych liczb w kernelach programu. Stwierdzono, że w implementowanych algorytmach, w ich podstawowej wersji, przeważają operacje na~pamięci w związku z czym jako wskaźnik optymalizacji zaproponowanego kodu przyjęto wykorzystaną dostępną przepustowość karty.
 
-W implementacji algorytmów do obliczeń na kartach graficznych wykorzystano natywną bibliotekę CUDA w języku \textit{c++} oraz biblioteki wchodzące w jej skład: \textit{Thrust} do prostych operacji na wektorach w pamięci karty graficznej i \textit{cuRAND} do generowania pseudolosowych liczb w kernelach programu. Stwierdzono, że w implementowanych algorytmach, w ich podstawowej wersji, przeważają operacje na pamięci w związku z czym jako wskaźnik optymalizacji zaproponowanego kodu przyjęto wykorzystaną dostępną przepustowość karty.
+Program testowano na karcie graficznej opisanej w sekcji \ref{sec:hardware}. Aby całkowicie wykorzystać możliwości obliczeniowe takiej karty, na każdą operację na pamięci jednostki obliczeniowe muszą wykonać $100$ 32-bitowych operacji zmiennoprzecinkowych. Nie jest to proste zadanie - szczególnie biorąc pod uwagę konieczność synchronizacji i uzgodnienia najlepszej cząsteczki w każdej generacji PSO. Korzystając z narzędzi do profilowania kodu CUDA udało się osiągnąć wykorzystanie pasma karty graficznej dla każdego z zaprogramowanych kerneli na poziomie $85 \ \%$, czyli dla używanej w testach karty osiągnąć stały transfer około $150$~GB/s danych.
 
-Program testowano na karcie graficznej opisanej w sekcji \ref{sec:hardware}. Aby całkowicie wykorzystać możliwości obliczeniowe takiej karty, na każdą operację na pamięci jednostki obliczeniowe muszą wykonać $100$ 32-bitowych operacji zmiennoprzecinkowych. Nie jest to proste zadanie - szczególnie biorąc pod uwagę konieczność synchronizacji i uzgodnienia najlepszej cząsteczki w każdej generacji PSO. Korzystając z narzędzi do profilowania kodu CUDA udało się osiągnąć wykorzystanie pasma karty graficznej dla każdej z zaprogramowanych kerneli na poziomie $85 \ \%$, czyli dla używanej w testach karty około $150$~GB/s.
-
-Przewidziano, że każdą cząsteczkę w symulacji reprezentować będzie jeden wątek. Wątki zaś zebrane są w bloki o wielkości będącymi potęgą liczby $2$. Wielkość bloku można modyfikować poprzez argumenty programu i dopasowywać do wielkości zadania. Jest to bardzo istotny parametr, ponieważ jego odpowiedni dobór pozwala skutecznie ukryć opóźnienia w dostępie do pamięci i zmaksymalizować wykorzystanie jednostek obliczeniowych karty. Na wykresie \ref{fig:blocksize} pokazano zależność czasu wykonywania programu (algorytm PSO, $100 \ 000$ cząsteczek, $n \ = \ 50$) od doboru rozmiaru bloku.
+Przewidziano, że każdą cząsteczkę w symulacji reprezentować będzie jeden wątek. Wątki zaś zebrane są w bloki o wielkości będącymi potęgą liczby $2$. Wielkość bloku można modyfikować poprzez argumenty programu i dopasowywać do wielkości zadania. Jest to bardzo istotny parametr, ponieważ jego odpowiedni dobór pozwala skutecznie ukryć opóźnienia w dostępie do pamięci i zmaksymalizować wykorzystanie jednostek obliczeniowych karty. Na wykresie \ref{fig:blocksize}. pokazano zależność czasu wykonywania programu (algorytm PSO, $100 \ 000$ cząsteczek, $n \ = \ 50$) od doboru rozmiaru bloku.
 
 \begin{figure}[H]
 \centering
-	\includegraphics[width=0.8\textwidth]{grafiki/blocksizeplot.pdf}{\caption{Zależność czasu wykonywania programu od wielkości bloku.}}
-		\label{fig:blocksize}
+	\includegraphics[width=0.8\textwidth]{grafiki/blocksizeplot.pdf}{\caption{Zależność czasu wykonywania programu od wielkości bloku.}\label{fig:blocksize}}
+	
 \end{figure}
 
-Aby zapobiec konfliktom jednoczesnego odczytywania poprzez kolejne wątki odległych miejsc pamięci karty graficznej, wybrano taką reprezentacje wektorów cząstek, która gwarantuje ciągłość pamięci podczas iterowania po danej współrzędnej wektorów kolejnych cząsteczek. Wymianę danych między pamięcią komputera, a pamięcią karty graficznej ograniczono do niezbędne minimum - w przypadku odczytywania danych z karty do hosta użyto alokacji pamięci typu \textit{pinned}.
+Aby zapobiec konfliktom jednoczesnego odczytywania poprzez kolejne wątki odległych miejsc pamięci karty graficznej, wybrano taką reprezentacje wektorów cząstek, która gwarantuje ciągłość pamięci podczas iterowania po danej współrzędnej wektorów kolejnych cząsteczek. Wymianę danych między pamięcią komputera, a pamięcią karty graficznej ograniczono do niezbędnego minimum - w przypadku odczytywania danych z karty do hosta użyto alokacji pamięci typu \textit{pinned}.
 
 Dla każdej z metod przygotowana została odpowiednia klasa zarządzająca cząsteczkami. W kolejnych podsekcjach pokazane zostaną przykładowe kernele wywoływane przez wspomniane  klasy zarządzające.
 
 \subsection{Optymalizacja rojem cząsteczek}
-Na listingu \ref{lst:cuda_pso} pokazano kernel odpowiadający za aktualizację pozycji cząsteczki. Najlepsza znana w całym roju pozycja ładowana jest do pamięci \lstinline[style=mycpp]{shared}, ponieważ dane te odczytują wszystkie wątki z danego bloku. Iteratory w petlach \lstinline[style=mycpp]{for} wskazują sposób ułożenia danych w pamięci urządzenia.
+Na listingu \ref{lst:cuda_pso} pokazano kernel odpowiadający za aktualizację pozycji cząsteczki. Najlepsza znana w całym roju pozycja ładowana jest do pamięci \lstinline[style=mycpp]{shared}, ponieważ dane te odczytują wszystkie wątki z bloku. Iteratory w pętlach \lstinline[style=mycpp]{for} wskazują sposób ułożenia danych w pamięci urządzenia.
 
 \begin{lstlisting}[style=mycpp, label=lst:cuda_pso, caption={Kernel CUDA aktualizujący cząsteczkę PSO.}]
 template<int maxDimension>
@@ -476,16 +476,15 @@ __global__ void _McParticles_McParticles_initialize(float* d_positions, float* d
 \end{lstlisting}
 
 \section{Rozwiązanie zadań dla różnych wymiarów $n$}
+Zarówno dla programu implementującego algorytm PSO i Monte Carlo z wykorzystaniem Open MPI jak i dla programu działającego we współpracy z kartą graficzną przeprowadzono szereg testów optymalizacyjnych dla zadań $1$. oraz $2$ o różnych wymiarach ($n$): $2, \ 10, \ 20, \ 50, \ 100$. Aby~ograniczyć czas wykonywania programów do czasu poniżej $10$ minut, koniczne było w niektórych przypadkach indywidualne dopasowanie parametrów optymalizacji. W ogólności jednak, dla zadań obliczanych metodą PSO użyto następujących parametrów $\omega = \chi$, $c_1 = \chi c_1^*$, $c_2 = \chi c_2^*$, gdzie $\chi = 0.72984$, $c_1^* = c_2^* = 2.05$. W przypadku zadań działających na zasadzie metody Monte Carlo przyjęto ustawienia $\sigma = 0.1$, $T = 0.01$. 
 
-Zarówno dla programu implementującego algorytmu PSO i Monte Carlo z wykorzystaniem Open MPI jak i dla programu działającego we współpracy z kartą graficzną przeprowadzono szereg testów optymalizacyjnych dla zadań $1$. oraz $2$ o różnych wymiarach ($n$): $2, \ 10, \ 20, \ 50, \ 100$. Aby~ograniczyć czas wykonywania programów do czasu poniżej $10$ minut, koniczne było w niektórych przypadkach indywidualne dopasowanie parametrów optymalizacji. W ogólności jednak, dla zadań obliczanych metodą PSO użyto następujących parametrów $\omega = \chi$, $c_1 = \chi c_1^*$, $c_2 = \chi c_2^*$, gdzie $\chi = 0.72984$, $c_1^* = c_2^* = 2.05$. W przypadku zadań działających na zasadzie metody Monte Carlo przyjęto ustawienia $\sigma = 0.1$, $T = 0.01$. W większości testów przyjęta warunek stopu akademickiego na poziomie $0.01$.
-
-Sprawdzono działanie programów w optymalizacji problemów o różnej złożoności, tj. każde z zadań zostało rozwiązane dla następujących wymiarów  Aby~ograniczyć działanie programu do czasów wykonywania poniżej $10$ minut, konieczne było w przypadkach o większym wymiarze problemu zwiększenie liczby cząsteczek. Każdy test został wykonany co najmniej $10$ razy, aby móc uśrednić stochastyczny charakter algorytmów. W każdym przypadku położenia początkowe cząsteczek losowano z rozkładu jednostajnego na części obszaru dozwolonego ograniczonego nierównościami kostkowymi $-40 \leq \vect{x}_i \leq -30 \quad i = 1, \ ..., \ n$. Jako kryterium stopu przyjęto kryterium typu akademickiego z warunkiem zakończenia obliczeń $f\left(\vect{x}^{*}\right) < 0.01$.
+W każdym przypadku położenia początkowe cząsteczek losowano z rozkładu jednostajnego na części obszaru dozwolonego ograniczonego nierównościami kostkowymi $-40 \leq \vect{x}_i \leq -30 \quad i = 1, \ ..., \ n$. Jako kryterium stopu przyjęto kryterium typu akademickiego z warunkiem zakończenia obliczeń $f\left(\vect{x}^{*}\right) < 0.01$.
 
 W kolejnych podrozdziałach opisane zostaną rozwiązania bazujące na technologii MPI (sekcja \ref{sec:table:mpi}) oraz CUDA (sekcja \ref{sec:table:cuda}).
 
 \subsection{Rozwiązanie zadań dla różnych wymiarów $n$ w MPI} \label{sec:table:mpi}
 
-W tabeli \ref{tab:MPI:zad_1} przedstawione zostały pomiary czasu wykonywania programu dla metody PSO oraz Monte Carlo w zadaniu $1$. W przypadku zadania o $n \ = \ 100$ wymiarach konieczne było obniżenie wymagania dot. kryterium stopu do wartości $0.1$. Wyniki pomiarów czasu wykonywania programu dla dla zadania $2$. zebrano w tabeli  \ref{tab:MPI:zad_2}. Dla przypadków o wymiarach $n \ = \ 50$ oraz $n \ = \ 100$ nie udało się znaleźć ustawień optymalizatorów, które pozwoliłyby na rozwiązanie zadań w zadowalającym czasie. Problem ten pojawił się już w poprzedniej części raportu i może wskazywać na naturalne trudności obliczeniowe, które nie są związane z konkretną implementacją.
+W tabeli \ref{tab:MPI:zad_1} przedstawione zostały pomiary czasu wykonywania programu dla metody PSO oraz Monte Carlo w zadaniu $1$. W przypadku zadania o $n \ = \ 100$ wymiarach konieczne było obniżenie wymagania dot. kryterium stopu do wartości $0.1$. Wyniki pomiarów czasu wykonywania programu dla zadania $2$. zebrano w tabeli  \ref{tab:MPI:zad_2}. Dla przypadków o wymiarach $n \ = \ 50$ oraz $n \ = \ 100$ nie udało się znaleźć ustawień optymalizatorów, które pozwoliłyby na rozwiązanie zadań w zadowalającym czasie. Problem ten pojawił się już w poprzedniej części raportu i może wskazywać na naturalne trudności obliczeniowe, które nie są związane z konkretną implementacją.
 
 \renewcommand{\arraystretch}{2}
 \begin{table}[H]
@@ -560,7 +559,7 @@ Wykorzystanie karty graficznej i sposób implementacji algorytmu pozwala na znac
 
 Możemy także porównać czasy działania programu z akceleracją GPU i innych wersji równoległych - na maszyny z pamięcią globalną oraz lokalną. Widoczne jest, że GPU sprawdza się w zadaniach z~dużą liczbą cząsteczek - dużą ilością danych do przetworzenia. Dla zadań o małej liczbie cząstek i~wymiarów zysk jest znikomy lub wersje programów na GPU działają gorzej niż ich odpowiedniki przeznaczone do obliczeń na CPU. Duża liczba cząsteczek pozwala lepiej ukryć opóźnienia w dostępie do pamięci na karcie graficznej i~zniwelować niską przepustowość magistrali.
 
-Mogłoby się wydawać, że skoro dostępna jest moc obliczeniowa karty graficznej i w konsekwencji przetwarzanie wektorowe, to najlepszą strategią optymalizacji z cząsteczkami jest użycie ich jak największej liczby. Pośrednie wyniki uzyskane podczas testów wskazywały, że może istnieć optymalna liczba lub zagęszczenie cząsteczek, powyżej której zbieżność algorytmów znacznie spada. Efekt ten widoczny był szczególnie w przypadku PSO, które powyżej pewnego zagęszczenia cząsteczek nie dawało lepszych rezultatów.
+Mogłoby się wydawać, że skoro dostępna jest moc obliczeniowa karty graficznej i w konsekwencji przetwarzanie wektorowe, to najlepszą strategią optymalizacji z cząsteczkami jest użycie ich jak największej liczby. Pośrednie wyniki uzyskane podczas testów wskazywały, że może istnieć optymalna liczba lub zagęszczenie cząsteczek, powyżej której tempo zbieżności algorytmów nie zmienia się lub spada. Efekt ten widoczny był szczególnie w przypadku PSO, które powyżej pewnego zagęszczenia cząsteczek nie dawało lepszych rezultatów.
 
 \renewcommand{\arraystretch}{2}
 \begin{table}[H]
@@ -588,12 +587,10 @@ Mogłoby się wydawać, że skoro dostępna jest moc obliczeniowa karty graficzn
 \end{table}
 
 \section{Porównanie trajektorii dla $n = 2$}
-
 W tej części sprawozdania przedstawiono wyniki uzyskane dla cząsteczki dwuwymiarowej dla obu zadań i dla obu algorytmów. W pierwszej części (\ref{sec:MPI2}) pokazano wyniki otrzymane dla MPI, a w drugiej  (\ref{sec:CUDA2})-- dla CUDA.
 
 \subsection{Porównanie trajektorii dla $n = 2$ w MPI} \label{sec:MPI2}
-
-Na wykresach \ref{fig:koszt:PSO1} - \ref{fig:koszt:MC2} zostało pokazane jak zmienia się koszt w kolejnych iteracjach dla najlepszych położeń. Z wykresów tych widać, że wartość kosztu osiąga okolice 0 po podobnej liczbie iteracji dla obu algorytmów. Różnica jest minimalna w przypadku zadania 1 -- na rzecz algorytmu PSO, a w przypadku zadania 2 -- na rzecz algorytmu Monte Carlo.
+Na wykresach \ref{fig:koszt:PSO1} - \ref{fig:koszt:MC2} zostało pokazane jak zmienia się koszt w kolejnych iteracjach dla najlepszych położeń. Z wykresów tych widać, że wartość kosztu osiąga okolice $0$ po podobnej liczbie iteracji dla obu algorytmów. Różnica jest minimalna i bardziej korzystna w przypadku zadania $1$. -- na rzecz algorytmu PSO, a w przypadku zadania 2 -- na rzecz algorytmu Monte Carlo.
 
 %Funkcja kosztu - zad1 i zad2 dla najlepszej cząsteczki
 \begin{figure}[H]
@@ -628,8 +625,7 @@ Na wykresach \ref{fig:koszt:PSO1} - \ref{fig:koszt:MC2} zostało pokazane jak zm
 \end{minipage}
 \end{figure}
 
-Na kolejnych wykresach \ref{fig:pozycjeStartowe:PSO1} - \ref{fig:pozycjeStartowe:MC2} przedstawiono pozycje startowe przykładowych cząsteczek, a na kolejnych wykresach   \ref{fig:pozycjeStartowe:PSO1} - \ref{fig:pozycjeStartowe:MC2} trajektorię ruchu przykładowych cząsteczek. Widać, ze dzięki zmodyfikowaniu algorytmu Monte Carlo cząsteczka dąży prosto do celu, czyli do jak najmniejszego kosztu. To może powodować wpadnięcie w lokalne minimum bez możliwości wyjścia z niego, choc podjęta przez nas modyfikacja może czasem temu zapobiec. Natomiast losowanie odpowiednio dużej liczby cząsteczek powoduje, ze znajdowana jest taka, która ląduje w minimum globalnym. Natomiast dla algorytmu PSO widać, że cząsteczki potrafią wyjść poza lokalne minima i dlatego ich trajektoria jest mniej prosta.
-
+Na kolejnych wykresach \ref{fig:pozycjeStartowe:PSO1} - \ref{fig:pozycjeStartowe:MC2} przedstawiono pozycje startowe przykładowych cząsteczek, a na~wykresach   \ref{fig:pozycjeStartowe:PSO1} - \ref{fig:pozycjeStartowe:MC2} trajektorię ruchu przykładowych cząsteczek. Widać, ze dzięki zmodyfikowaniu algorytmu Monte Carlo cząsteczka dąży prosto do celu, czyli do jak najmniejszego kosztu. To może powodować wpadnięcie w lokalne minimum bez możliwości wyjścia z niego, choć zaimplementowana przez nas modyfikacja może czasem temu zapobiec. Natomiast losowanie odpowiednio dużej liczby cząsteczek powoduje, ze znajdowana jest taka, która ląduje w minimum globalnym. Dla algorytmu PSO widać, że cząsteczki potrafią wyjść poza lokalne minima i dlatego ich trajektoria jest bardziej złożona.
 
 %Pozycje startowe
 \begin{figure}[H]
@@ -806,7 +802,7 @@ Na wykresach \ref{fig:koszt:PSO1CUDAlog}-\label{fig:koszt:MC2CUDAlog} przedstawi
 \end{figure}
 
 \section{Wnioski} 
-
+\subsubsection*{Implementacja MPI}
 Z wykresów \ref{fig:przysp:zad1}. i \ref{fig:przysp:zad2} widać, że przyspieszenie algorytmu PSO jest znacznie mniejsze niż przyspieszenie Monte Carlo. Prawdopodobnie wynika to z faktu, iż w implementacji PSO dużo czasu poświęcane jest komunikacji międzyprocesowej - w każdej iteracji procesy muszą sprawdzić czy znana jest nowa globalna najlepsza wartość. Metoda Monte Carlo nie używa komunikacji w trakcie obliczeń - wiadomości wysyłane są jedynie po znalezieniu zadowalającego rozwiązania przez jeden z procesów.
 
 Warto także zwrócić uwagę, że niskie przyspieszenie PSO może także wynikać z względnie małej liczby cząstek. Do rozwiązania zadania $2$. dla $n \ = \ 20$ wymiarów użyto $10^{4}$ cząsteczek - znacznie więcej niż w pozostałych przypadkach. Ilość danych do przetworzenia związana z liczbą cząsteczek spowodowała rozmycie udziału komunikacji i w efekcie doprowadziła do większego przyspieszenia.
@@ -815,6 +811,7 @@ Kolejnym wnioskiem z przeprowadzonych badań jest to, że zmodyfikowany algorytm
 
 W równoległych procesach w MPI każdy proces zdąża zrobić różną liczbę iteracji z powodu opóźnień związanych z komunikacją (wykresy \ref{fig:trajektoriaWybrana:MC1} - \ref{fig:trajektoriaWybrana:MC2}).
 
+\subsubsection*{Implementacja CUDA}
 Przy obliczeniach w CUDA zdecydowanie szybciej wyznacza się cząsteczkę spełniającą warunek stopu dla algorytmu PSO niż dla algorytmu Monte Carlo.
 \end{document}
 
