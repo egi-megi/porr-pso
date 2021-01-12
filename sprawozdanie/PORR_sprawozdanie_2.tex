@@ -604,7 +604,7 @@ Na wykresach \ref{fig:koszt:PSO1} - \ref{fig:koszt:MC2} zostało pokazane jak zm
 \end{minipage}
 \end{figure}
 
-Na kolejnych wykresach \ref{fig:pozycjeStartowe:PSO1} - \ref{fig:pozycjeStartowe:MC2} przedstawiono pozycje startowe przykładowych cząsteczek, a na kolejnych wykresach   \ref{fig:pozycjeStartowe:PSO1} - \ref{fig:pozycjeStartowe:MC2} trajektorię ruchu przykładowych cząsteczek.
+Na kolejnych wykresach \ref{fig:pozycjeStartowe:PSO1} - \ref{fig:pozycjeStartowe:MC2} przedstawiono pozycje startowe przykładowych cząsteczek, a na kolejnych wykresach   \ref{fig:pozycjeStartowe:PSO1} - \ref{fig:pozycjeStartowe:MC2} trajektorię ruchu przykładowych cząsteczek. Widać, ze dzięki zmodyfikowaniu algorytmu Monte Carlo cząsteczka dąży prosto do celu, czyli do jak najmniejszego kosztu. To może powodować wpadnięcie w lokalne minimum bez możliwości wyjścia z niego, choc podjęta przez nas modyfikacja może czasem temu zapobiec. Natomiast losowanie odpowiednio dużej liczby cząsteczek powoduje, ze znajdowana jest taka, która ląduje w minimum globalnym. Natomiast dla algorytmu PSO widać, że cząsteczki potrafią wyjść poza lokalne minima i dlatego ich trajektoria jest mniej prosta.
 
 
 %Pozycje startowe
@@ -711,6 +711,8 @@ Na kolejnych wykresach \ref{fig:pozycjeStartowe:PSO1} - \ref{fig:pozycjeStartowe
 
 
 \subsection{Porównanie kosztu w CUDA} \label{sec:CUDA2}
+
+Na wykresach \ref{fig:koszt:PSO1CUDAlog}-\label{fig:koszt:MC2CUDAlog} przedstawiono koszt dla obu zadań dla obu algorytmów. Dodatkowo koszt ten narysowano w skali logarytmicznej na wykresach \ref{fig:koszt:MC1CUDAlog}, \ref{fig:koszt:MC1CUDAlog}, \ref{fig:koszt:PSO2CUDAlog} i \ref{fig:koszt:MC2CUDAlog}.
 
 %Funkcja kosztu - zad1 i zad2
 \begin{figure}[H]
