@@ -361,7 +361,13 @@ W implementacji algorytmów do obliczeń na kartach graficznych wykorzystano nat
 
 Program testowano na karcie graficznej opisanej w sekcji \ref{sec:hardware}. Aby całkowicie wykorzystać możliwości obliczeniowe takiej karty, na każdą operację na pamięci jednostki obliczeniowe muszą wykonać $100$ 32-bitowych operacji zmiennoprzecinkowych. Nie jest to proste zadanie - szczególnie biorąc pod uwagę konieczność synchronizacji i uzgodnienia najlepszej cząsteczki w każdej generacji PSO. Korzystając z narzędzi do profilowania kodu CUDA udało się osiągnąć wykorzystanie pasma karty graficznej dla każdej z zaprogramowanych kerneli na poziomie $85 \ \%$, czyli dla używanej w testach karty około $150$~GB/s.
 
-Przewidziano, że każdą cząsteczkę w symulacji reprezentować będzie jeden wątek. Wątki zaś zebrane są w bloki o wielkości będącymi potęgą liczby $2$. Wielkość bloku można modyfikować poprzez argumenty programu i dopasowywać do wielkości zadania. Jest to bardzo istotny parametr, ponieważ jego odpowiedni dobór pozwala skutecznie ukryć opóźnienia w dostępie do pamięci i zmaksymalizować wykorzystanie jednostek obliczeniowych karty.
+Przewidziano, że każdą cząsteczkę w symulacji reprezentować będzie jeden wątek. Wątki zaś zebrane są w bloki o wielkości będącymi potęgą liczby $2$. Wielkość bloku można modyfikować poprzez argumenty programu i dopasowywać do wielkości zadania. Jest to bardzo istotny parametr, ponieważ jego odpowiedni dobór pozwala skutecznie ukryć opóźnienia w dostępie do pamięci i zmaksymalizować wykorzystanie jednostek obliczeniowych karty. Na wykresie \ref{fig:blocksize} pokazano zależność czasu wykonywania programu (algorytm PSO, $100 \ 000$ cząsteczek, $n \ = \ 50$) od doboru rozmiaru bloku.
+
+\begin{figure}[H]
+\centering
+	\includegraphics[width=0.8\textwidth]{grafiki2/blocksizeplot.pdf}{\caption{Zależność czasu wykonywania programu od wielkości bloku.}}
+		\label{fig:blocksize}
+\end{figure}
 
 Aby zapobiec konfliktom jednoczesnego odczytywania poprzez kolejne wątki odległych miejsc pamięci karty graficznej, wybrano taką reprezentacje wektorów cząstek, która gwarantuje ciągłość pamięci podczas iterowania po danej współrzędnej wektorów kolejnych cząsteczek. Wymianę danych między pamięcią komputera, a pamięcią karty graficznej ograniczono do niezbędne minimum - w przypadku odczytywania danych z karty do hosta użyto alokacji pamięci typu \textit{pinned}.
 
