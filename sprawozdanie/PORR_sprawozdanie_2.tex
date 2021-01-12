@@ -529,9 +529,7 @@ W tabeli \ref{tab:MPI:zad_1} przedstawione zostały pomiary czasu wykonywania pr
 \label{tab:MPI:zad_2}
 \end{table}
 
-Na rys. \ref{fig:przysp:zad1}. i \ref{fig:przysp:zad2} pokazano przyspieszenia implementacji równoległej PSO i Monte Carlo z wykorzystaniem MPI. Widoczne jest, że przyspieszenie algorytmu PSO jest znacznie mniejsze niż przyspieszenie Monte Carlo. Prawdopodobnie wynika to z faktu, iż w implementacji PSO dużo czasu poświęcane jest komunikacji międzyprocesowej - w każdej iteracji procesy muszą sprawdzić czy znana jest nowa globalna najlepsza wartość. Metoda Monte Carlo nie używa komunikacji w trakcie obliczeń - wiadomości wysyłane są jedynie po znalezieniu zadowalającego rozwiązania przez jeden z procesów.
-
-Warto także zwrócić uwagę, że niskie przyspieszenie PSO może także wynikać z względnie małej liczby cząstek. Do rozwiązania zadania $2$. dla $n \ = \ 20$ wymiarów użyto $10^{4}$ cząsteczek - znacznie więcej niż w pozostałych przypadkach. Ilość danych do przetworzenia związana z liczbą cząsteczek spowodowała rozmycie udziału komunikacji i w efekcie doprowadziła do większego przyspieszenia.
+Na rys. \ref{fig:przysp:zad1}. i \ref{fig:przysp:zad2} pokazano przyspieszenia implementacji równoległej PSO i Monte Carlo z wykorzystaniem MPI. 
 
 \begin{figure}[H]
 \centering
@@ -694,6 +692,8 @@ Na kolejnych wykresach \ref{fig:pozycjeStartowe:PSO1} - \ref{fig:pozycjeStartowe
 \end{minipage}
 \end{figure}
 
+Na wykresach  \ref{fig:trajektoriaWybrana:MC1} - \ref{fig:trajektoriaWybrana:MC2} przedstawiono liczbę iteracji wykonaną w różnych procesach. Różnice w liczbie iteracji wykonanych w każdym z procesów wynikają z tego, że procesy te nie startują jednocześnie, ponieważ mają opóźnienia spowodowane koniecznością komunikacji.
+
 % Liczba iteracji dla każdego z procesów
 
 \begin{figure}[H]
@@ -801,6 +801,18 @@ Na wykresach \ref{fig:koszt:PSO1CUDAlog}-\label{fig:koszt:MC2CUDAlog} przedstawi
 
 
 \section{Wnioski} 
+
+Z wykresów \ref{fig:przysp:zad1}. i \ref{fig:przysp:zad2} widać, że przyspieszenie algorytmu PSO jest znacznie mniejsze niż przyspieszenie Monte Carlo. Prawdopodobnie wynika to z faktu, iż w implementacji PSO dużo czasu poświęcane jest komunikacji międzyprocesowej - w każdej iteracji procesy muszą sprawdzić czy znana jest nowa globalna najlepsza wartość. Metoda Monte Carlo nie używa komunikacji w trakcie obliczeń - wiadomości wysyłane są jedynie po znalezieniu zadowalającego rozwiązania przez jeden z procesów.
+
+Warto także zwrócić uwagę, że niskie przyspieszenie PSO może także wynikać z względnie małej liczby cząstek. Do rozwiązania zadania $2$. dla $n \ = \ 20$ wymiarów użyto $10^{4}$ cząsteczek - znacznie więcej niż w pozostałych przypadkach. Ilość danych do przetworzenia związana z liczbą cząsteczek spowodowała rozmycie udziału komunikacji i w efekcie doprowadziła do większego przyspieszenia.
+
+Kolejnym wnioskiem z przeprowadzonych badań jest to, że zmodyfikowany algorytm Monte Carlo prowadzi cząsteczkę prosto do najmniejszego kosztu bez "skakania" po całej przestrzeni kosztu, co powinno się dziać, jeśli zastosowalibyśmy czysty algorytm Monte Carlo. To powoduje niemożność wyjścia z lokalnych minimów. Ale ten problem jest rozwiązany dostatecznie dużą liczbą cząsteczek.
+
+W równoległych procesach w MPI każdy proces zdąża zrobić różną liczbę iteracji z powodu opóźnień związanych z komunikacją (wykresy \ref{fig:trajektoriaWybrana:MC1} - \ref{fig:trajektoriaWybrana:MC2}).
+
+Przy obliczeniach w CUDA zdecydowanie szybciej wyznacza się cząsteczkę spełniającą warunek stopu dla algorytmu PSO niż dla algorytmu Monte Carlo.
+
+
 
 
 
