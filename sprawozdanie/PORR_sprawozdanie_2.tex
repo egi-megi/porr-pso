@@ -252,103 +252,91 @@ Wszystkie cząsteczki podzielone są pomiędzy procesy. Każdy z procesów losuj
 W metodzie Monte Carlo cząsteczki również podzielone są pomiędzy procesy. Ale ponieważ nie jest wybierana jedna globalna najlepsza cząsteczka, to nie muszą one się ze sobą w tym celu porozumiewać. W każdym procesie oddzielnie i dla każdej cząsteczki oddzielnie po wyliczeniu (wylosowaniu) kolejnego położenia sprawdzane jest niezależnie czy znaleziono juz dobre rozwiązanie. Jeśli tak, to w takim przypadku potrzebna jest komunikacja w celu zatrzymania pozostałych procesów (\lstinline[style=mycpp]{MPI_Recv(&stopMessage, 1, MPI_INT, settings->getRoot(), communicationType::STOP, MPI_COMM_WORLD, &stopMessageStatus)}). W trakcie wyznaczania nowych położeń cząsteczek sprawdzane jest czy komunikat o znalezieniu najlepszej \lstinline[style=mycpp]{BEST_SOLUTION} cząsteczki spełniającej warunek stopu przyszedł od jakiegokolwiek nadawcy ( \lstinline[style=mycpp]{MPI_Iprobe(MPI_ANY_SOURCE, communicationType::BEST_SOLUTION, MPI_COMM_WORLD, &solutionReceived, &solutionMessageStatus)}) i pobierany jest taki komunikat (\lstinline[style=mycpp]{MPI_Recv(potentialSolution, settings->getDimensions(), MPI_DOUBLE, solutionMessageStatus.MPI_SOURCE, communicationType::BEST_SOLUTION, MPI_COMM_WORLD, &solutionMessageStatus)}). W ten spośób odbierany jest równiez komunikat o skończeniu poszukiwań najlepszej cząsteczki (\lstinline[style=mycpp]{MPI_Recv(&stopMessage, 1, MPI_INT, settings->getRoot(), communicationType::STOP, MPI_COMM_WORLD, &stopMessageStatus)}). Natomiast wysyłane są komunikaty o spełnieniu warunku stopu (\lstinline[style=mycpp]{MPI_Send(&iteration, 1, MPI_INT, dest, communicationType::STOP, MPI_COMM_WORLD)}) oraz z położeniem cząsteczki, dla której wartość funkcji kosztu spełnia warunek stopu (\lstinline[style=mycpp]{MPI_Send(&localBestPosition[0], settings->getDimensions(), MPI_DOUBLE, settings->getRoot(), communicationType::BEST_SOLUTION, MPI_COMM_WORLD)}) do ROOTa.
                     
 
-\begin{lstlisting}[style=mycpp, label=code:pso_before, caption={Optymalizacja MonteCarlo w MPI.}]
+\begin{lstlisting}[style=mycpp, label=code:pso_before, caption={Schemat komunikacji MPI w metodzie Monte Carlo.}]
+while (!stop)
+{
+    // Compute new positions (S)
+    double *localBestPosition = new double[dimensions];
+    localBestPosition[0] = processRank;
+    for (int i = 1; i < dimensions; i++)
+        localBestPosition[i] = 0;
+    // Compute new positions (E)
 
-        // Compute new positions
-        for(int i = 0; i < settings->getLocalParticlesNumber(); i++)
+    if (processRank == ROOT)
+    {
+        // If stop criterion is met, save it and compare with other potential solutions
+        if (false)
         {
-            particles[i]->updatePosition();
-            if(particles[i]->getCost() < localBestParticle->getCost())
-                localBestParticle = particles[i];
-
-            if(settings->getLogger() && settings->getDimensions() == 2)
-            {
-                std::vector<double> tempPosition = particles[i]->getPosition();
-                fprintf(logFile, "%d_%d_%lf_%lf_%lf\n", iteration, particles[i]->getId(),
-                    tempPosition[0], tempPosition[1], particles[i]->getCost());
-            }
+            stop = true;
+            solutionSource = processRank;
         }
 
-        if(settings->getProcessRank() == settings->getRoot())
+        MPI_Status solutionMessageStatus;
+        int solutionReceived = 0;
+        MPI_Iprobe(MPI_ANY_SOURCE, communicationType::BEST_SOLUTION, MPI_COMM_WORLD, &solutionReceived,
+                   &solutionMessageStatus);
+        std::vector<bool> ranksFoundSolution(numberOfProcesses, false);
+        double *potentialSolution = new double[dimensions];
+        while (solutionReceived)
         {
-            // If stop criterion is met, save it and compare other with potential solutions
-            localBestPosition = localBestParticle->getPosition();
-            if(localBestParticle->getCost() < settings->getStopCriterion())
+            stop = true;
+            ranksFoundSolution[solutionMessageStatus.MPI_SOURCE] = true;
+            MPI_Recv(potentialSolution, dimensions, MPI_DOUBLE, solutionMessageStatus.MPI_SOURCE,
+                     communicationType::BEST_SOLUTION, MPI_COMM_WORLD, &solutionMessageStatus);
+            // If potential best solution is better, save it
+            if (true)
             {
-                stop = true;
-                solutionSource = settings->getProcessRank();
+                solutionSource = solutionMessageStatus.MPI_SOURCE;
             }
 
-            MPI_Status solutionMessageStatus;
-            int solutionReceived = 0;
-            MPI_Iprobe(MPI_ANY_SOURCE, communicationType::BEST_SOLUTION, MPI_COMM_WORLD, &solutionReceived,
-                &solutionMessageStatus);
-            std::vector<bool> ranksWhoFoundSolution(settings->getNumberOfProcesses(), false);
-            double *potentialSolution = new double[settings->getDimensions()];
-            while(solutionReceived)
-            {
-                stop = true;
-                ranksWhoFoundSolution[solutionMessageStatus.MPI_SOURCE] = true;
-                MPI_Recv(potentialSolution, settings->getDimensions(), MPI_DOUBLE, solutionMessageStatus.MPI_SOURCE,
-                    communicationType::BEST_SOLUTION, MPI_COMM_WORLD, &solutionMessageStatus);
-
-                // If received best solution is better, save it
-                std::vector<double> receivedBestPosition(potentialSolution, potentialSolution + settings->getDimensions());
-                if(settings->getTask()->computeCost(receivedBestPosition)
-                    < settings->getTask()->computeCost(localBestPosition))
-                {
-                    solutionSource = solutionMessageStatus.MPI_SOURCE;
-                    localBestPosition = receivedBestPosition;
-                }
-
-                // Check for more received solutions
-                solutionReceived = 0;
-                MPI_Iprobe(MPI_ANY_SOURCE, communicationType::BEST_SOLUTION, MPI_COMM_WORLD, &solutionReceived,
-                    &solutionMessageStatus);
-            }
-
-            // If any soltuion is found, send a proper message and join processes
-            if(stop)
-            {
-                for(int dest = 1; dest < settings->getNumberOfProcesses(); dest++)
-                {
-                    if(ranksWhoFoundSolution[dest])
-                        continue;
-                    // Content of the message doesn't matter
-                    MPI_Send(&iteration, 1, MPI_INT, dest, communicationType::STOP, MPI_COMM_WORLD);
-                }
-                delete potentialSolution;
-            }
+            // Check for more received solutions
+            solutionReceived = 0;
+            MPI_Iprobe(MPI_ANY_SOURCE, communicationType::BEST_SOLUTION, MPI_COMM_WORLD,
+                       &solutionReceived, &solutionMessageStatus);
         }
-        else
+
+        // If any solution is found, send a proper message and join processes
+        if (stop)
         {
-            // If stop criterion is met, send the best solution to the root
-            if(localBestParticle->getCost() < settings->getStopCriterion())
+            for (int dest = 1; dest < numberOfProcesses; dest++)
             {
-                stop = true;
-                solutionSource = settings->getProcessRank();
-                localBestPosition = localBestParticle->getPosition();
-
-                MPI_Send(&localBestPosition[0], settings->getDimensions(), MPI_DOUBLE, settings->getRoot(),
-                    communicationType::BEST_SOLUTION, MPI_COMM_WORLD);
+                if (ranksFoundSolution[dest])
+                    continue;
+                // Content of the message doesn't matter
+                MPI_Send(&iteration, 1, MPI_INT, dest, communicationType::STOP, MPI_COMM_WORLD);
             }
-
-            // Check if solution is already found by other process
-            MPI_Status stopMessageStatus;
-            int stopReceived;
-            MPI_Iprobe(settings->getRoot(), communicationType::STOP, MPI_COMM_WORLD, &stopReceived,
-                &stopMessageStatus);
-            if (stopReceived)
-            {
-                stop = true;
-                int stopMessage;
-                MPI_Recv(&stopMessage, 1, MPI_INT, settings->getRoot(), communicationType::STOP,
-                    MPI_COMM_WORLD, &stopMessageStatus);
-            }
+            delete localBestPosition, potentialSolution;
+            break;
         }
-        
-        iteration++;
-        \end{lstlisting}
+    }
+    else
+    {
+        // If stop criterion is met, send the best solution to the root
+        if (processRank == 1 && iteration == 1000)
+        {
+            MPI_Send(localBestPosition, dimensions, MPI_DOUBLE, ROOT, communicationType::BEST_SOLUTION,
+                     MPI_COMM_WORLD);
+            delete localBestPosition;
+            break;
+        }
+
+        // Check if solution is already found
+        MPI_Status stopMessageStatus;
+        int stopReceived = 0;
+        MPI_Iprobe(ROOT, communicationType::STOP, MPI_COMM_WORLD, &stopReceived, &stopMessageStatus);
+        if (stopReceived)
+        {
+            int stopMessage;
+            MPI_Recv(&stopMessage, 1, MPI_INT, ROOT, communicationType::STOP, MPI_COMM_WORLD,
+                     &stopMessageStatus);
+            delete localBestPosition;
+            break;
+        }
+    }
+
+    iteration++;
+}
+\end{lstlisting}
         
         
  \section{Implementacja w CUDA}
@@ -360,6 +348,30 @@ W metodzie Monte Carlo cząsteczki również podzielone są pomiędzy procesy. A
 \section{Rozwiązanie zadań dla różnych wymiarów $n$}
 
 \subsection{Rozwiązanie zadań dla różnych wymiarów $n$ w MPI}
+
+\renewcommand{\arraystretch}{2}
+\begin{table}[t]
+\scriptsize
+\begin{adjustwidth}{-1.76cm}{}
+\centering
+\begin{tabular}{|c|c|c|l|l|l|l|l|l|l|l|l|l|}
+\hline
+\multicolumn{3}{|c|}{Wymiar}                                      & \multicolumn{2}{c|}{2}                             & \multicolumn{2}{c|}{10}                            & \multicolumn{2}{c|}{20}                            & \multicolumn{2}{c|}{50}                            & \multicolumn{2}{c|}{100}                           \\ \hline
+\multicolumn{3}{|c|}{Algorytm}                                    & \multicolumn{1}{c|}{PSO} & \multicolumn{1}{c|}{MC} & \multicolumn{1}{c|}{PSO} & \multicolumn{1}{c|}{MC} & \multicolumn{1}{c|}{PSO} & \multicolumn{1}{c|}{MC} & \multicolumn{1}{c|}{PSO} & \multicolumn{1}{c|}{MC} & \multicolumn{1}{c|}{PSO} & \multicolumn{1}{c|}{MC} \\ \hline
+\multicolumn{3}{|c|}{Liczba cząsteczek}                           & $10^{2}$                 & $10^{2}$                & $10^{2}$                 & $10^{2}$                & $10^{3}$                 & $10^{3}$                & $10^{3}$                 & $10^{3}$                & $10^{3}$                 & $10^{3}$                \\ \hline
+\multirow{8}{*}{Czas} & \multirow{4}{*}{Sekwencyjnie} & Średnia   & $2.3 \ 10^{-4}$          & $1.1 \ 10^{-3}$         & $2.4 \ 10^{-3}$          & $2.9 \ 10^{-1}$         & $2.9 \ 10^{-2}$          & $1.1 \ 10^{0}$          & $1.5 \ 10^{2}$           & $3.1 \ 10^{1}$          & $4.9 \ 10^{2}$           & $8.6 \ 10^{1}$          \\ \cline{3-13} 
+                      &                               & Minimum   & $1.9 \ 10^{-4}$          & $3.1 \ 10^{-4}$         & $2.8 \ 10^{-3}$          & $2.2 \ 10^{-1}$         & $2.6 \ 10^{-2}$          & $9.5 \ 10^{-1}$         & $8.3 \ 10^{1}$           & $2.8 \ 10^{1}$          & $2.3 \ 10^{2}$           & $8.0 \ 10^{1}$          \\ \cline{3-13} 
+                      &                               & Maksimum  & $5.0 \ 10^{-4}$          & $1.6 \ 10^{-3}$         & $3.1 \ 10^{-3}$          & $3.5 \ 10^{-1}$         & $3.1 \ 10^{-2}$          & $1.2 \ 10^{0}$          & $2.4 \ 10^{2}$           & $3.3 \ 10^{1}$          & $7.4 \ 10^{2}$           & $9.3 \ 10^{1}$          \\ \cline{3-13} 
+                      &                               & Wariancja & $6.6 \ 10^{-9}$          & $2.0 \ 10^{-7}$         & $4.6 \ 10^{-8}$          & $1.4 \ 10^{-3}$         & $1.1 \ 10^{-6}$          & $2.4 \ 10^{-3}$         & $2.2 \ 10^{3}$           & $1.8 \ 10^{0}$          & $2.2 \ 10^{2}$           & $1.6 \ 10^{1}$          \\ \cline{2-13} 
+                      & \multirow{4}{*}{Równolegle}   & Średnia   & $7.7 \ 10^{-2}$          &                         & $5.9 \ 10^{-1}$          &                         & $3.5 \ 10^{-1}$          &                         & $3.6 \ 10^{0}$           &                         &                          &                         \\ \cline{3-13} 
+                      &                               & Minimum   & $1.8 \ 10^{-3}$          &                         & $7.4 \ 10^{-2}$          &                         & $2.3 \ 10^{-1}$          &                         & $2.6 \ 10^{0}$           &                         &                          &                         \\ \cline{3-13} 
+                      &                               & Maksimum  & $2.5 \ 10^{0}$           &                         & $2.2 \ 10^{0}$           &                         & $7.0 \ 10^{-1}$          &                         & $5.6 \ 10^{0}$           &                         &                          &                         \\ \cline{3-13} 
+                      &                               & Wariancja & $1.7 \ 10^{-1}$          &                         & $2.3 \ 10^{-1}$          &                         & $8 \ 10^{-3}$            &                         & $4.1 \ 10^{-1}$          &                         &                          &                         \\ \hline
+\end{tabular}
+\end{adjustwidth}
+\caption{Rozwiązania zadania $1$. dla różnych wymiarów $n$ i ustawień (OpenMPI).}
+\label{tab:MPI:zad_1}
+\end{table}
 
 \subsection{Rozwiązanie zadań dla różnych wymiarów $n$ w CUDA}
 

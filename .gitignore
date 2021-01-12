@@ -16,7 +16,6 @@ build
 
 plots/*
 logs/*
-*.png
 
 sprawozdanie/logs/*
 *.pdf
