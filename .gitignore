@@ -17,11 +17,10 @@ build
 plots/*
 logs/*
 
-sprawozdanie/logs/*
+sprawozdanie/sprawozdanie_*/logs/*
 *.pdf
+*.png
 
-!/sprawozdanie/grafiki/*.pdf
-!/sprawozdanie/grafiki/Wykresy2d/*.png
-
-!/sprawozdanie/grafiki2/*.pdf
+!/sprawozdanie/sprawozdanie_*/grafiki/*.pdf
+!/sprawozdanie/sprawozdanie_*/grafiki/*/*.png
 
