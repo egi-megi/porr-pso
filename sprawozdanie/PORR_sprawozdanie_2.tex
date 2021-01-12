@@ -151,7 +151,7 @@ gdzie minimum globalne $f_{\mathrm{min}} = 0$ w punkcie $\vect{x} = \vect{0}$.
 \end{equation}
 gdzie minimum globalne $f_{\mathrm{min}} = 0$ w punkcie $\vect{x} = \vect{1}$.
 
-\section{Sprzęt używany podczas testów} 
+\section{Sprzęt używany podczas testów} \label{sec:hardware}
 
 Testy przeprowadzono na komputerze, którego najistotniejsze parametry zapisano w tabeli \ref{tab:parametry}. Testy implementacji algorytmów na GPU przeprowadzono z wykorzystaniem karty graficznej \textit{NVIDIA GeFroce GTX 1660}, której niektóre parametry przedstawiono w tabeli \ref{tab:par_gpu}.
 
@@ -183,7 +183,7 @@ Wydajność obliczeniowa			  & 5 TFLOPS						        \\ \hline
 Przepustowość pamięci			  & 192.1 GB/s						        \\ \hline
 \end{tabular}
 \caption{Parametry karty graficznej.}
-\label{tab:par-gpu}
+\label{tab:par_gpu}
 \end{table}
 
 
@@ -357,9 +357,117 @@ while (!stop)
         
 \section{Implementacja w CUDA}
 
-\subsection{Implementacja PSO w CUDA}
+W implementacji algorytmów do obliczeń na kartach graficznych wykorzystano natywną bibliotekę CUDA w języku \textit{c++} oraz biblioteki wchodzące w jej skład: \textit{Thrust} do prostych operacji na wektorach w pamięci karty graficznej i \textit{cuRAND} do generowania pseudolosowych liczb w kernelach programu. Stwierdzono, że w implementowanych algorytmach, w ich podstawowej wersji, przeważają operacje na pamięci w związku z czym jako wskaźnik optymalizacji zaproponowanego kodu przyjęto wykorzystaną dostępną przepustowość karty.
 
-\subsection{Implementacja Monte Carlo w CUDA}
+Program testowano na karcie graficznej opisanej w sekcji \ref{sec:hardware}. Aby całkowicie wykorzystać możliwości obliczeniowe takiej karty, na każdą operację na pamięci jednostki obliczeniowe muszą wykonać $100$ 32-bitowych operacji zmiennoprzecinkowych. Nie jest to proste zadanie - szczególnie biorąc pod uwagę konieczność synchronizacji i uzgodnienia najlepszej cząsteczki w każdej generacji PSO. Korzystając z narzędzi do profilowania kodu CUDA udało się osiągnąć wykorzystanie pasma karty graficznej dla każdej z zaprogramowanych kerneli na poziomie $85 \ \%$, czyli dla używanej w testach karty około $150$~GB/s.
+
+Przewidziano, że każdą cząsteczkę w symulacji reprezentować będzie jeden wątek. Wątki zaś zebrane są w bloki o wielkości będącymi potęgą liczby $2$. Wielkość bloku można modyfikować poprzez argumenty programu i dopasowywać do wielkości zadania. Jest to bardzo istotny parametr, ponieważ jego odpowiedni dobór pozwala skutecznie ukryć opóźnienia w dostępie do pamięci i zmaksymalizować wykorzystanie jednostek obliczeniowych karty.
+
+Aby zapobiec konfliktom jednoczesnego odczytywania poprzez kolejne wątki odległych miejsc pamięci karty graficznej, wybrano taką reprezentacje wektorów cząstek, która gwarantuje ciągłość pamięci podczas iterowania po danej współrzędnej wektorów kolejnych cząsteczek. Wymianę danych między pamięcią komputera, a pamięcią karty graficznej ograniczono do niezbędne minimum - w przypadku odczytywania danych z karty do hosta użyto alokacji pamięci typu \textit{pinned}.
+
+Dla każdej z metod przygotowana została odpowiednia klasa zarządzająca cząsteczkami. W kolejnych podsekcjach pokazane zostaną przykładowe kernele wywoływane przez wspomniane  klasy zarządzające.
+
+\subsection{Optymalizacja rojem cząsteczek}
+Na listingu \ref{lst:cuda_pso} pokazano kernel odpowiadający za aktualizację pozycji cząsteczki. Najlepsza znana w całym roju pozycja ładowana jest do pamięci \lstinline[style=mycpp]{shared}, ponieważ dane te odczytują wszystkie wątki z danego bloku. Iteratory w petlach \lstinline[style=mycpp]{for} wskazują sposób ułożenia danych w pamięci urządzenia.
+
+\begin{lstlisting}[style=mycpp, label=lst:cuda_pso, caption={Kernel CUDA aktualizujący cząsteczkę PSO.}]
+template<int maxDimension>
+__global__ void _PsoParticles_updatePositions(float* d_positions, float* d_velocities, float* d_gBestPosition,
+	float* d_lBestPositions, curandState* d_prngStates)
+{
+	int particleId = threadIdx.x + blockIdx.x * blockDim.x;
+	if (particleId >= d_particlesNumber)
+		return;
+	curandState prngLocalState = d_prngStates[particleId];
+
+	__shared__ float gBestPosition[maxDimension];
+	for (int i = threadIdx.x; i < d_dimensions; i += blockDim.x)
+		gBestPosition[i] = d_gBestPosition[i];
+	__syncthreads();
+
+	float randLocal = curand_uniform(&prngLocalState);
+	float randGlobal = curand_uniform(&prngLocalState);
+	d_prngStates[particleId] = prngLocalState;
+
+	float newVelocity[maxDimension];
+	float newPosition[maxDimension];
+
+	float k = 1;
+	for (int coordIdx = particleId, i = 0; coordIdx < d_particlesNumber * d_dimensions;
+		coordIdx += d_particlesNumber, i++)
+	{
+		newVelocity[i] = d_psoConstants.w * d_velocities[coordIdx] +
+			d_psoConstants.speedLocal * randLocal * (d_lBestPositions[coordIdx] - d_positions[coordIdx]) +
+			d_psoConstants.speedGlobal * randGlobal * (gBestPosition[i] - d_positions[coordIdx]);
+		newPosition[i] = d_positions[coordIdx] + newVelocity[i];
+
+		// Compute k normalizing coefficient
+	}
+
+	for (int coordIdx = particleId, i = 0; coordIdx < d_particlesNumber * d_dimensions;
+		coordIdx += d_particlesNumber, i++)
+	{
+		d_positions[coordIdx] += k * newVelocity[i];
+		d_velocities[coordIdx] = k * newVelocity[i];
+	}
+}
+\end{lstlisting}
+
+\section{Monte Carlo}
+Na listingu \ref{lst:cuda_mc} pokazano kernel odpowiadający za aktualizację pozycji cząsteczki typu Monte Carlo. Kernel losuje przemieszczenie cząsteczki, a następnie normalizuje długość wektora przemieszczenia tak, aby cząsteczka nie wyszła poza dozwolony obszar. Na koniec podejmowana jest decyzja o przemieszczeniu cząsteczki lub też rezygnacji z ruchu.
+
+\begin{lstlisting}[style=mycpp, label=lst:cuda_mc, caption={Kernel CUDA aktualizujący cząsteczkę Monte Carlo.}]
+template<int taskId, int maxDimension>
+__global__ void _McParticles_McParticles_initialize(float* d_positions, float* d_costs,
+	curandState* d_prngStates)
+{
+	int particleId = threadIdx.x + blockIdx.x * blockDim.x;
+	if (particleId >= d_particlesNumber)
+		return;
+	curandState prngLocalState = d_prngStates[particleId];
+
+	float deltaPosition[maxDimension];
+	float newPosition[maxDimension];
+
+	float k = 1;
+	for (int coordIdx = particleId, i = 0; coordIdx < d_particlesNumber * d_dimensions;
+		coordIdx += d_particlesNumber, i++)
+	{
+		deltaPosition[i] = (-1 + 2 * curand_uniform(&prngLocalState)) * d_mcConstants.sigma;
+		newPosition[i] = d_positions[coordIdx] + deltaPosition[i];
+
+		// Compute k normalizing coefficient
+	}
+	for (int coordIdx = particleId, i = 0; coordIdx < d_particlesNumber * d_dimensions;
+		coordIdx += d_particlesNumber, i++)
+		newPosition[i] = d_positions[coordIdx] + k * deltaPosition[i];
+
+	float newCost;
+	if(taskId == 1)
+		newCost = _PsoParticles_computeCosts_Task1(newPosition);
+	else if(taskId == 2)
+		newCost = _PsoParticles_computeCosts_Task2(newPosition);
+
+	float currentCost = d_costs[particleId];
+	if (newCost < currentCost)
+	{
+		d_costs[particleId] = newCost;
+		for (int coordIdx = particleId, i = 0; coordIdx < d_particlesNumber * d_dimensions;
+			coordIdx += d_particlesNumber, i++)
+			d_positions[coordIdx] = newPosition[i];
+	}
+	else
+	{
+		float rand = curand_uniform(&prngLocalState);
+		float threshold = __expf(-(newCost - currentCost) / d_mcConstants.T);
+		if (rand < threshold)
+		{
+			// Save new cost and position analogically
+		}
+	}
+	d_prngStates[particleId] = prngLocalState;
+}
+\end{lstlisting}
 
 \section{Rozwiązanie zadań dla różnych wymiarów $n$}
 
