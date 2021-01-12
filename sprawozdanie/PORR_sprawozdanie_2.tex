@@ -401,7 +401,7 @@ __global__ void _PsoParticles_updatePositions(float* d_positions, float* d_veloc
 			d_psoConstants.speedGlobal * randGlobal * (gBestPosition[i] - d_positions[coordIdx]);
 		newPosition[i] = d_positions[coordIdx] + newVelocity[i];
 
-		// Compute k normalizing coefficient 
+		// Compute k normalizing coefficient
 	}
 
 	for (int coordIdx = particleId, i = 0; coordIdx < d_particlesNumber * d_dimensions;
@@ -413,7 +413,7 @@ __global__ void _PsoParticles_updatePositions(float* d_positions, float* d_veloc
 }
 \end{lstlisting}
 
-\section{Monte Carlo}
+\subsection{Monte Carlo}
 Na listingu \ref{lst:cuda_mc} pokazano kernel odpowiadający za aktualizację pozycji cząsteczki typu Monte Carlo. Kernel losuje przemieszczenie cząsteczki, a następnie normalizuje długość wektora przemieszczenia tak, aby cząsteczka nie wyszła poza dozwolony obszar. Na koniec podejmowana jest decyzja o przemieszczeniu cząsteczki lub też rezygnacji z ruchu.
 
 \begin{lstlisting}[style=mycpp, label=lst:cuda_mc, caption={Kernel CUDA aktualizujący cząsteczkę Monte Carlo.}]
@@ -436,7 +436,7 @@ __global__ void _McParticles_McParticles_initialize(float* d_positions, float* d
 		deltaPosition[i] = (-1 + 2 * curand_uniform(&prngLocalState)) * d_mcConstants.sigma;
 		newPosition[i] = d_positions[coordIdx] + deltaPosition[i];
 
-		// Compute k normalizing coefficient 
+		// Compute k normalizing coefficient
 	}
 	for (int coordIdx = particleId, i = 0; coordIdx < d_particlesNumber * d_dimensions;
 		coordIdx += d_particlesNumber, i++)
@@ -482,7 +482,7 @@ W kolejnych podrozdziałach opisane zostaną rozwiązania bazujące na technolog
 W tabeli \ref{tab:MPI:zad_1} przedstawione zostały pomiary czasu wykonywania programu dla metody PSO oraz Monte Carlo w zadaniu $1$. W przypadku zadania o $n \ = \ 100$ wymiarach konieczne było obniżenie wymagania dot. kryterium stopu do wartości $0.1$. Wyniki pomiarów czasu wykonywania programu dla dla zadania $2$. zebrano w tabeli  \ref{tab:MPI:zad_2}. Dla przypadków o wymiarach $n \ = \ 50$ oraz $n \ = \ 100$ nie udało się znaleźć ustawień optymalizatorów, które pozwoliłyby na rozwiązanie zadań w zadowalającym czasie. Problem ten pojawił się już w poprzedniej części raportu i może wskazywać na naturalne trudności obliczeniowe, które nie są związane z konkretną implementacją.
 
 \renewcommand{\arraystretch}{2}
-\begin{table}[t]
+\begin{table}[H]
 \scriptsize
 \begin{adjustwidth}{-1.76cm}{}
 \centering
@@ -491,11 +491,11 @@ W tabeli \ref{tab:MPI:zad_1} przedstawione zostały pomiary czasu wykonywania pr
 \multicolumn{3}{|c|}{Wymiar}                                      & \multicolumn{2}{c|}{2}                             & \multicolumn{2}{c|}{10}                            & \multicolumn{2}{c|}{20}                            & \multicolumn{2}{c|}{50}                            & \multicolumn{2}{c|}{100}                           \\ \hline
 \multicolumn{3}{|c|}{Algorytm}                                    & \multicolumn{1}{c|}{PSO} & \multicolumn{1}{c|}{MC} & \multicolumn{1}{c|}{PSO} & \multicolumn{1}{c|}{MC} & \multicolumn{1}{c|}{PSO} & \multicolumn{1}{c|}{MC} & \multicolumn{1}{c|}{PSO} & \multicolumn{1}{c|}{MC} & \multicolumn{1}{c|}{PSO} & \multicolumn{1}{c|}{MC} \\ \hline
 \multicolumn{3}{|c|}{Liczba cząsteczek}                           & $10^{2}$                 & $10^{2}$                & $10^{2}$                 & $10^{2}$                & $10^{3}$                 & $10^{3}$                & $10^{3}$                 & $10^{3}$                & $10^{3}$                 & $10^{3}$                \\ \hline
-\multirow{8}{*}{Czas} & \multirow{4}{*}{Sekwencyjnie} & Średnia   & $7.7 \ 10^{-3}$          & $6.6 \ 10^{-3}$         & $9.9 \ 10^{-2}$          & $2.5 \ 10^{-1}$         & $7.4 \ 10^{-1}$          & $6.6 \ 10^{0}$          & $5.6 \ 10^{0}$           & $4.3 \ 10^{1}$          & $8.5 \ 10^{1}$           & $7.9 \ 10^{1}$          \\ \cline{3-13} 
-                      &                               & Minimum   & $3.0 \ 10^{-3}$          & $3.2 \ 10^{-3}$         & $6.3 \ 10^{-2}$          & $2.1 \ 10^{-1}$         & $4.8 \ 10^{-1}$          & $6.0 \ 10^{0}$          & $3.9 \ 10^{0}$           & $3.6 \ 10^{1}$          & $3.3 \ 10^{1}$           & $7.8 \ 10^{1}$          \\ \cline{3-13} 
-                      &                               & Maksimum  & $2.0 \ 10^{-3}$          & $1.2 \ 10^{-2}$         & $1.6 \ 10^{-1}$          & $2.8  \ 10^{-1}$        & $8.9 \ 10^{-1}$          & $7.4 \ 10^{0}$          & $5.4 \ 10^{0}$           & $4.9 \ 10^{1}$          & $1.3 \ 10^{1}$           & $8.0 \ 10^{1}$          \\ \cline{3-13} 
-                      &                               & Wariancja & $1.7 \ 10^{-5}$          & $7.9 \ 10^{-6}$         & $7.5 \ 10^{-4}$          & $3.3 \ 10^{-4}$         & $8.9 \ 10^{-3}$          & $1.4 \ 10^{-1}$         & $1.8 \ 10^{-1}$          & $1.8 \ 10^{1}$          & $5.9 \ 10^{2}$           & $8.9 \ 10^{-1}$         \\ \cline{2-13} 
-                      & \multirow{4}{*}{Równolegle}   & Średnia   & $7.7 \ 10^{-2}$          & $1.2 \ 10^{-3}$         & $5.9 \ 10^{-1}$          & $4.9 \ 10^{-2}$         & $3.5 \ 10^{-1}$          & $1.2 \ 10^{0}$          & $3.6 \ 10^{0}$           & $8.0 \ 10^{0}$          & $5.1 \ 10^{1}$           & $1.4 \ 10^{1}$          \\ \cline{3-13} 
+\multirow{8}{*}{Czas} & \multirow{4}{*}{Sekwencyjnie} & Średnia   & $7.7 \ 10^{-2}$          & $6.6 \ 10^{-3}$         & $9.9 \ 10^{-2}$          & $2.5 \ 10^{-1}$         & $7.4 \ 10^{-1}$          & $6.6 \ 10^{0}$          & $5.6 \ 10^{0}$           & $4.3 \ 10^{1}$          & $8.5 \ 10^{1}$           & $7.9 \ 10^{1}$          \\ \cline{3-13} 
+                      &                               & Minimum   & $3.0 \ 10^{-2}$          & $3.2 \ 10^{-3}$         & $6.3 \ 10^{-2}$          & $2.1 \ 10^{-1}$         & $4.8 \ 10^{-1}$          & $6.0 \ 10^{0}$          & $3.9 \ 10^{0}$           & $3.6 \ 10^{1}$          & $3.3 \ 10^{1}$           & $7.8 \ 10^{1}$          \\ \cline{3-13} 
+                      &                               & Maksimum  & $2.0 \ 10^{-1}$          & $1.2 \ 10^{-2}$         & $1.6 \ 10^{-1}$          & $2.8  \ 10^{-1}$        & $8.9 \ 10^{-1}$          & $7.4 \ 10^{0}$          & $5.4 \ 10^{0}$           & $4.9 \ 10^{1}$          & $1.3 \ 10^{1}$           & $8.0 \ 10^{1}$          \\ \cline{3-13} 
+                      &                               & Wariancja & $1.7 \ 10^{-3}$          & $7.9 \ 10^{-6}$         & $7.5 \ 10^{-4}$          & $3.3 \ 10^{-4}$         & $8.9 \ 10^{-3}$          & $1.4 \ 10^{-1}$         & $1.8 \ 10^{-1}$          & $1.8 \ 10^{1}$          & $5.9 \ 10^{2}$           & $8.9 \ 10^{-1}$         \\ \cline{2-13} 
+                      & \multirow{4}{*}{Równolegle}   & Średnia   & $4.7 \ 10^{-2}$          & $1.2 \ 10^{-3}$         & $4.9 \ 10^{-1}$          & $4.9 \ 10^{-2}$         & $3.5 \ 10^{-1}$          & $1.2 \ 10^{0}$          & $3.6 \ 10^{0}$           & $8.0 \ 10^{0}$          & $5.1 \ 10^{1}$           & $1.4 \ 10^{1}$          \\ \cline{3-13} 
                       &                               & Minimum   & $1.8 \ 10^{-3}$          & $5.3 \ 10^{-5}$         & $7.4 \ 10^{-2}$          & $3.7 \ 10^{-2}$         & $2.3 \ 10^{-1}$          & $1.0 \ 10^{0}$          & $2.6 \ 10^{0}$           & $6.1 \ 10^{0}$          & $3.3 \ 10^{1}$           & $1.3 \ 10^{1}$          \\ \cline{3-13} 
                       &                               & Maksimum  & $2.5 \ 10^{0}$           & $5.5 \ 10^{-3}$         & $2.2 \ 10^{0}$           & $5.7 \ 10^{-2}$         & $7.0 \ 10^{-1}$          & $1.3 \ 10^{0}$          & $5.6 \ 10^{0}$           & $1.3 \ 10^{1}$          & $7.0 \ 10^{1}$           & $1.4 \ 10^{1}$          \\ \cline{3-13} 
                       &                               & Wariancja & $1.7 \ 10^{-1}$          & $8.7 \ 10^{-7}$         & $2.3 \ 10^{-1}$          & $2.2 \ 10^{-5}$         & $8 \ 10^{-3}$            & $4.1 \ 10^{-3}$         & $4.1 \ 10^{-1}$          & $3.5 \ 10^{0}$          & $1.2 \ 10^{2}$           & $7.9 \ 10^{-2}$         \\ \hline
@@ -506,7 +506,7 @@ W tabeli \ref{tab:MPI:zad_1} przedstawione zostały pomiary czasu wykonywania pr
 \end{table}
 
 \renewcommand{\arraystretch}{2}
-\begin{table}[t]
+\begin{table}[H]
 \scriptsize
 \begin{adjustwidth}{-1.76cm}{}
 \centering
@@ -529,6 +529,26 @@ W tabeli \ref{tab:MPI:zad_1} przedstawione zostały pomiary czasu wykonywania pr
 \label{tab:MPI:zad_2}
 \end{table}
 
+Na rys. \ref{fig:przysp:zad1}. i \ref{fig:przysp:zad2} pokazano przyspieszenia implementacji równoległej PSO i Monte Carlo z wykorzystaniem MPI. Widoczne jest, że przyspieszenie algorytmu PSO jest znacznie mniejsze niż przyspieszenie Monte Carlo. Prawdopodobnie wynika to z faktu, iż w implementacji PSO dużo czasu poświęcane jest komunikacji międzyprocesowej - w każdej iteracji procesy muszą sprawdzić czy znana jest nowa globalna najlepsza wartość. Metoda Monte Carlo nie używa komunikacji w trakcie obliczeń - wiadomości wysyłane są jedynie po znalezieniu zadowalającego rozwiązania przez jeden z procesów.
+
+Warto także zwrócić uwagę, że niskie przyspieszenie PSO może także wynikać z względnie małej liczby cząstek. Do rozwiązania zadania $2$. dla $n \ = \ 20$ wymiarów użyto $10^{4}$ cząsteczek - znacznie więcej niż w pozostałych przypadkach. Ilość danych do przetworzenia związana z liczbą cząsteczek spowodowała rozmycie udziału komunikacji i w efekcie doprowadziła do większego przyspieszenia.
+
+\begin{figure}[H]
+\centering
+\begin{minipage}[b]{\dimexpr.5\textwidth-1em}
+  \centering
+  \includegraphics[width=1\linewidth]{grafiki2/przyspieszenieMPI1.pdf}
+  \captionof{figure}{Średnie przyspieszenie implementacji równoległej podczas prób optymalizacji zad. $1$.}
+  \label{fig:przysp:zad1}
+\end{minipage} \hfill
+\begin{minipage}[b]{\dimexpr.5\textwidth-1em}
+  \centering
+  \includegraphics[width=1\linewidth]{grafiki2/przyspieszenieMPI2.pdf}
+  \captionof{figure}{Średnie przyspieszenie implementacji równoległej podczas prób optymalizacji zad. $2$.}
+  \label{fig:przysp:zad2}
+\end{minipage}
+\end{figure}
+
 \subsection{Rozwiązanie zadań dla różnych wymiarów $n$ w CUDA} \label{sec:table:cuda}
 W tabeli \ref{tab:CUDA} przedstawione zostały pomiary czasu wykonywania zadań $1$. i $2$. dla metody PSO oraz~Monte Carlo. W przypadku zadania o $n \ = \ 100$ wymiarach konieczne było obniżenie wymagania dot. kryterium stopu do wartości $0.1$. Podobnie jak w poprzednich badaniach, nie udało rozwiązać się wysokowymiarowych zadań optymalizacji funkcji Rosenbrocka.
 
@@ -539,7 +559,7 @@ Możemy także porównać czasy działania programu z akceleracją GPU i innych 
 Mogłoby się wydawać, że skoro dostępna jest moc obliczeniowa karty graficznej i w konsekwencji przetwarzanie wektorowe, to najlepszą strategią optymalizacji z cząsteczkami jest użycie ich jak największej liczby. Pośrednie wyniki uzyskane podczas testów wskazywały, że może istnieć optymalna liczba lub zagęszczenie cząsteczek, powyżej której zbieżność algorytmów znacznie spada. Efekt ten widoczny był szczególnie w przypadku PSO, które powyżej pewnego zagęszczenia cząsteczek nie dawało lepszych rezultatów.
 
 \renewcommand{\arraystretch}{2}
-\begin{table}[t]
+\begin{table}[H]
 \scriptsize
 \begin{adjustwidth}{-1.76cm}{}
 \centering
@@ -565,22 +585,26 @@ Mogłoby się wydawać, że skoro dostępna jest moc obliczeniowa karty graficzn
 
 \section{Porównanie trajektorii dla $n = 2$}
 
-\subsection{Porównanie trajektorii dla $n = 2$ w MPI}
+W tej części sprawozdania przedstawiono wyniki uzyskane dla cząsteczki dwuwymiarowej dla obu zadań i dla obu algorytmów. W pierwszej części (\ref{sec:MPI2}) pokazano wyniki otrzymane dla MPI, a w drugiej  (\ref{sec:CUDA2})-- dla CUDA.
 
-%Funkcja kosztu - zad1 i zad2
+\subsection{Porównanie trajektorii dla $n = 2$ w MPI} \label{sec:MPI2}
+
+Na wykresach \ref{fig:koszt:PSO1} - \ref{fig:koszt:MC2} zostało pokazane jak zmienia się koszt w kolejnych iteracjach dla najlepszych położeń. Z wykresów tych widać, że wartość kosztu osiąga okolice 0 po podobnej liczbie iteracji dla obu algorytmów. Różnica jest minimalna w przypadku zadania 1 -- na rzecz algorytmu PSO, a w przypadku zadania 2 -- na rzecz algorytmu Monte Carlo.
+
+%Funkcja kosztu - zad1 i zad2 dla najlepszej cząsteczki
 \begin{figure}[H]
 \centering
 \begin{minipage}[b]{\dimexpr.5\textwidth-1em}
   \centering
-  \includegraphics[width=1\linewidth]{grafiki2/MPI_PSO_T1/MPI_PSO_T1_koszt.png}
+  \includegraphics[width=1\linewidth]{grafiki2/MPI_PSO_T1/MPI_PSO_T1_koszt_monotoniczny.png}
   \captionof{figure}{Wartość funkcji kosztu dla zadania $1$ dla metody PSO.}
-  \label{fig:pozycjeStartowe:PSO1}
+  \label{fig:koszt:PSO1}
 \end{minipage} \hfill
 \begin{minipage}[b]{\dimexpr.5\textwidth-1em}
   \centering
   \includegraphics[width=1\linewidth]{grafiki2/MPI_MC_T1/MPI_MC_T1_koszt.png}
   \captionof{figure}{Wartość funkcji kosztu dla zadania $1$ dla metody Monte Carlo.}
-  \label{fig:pozycjeStartowe:MC1}
+  \label{fig:koszt:MC1}
 \end{minipage}
 \end{figure}
 
@@ -588,17 +612,20 @@ Mogłoby się wydawać, że skoro dostępna jest moc obliczeniowa karty graficzn
 \centering
 \begin{minipage}[b]{\dimexpr.5\textwidth-1em}
   \centering
-  \includegraphics[width=1\linewidth]{grafiki2/MPI_PSO_T2/MPI_PSO_T2_koszt.png}
+  \includegraphics[width=1\linewidth]{grafiki2/MPI_PSO_T2/MPI_PSO_T2_koszt_monotoniczny.png}
   \captionof{figure}{Wartość funkcji kosztu dla zadania $2$ dla metody PSO.}
-  \label{fig:pozycjeStartowe:PSO2}
+  \label{fig:koszt:PSO2}
 \end{minipage} \hfill
 \begin{minipage}[b]{\dimexpr.5\textwidth-1em}
   \centering
   \includegraphics[width=1\linewidth]{grafiki2/MPI_MC_T2/MPI_MC_T2_koszt.png}
   \captionof{figure}{Wartość funkcji kosztu dla zadania $2$ dla metody Monte Carlo.}
-  \label{fig:pozycjeStartowe:MC2}
+  \label{fig:koszt:MC2}
 \end{minipage}
 \end{figure}
+
+Na kolejnych wykresach \ref{fig:pozycjeStartowe:PSO1} - \ref{fig:pozycjeStartowe:MC2} przedstawiono pozycje startowe przykładowych cząsteczek, a na kolejnych wykresach   \ref{fig:pozycjeStartowe:PSO1} - \ref{fig:pozycjeStartowe:MC2} trajektorię ruchu przykładowych cząsteczek.
+
 
 %Pozycje startowe
 \begin{figure}[H]
@@ -633,9 +660,142 @@ Mogłoby się wydawać, że skoro dostępna jest moc obliczeniowa karty graficzn
 \end{minipage}
 \end{figure}
 
+% Trajektoria wybranej cząstki
+
+\begin{figure}[H]
+\centering
+\begin{minipage}[b]{\dimexpr.5\textwidth-1em}
+  \centering
+  \includegraphics[width=1\linewidth]{grafiki2/MPI_PSO_T1/MPI_PSO_T1_trajectory_id10.png}
+  \captionof{figure}{Trajektoria wybranej cząstki dla algorytmu PSO dla zadania $1$.}
+  \label{fig:trajektoriaWybrana:PSO1}
+\end{minipage} \hfill
+\begin{minipage}[b]{\dimexpr.5\textwidth-1em}
+  \centering
+  \includegraphics[width=1\linewidth]{grafiki2/MPI_MC_T1/MPI_ MC_T1_trajectory_id15.png}
+  \captionof{figure}{Trajektoria wybranej cząstki dla algorytmu MC dla zadania $1$.}
+  \label{fig:trajektoriaWybrana:MC1}
+\end{minipage}
+\end{figure}
+
+\begin{figure}[H]
+\centering
+\begin{minipage}[b]{\dimexpr.5\textwidth-1em}
+  \centering
+  \includegraphics[width=1\linewidth]{grafiki2/MPI_PSO_T2/MPI_ PSO_T2_trajectory_id10.png}
+  \captionof{figure}{Trajektoria wybranej cząstki dla algorytmu PSO dla zadania $2$.}
+  \label{fig:trajektoriaWybrana:PSO2}
+\end{minipage} \hfill
+\begin{minipage}[b]{\dimexpr.5\textwidth-1em}
+  \centering
+  \includegraphics[width=1\linewidth]{grafiki2/MPI_MC_T2/MPI_ MC_T2_trajectory_id10.png}
+  \captionof{figure}{Trajektoria wybranej cząstki dla algorytmu MC dla zadania $2$.}
+  \label{fig:trajektoriaWybrana:MC2}
+\end{minipage}
+\end{figure}
+
+% Liczba iteracji dla każdego z procesów
+
+\begin{figure}[H]
+\centering
+\begin{minipage}[b]{\dimexpr.5\textwidth-1em}
+  \centering
+  \includegraphics[width=1\linewidth]{grafiki2/MPI_PSO_T1/MPI_PSO_T1_procIter.png}
+  \captionof{figure}{Liczba iteracji dla każdego z procesów dla algorytmu PSO dla zadania $1$.}
+  \label{fig:trajektoriaWybrana:PSO1}
+\end{minipage} \hfill
+\begin{minipage}[b]{\dimexpr.5\textwidth-1em}
+  \centering
+  \includegraphics[width=1\linewidth]{grafiki2/MPI_MC_T1/MPI_MC_T1_procIter.png}
+  \captionof{figure}{Liczba iteracji dla każdego z procesów dla algorytmu MC dla zadania $1$.}
+  \label{fig:trajektoriaWybrana:MC1}
+\end{minipage}
+\end{figure}
+
+\begin{figure}[H]
+\centering
+\begin{minipage}[b]{\dimexpr.5\textwidth-1em}
+  \centering
+  \includegraphics[width=1\linewidth]{grafiki2/MPI_PSO_T2/MPI_PSO_T2_procIter.png}
+  \captionof{figure}{Liczba iteracji dla każdego z procesów dla algorytmu PSO dla zadania $2$.}
+  \label{fig:trajektoriaWybrana:PSO2}
+\end{minipage} \hfill
+\begin{minipage}[b]{\dimexpr.5\textwidth-1em}
+  \centering
+  \includegraphics[width=1\linewidth]{grafiki2/MPI_MC_T2/MPI_MC_T2_procIter.png}
+  \captionof{figure}{Liczba iteracji dla każdego z procesów dla algorytmu MC dla zadania $2$.}
+  \label{fig:trajektoriaWybrana:MC2}
+\end{minipage}
+\end{figure}
 
 
-\subsection{Porównanie trajektorii dla $n = 2$ w CUDA}
+
+\subsection{Porównanie kosztu w CUDA} \label{sec:CUDA2}
+
+%Funkcja kosztu - zad1 i zad2
+\begin{figure}[H]
+\centering
+\begin{minipage}[b]{\dimexpr.5\textwidth-1em}
+  \centering
+  \includegraphics[width=1\linewidth]{grafiki2/CUDA/CUDA_PSO_Task1_koszt_linear.png}
+  \captionof{figure}{Wartość funkcji kosztu dla zadania $1$ dla algorytmu PSO.}
+  \label{fig:koszt:PSO1CUDA}
+\end{minipage} \hfill
+\begin{minipage}[b]{\dimexpr.5\textwidth-1em}
+  \centering
+  \includegraphics[width=1\linewidth]{grafiki2/CUDA/CUDA_PSO_Task1_koszt_log.png}
+  \captionof{figure}{Wartość funkcji kosztu w skali logarytmicznej dla zadania $1$ dla algorytmu PSO}
+  \label{fig:koszt:PSO1CUDAlog}
+\end{minipage}
+\end{figure}
+
+\begin{figure}[H]
+\centering
+\begin{minipage}[b]{\dimexpr.5\textwidth-1em}
+  \centering
+  \includegraphics[width=1\linewidth]{grafiki2/CUDA/CUDA_MonteCarlo_Task1_koszt_linear.png}
+  \captionof{figure}{Wartość funkcji kosztu dla zadania $1$ dla algorytmu Monte Carlo.}
+  \label{fig:koszt:PMC1CUDA}
+\end{minipage} \hfill
+\begin{minipage}[b]{\dimexpr.5\textwidth-1em}
+  \centering
+  \includegraphics[width=1\linewidth]{grafiki2/CUDA/CUDA_MonteCarlo_Task1_koszt_log.png}
+  \captionof{figure}{Wartość funkcji kosztu w skali logarytmicznej dla zadania $1$ dla algorytmu Monte Carlo}
+  \label{fig:koszt:MC1CUDAlog}
+\end{minipage}
+\end{figure}
+
+\begin{figure}[H]
+\centering
+\begin{minipage}[b]{\dimexpr.5\textwidth-1em}
+  \centering
+  \includegraphics[width=1\linewidth]{grafiki2/CUDA/CUDA_PSO_Task2_koszt_linear.png}
+  \captionof{figure}{Wartość funkcji kosztu dla zadania $2$ dla algorytmu PSO.}
+  \label{fig:koszt:PSO2CUDA}
+\end{minipage} \hfill
+\begin{minipage}[b]{\dimexpr.5\textwidth-1em}
+  \centering
+  \includegraphics[width=1\linewidth]{grafiki2/CUDA/CUDA_PSO_Task2_koszt_log.png}
+  \captionof{figure}{Wartość funkcji kosztu w skali logarytmicznej dla zadania $2$ dla algorytmu PSO.}
+  \label{fig:koszt:PSO2CUDAlog}
+\end{minipage}
+\end{figure}
+
+\begin{figure}[H]
+\centering
+\begin{minipage}[b]{\dimexpr.5\textwidth-1em}
+  \centering
+  \includegraphics[width=1\linewidth]{grafiki2/CUDA/CUDA_MonteCarlo_Task2_koszt_linear.png}
+  \captionof{figure}{Wartość funkcji kosztu dla zadania $2$ dla algorytmu Monte Carlo.}
+  \label{fig:koszt:MC2CUDA}
+\end{minipage} \hfill
+\begin{minipage}[b]{\dimexpr.5\textwidth-1em}
+  \centering
+  \includegraphics[width=1\linewidth]{grafiki2/CUDA/CUDA_MonteCarlo_Task2_koszt_log.png}
+  \captionof{figure}{Wartość funkcji kosztu w skali logarytmicznej dla zadania $2$ dla algorytmu Monte Carlo.}
+  \label{fig:koszt:MC2CUDAlog}
+\end{minipage}
+\end{figure}
 
 
 \section{Wnioski} 
