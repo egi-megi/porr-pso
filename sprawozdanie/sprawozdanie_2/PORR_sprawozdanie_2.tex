@@ -803,16 +803,23 @@ Na wykresach \ref{fig:koszt:PSO1CUDAlog}-\label{fig:koszt:MC2CUDAlog} przedstawi
 
 \section{Wnioski} 
 \subsubsection*{Implementacja MPI}
-Z wykresów \ref{fig:przysp:zad1}. i \ref{fig:przysp:zad2} widać, że przyspieszenie algorytmu PSO jest znacznie mniejsze niż przyspieszenie Monte Carlo. Prawdopodobnie wynika to z faktu, iż w implementacji PSO dużo czasu poświęcane jest komunikacji międzyprocesowej - w każdej iteracji procesy muszą sprawdzić czy znana jest nowa globalna najlepsza wartość. Metoda Monte Carlo nie używa komunikacji w trakcie obliczeń - wiadomości wysyłane są jedynie po znalezieniu zadowalającego rozwiązania przez jeden z procesów.
+Z wykresów \ref{fig:przysp:zad1}. i \ref{fig:przysp:zad2}. widać, że przyspieszenie algorytmu PSO jest znacznie mniejsze niż przyspieszenie Monte Carlo. Prawdopodobnie wynika to z faktu, iż w implementacji PSO dużo czasu poświęcane jest komunikacji międzyprocesowej - w każdej iteracji procesy muszą sprawdzić czy znana jest nowa globalna najlepsza wartość. Metoda Monte Carlo nie używa komunikacji w trakcie obliczeń - wiadomości wysyłane są jedynie po znalezieniu zadowalającego rozwiązania przez jeden z procesów.
 
-Warto także zwrócić uwagę, że niskie przyspieszenie PSO może także wynikać z względnie małej liczby cząstek. Do rozwiązania zadania $2$. dla $n \ = \ 20$ wymiarów użyto $10^{4}$ cząsteczek - znacznie więcej niż w pozostałych przypadkach. Ilość danych do przetworzenia związana z liczbą cząsteczek spowodowała rozmycie udziału komunikacji i w efekcie doprowadziła do większego przyspieszenia.
+Warto równieżzwrócić uwagę, że niskie przyspieszenie PSO może także wynikać z względnie małej liczby cząstek. Do rozwiązania zadania $2$. dla $n \ = \ 20$ wymiarów użyto $10^{4}$ cząsteczek - znacznie więcej niż w pozostałych przypadkach. Ilość danych do przetworzenia związana z liczbą cząsteczek spowodowała rozmycie udziału komunikacji i w efekcie doprowadziła do otrzymania większego wskaźnika przyspieszenia.
 
-Kolejnym wnioskiem z przeprowadzonych badań jest to, że zmodyfikowany algorytm Monte Carlo prowadzi cząsteczkę prosto do najmniejszego kosztu bez "skakania" po całej przestrzeni kosztu, co powinno się dziać, jeśli zastosowalibyśmy czysty algorytm Monte Carlo. To powoduje niemożność wyjścia z lokalnych minimów. Ale ten problem jest rozwiązany dostatecznie dużą liczbą cząsteczek.
+Kolejnym wnioskiem z przeprowadzonych badań jest to, że zmodyfikowany algorytm Monte Carlo z~odpowiednio dobranymi parametrami ($T$ o dużej wartości) prowadzi cząsteczkę do minimum lokalnego bez nadmiernego \quotedblbase skakania\textquotedblright \ po przestrzeni zadania jak widoczne jest to w niektórych przypadkach działania PSO. Taki dobór parametru $T$ utożsamia zmodyfikowany algorytm Monte Carlo z jego podstawową wersją, a tym samym pozbawia go podstawowej zalety modyfikacji - większych możliwości wyjścia z~minimów lokalnych.
 
-W równoległych procesach w MPI każdy proces zdąża zrobić różną liczbę iteracji z powodu opóźnień związanych z komunikacją (wykresy \ref{fig:trajektoriaWybrana:MC1} - \ref{fig:trajektoriaWybrana:MC2}).
+W równoległych procesach w MPI każdy proces robi różną liczbę iteracji z powodu opóźnień związanych z komunikacją (wykresy \ref{fig:trajektoriaWybrana:MC1} - \ref{fig:trajektoriaWybrana:MC2}).
 
 \subsubsection*{Implementacja CUDA}
-Przy obliczeniach w CUDA zdecydowanie szybciej wyznacza się cząsteczkę spełniającą warunek stopu dla algorytmu PSO niż dla algorytmu Monte Carlo.
+Projektowanie wydajnego oprogramowania do obliczeń na kartach graficznych jest trudnym zadaniem. Programiści mają szereg subtelnych decyzji do podjęcia, z których nawet najdrobniejsze mogą mieć duże znaczenie dla stopnia zoptymalizowania implementacji. Świetnym przykładem pokazanym w pracy jest dobór wielkości bloku - dla odpowiednich rozmiarów zadań można znaleźć optymalną wielkość tego parametru.
+
+Zalety obliczeń na karcie graficznej były widoczne w czasach obliczeń dopiero dla odpowiednio dużych liczb cząsteczek w symulacji. Małe zestawy cząsteczek (np. $10^{3}$) charakteryzowały się podobnym czasem wykonywania obliczeń jak na wersjach programów na CPU lub nawet wydłużeniem tego czasu. Implementacja na GPU pozwoliła jednak na symulację z liczbą cząsteczek rzędu $10^{6}$ i wymiarem zadania optymalizacji $n \ = \ 200$ co w przypadku obliczeń na CPU byłoby niemożliwe do wykonania w rozsądnym czasie - w przypadku GPU optymalizacja do osiągnięcia ustalonego, względnie restrykcyjnego, warunku trwała ok. $7$ s.
+
+\subsubsection*{Podsumowanie}
+Przedstawione w tej części projektu implementacje wymagają dwóch skrajnych ziarnistości problemu. W przypadku maszyn z pamięcią lokalną staramy się podzielić algorytm na dostatecznie duże równoległe części, a w przypadku obliczeń na kartach graficznych odwrotnie - preferowana jest duża liczba równoległych, drobnych kawałków.
+
+Warto mieć w związku z tym na uwadze także możliwości modyfikacji pierwotnych algorytmów, np.~aby uniknąć zbędnego nakładu komunikacji w przypadku implementacji MPI można w poszczególnych procesach symulować jednocześnie niezależne zbiory cząstek.
 \end{document}
 
 
