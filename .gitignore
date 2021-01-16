@@ -24,3 +24,6 @@ sprawozdanie/sprawozdanie_*/logs/*
 !/sprawozdanie/sprawozdanie_*/grafiki/*.pdf
 !/sprawozdanie/sprawozdanie_*/grafiki/*/*.png
 
+prezentacja/logs/*
+!/prezentacja/grafiki/*.pdf
+!/prezentacja/grafiki/*.png

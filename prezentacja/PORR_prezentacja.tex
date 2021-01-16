@@ -1,0 +1,350 @@
+%\documentclass[aspectratio=169]{beamer}
+\documentclass[handout]{beamer}
+%\documentclass{beamer}
+
+% Packages
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage[polish]{babel}
+\usepackage[absolute,overlay]{textpos}
+%\usepackage[default]{sourcesanspro} % WUT fonts
+\usepackage{amsmath, amsthm, amssymb, latexsym}
+\usepackage{ragged2e}
+\usepackage{lipsum}
+\usepackage{tikz}
+\usepackage{caption}
+\captionsetup[figure]{font=footnotesize,labelfont=footnotesize}
+\usepackage{scrbase}
+\usepackage{float}
+\usepackage{subfig}
+\usepackage{lmodern}
+\usepackage{listings}
+
+\usetheme{Boadilla}
+\makeatother
+\setbeamertemplate{headline}{  
+  \leavevmode
+  \hbox{%
+  \begin{beamercolorbox}[wd=.8\paperwidth,ht=2.25ex,dp=1ex,left]{headline}
+    \leftskip=10pt \insertsectionhead
+  \ifx\insertsubsectionhead\empty\relax\else$\quad\mid\quad$\insertsubsectionhead\fi
+  \end{beamercolorbox}%
+  \begin{beamercolorbox}[wd=.2\paperwidth,ht=2.25ex,dp=1ex,right]{headline}
+    \insertframenumber{} / \inserttotalframenumber\hspace*{1ex}
+  \end{beamercolorbox}
+  }
+  \begin{beamercolorbox}[wd=\paperwidth,ht=0.3cm]{margin}
+  \end{beamercolorbox}
+}
+\setbeamerfont{headline}{size=\scriptsize}
+\setbeamertemplate{footline}
+{
+  \leavevmode
+  \begin{beamercolorbox}[wd=\paperwidth,ht=0cm]{margin}
+  \end{beamercolorbox}
+
+ 
+  \begin{beamercolorbox}[wd=\paperwidth,ht=.5cm]{footline}
+    \begin{columns}
+   	\begin{column}{1.0\paperwidth}
+   	\href{https://github.com/egi-megi/rojCzastek_Szczepanski_Jurkiewicz_Pikulinski}{\includegraphics[width=1.0\paperwidth,keepaspectratio]{grafiki/footer}}
+
+   	\end{column}
+    \end{columns}
+  \end{beamercolorbox}
+}
+\makeatletter
+\setbeamertemplate{navigation symbols}{}
+\setbeamersize{text margin left=8mm,text margin right=8mm} 
+
+%Defined colors
+\definecolor{mainColor}{RGB}{120,150,207}
+\definecolor{lightgray}{RGB}{180,160,170}
+\definecolor{additional}{RGB}{60,60,76}
+
+\setbeamercolor{headline}{fg=white,bg=mainColor}
+\setbeamercolor{footline}{fg=black, bg=white}
+
+\setbeamercolor{normal text}{fg=black, bg=white}
+\setbeamercolor{block title}{fg=white,bg=mainColor}
+\setbeamercolor{block body}{fg=black,bg=lightgray}
+%\setbeamertemplate{blocks}[rounded][shadow=true]
+
+\setbeamertemplate{itemize items}[circle]
+\setbeamercolor{enumerate item}{fg=mainColor,bg=white}
+\setbeamercolor{enumerate subitem}{fg=mainColor,bg=white}
+\setbeamercolor{enumerate subsubitem}{fg=mainColor,bg=white}
+
+\setbeamercolor{itemize item}{fg=mainColor,bg=white}
+\setbeamercolor{itemize subitem}{fg=mainColor,bg=white}
+\setbeamercolor{itemize subsubitem}{fg=mainColor,bg=white}
+
+\definecolor{mycolor1}{RGB}{0,0,128}
+\definecolor{lightgray}{gray}{0.9}
+\definecolor{lightlightgray}{gray}{0.95}
+\definecolor{lightyellow}{RGB}{255,255,224}
+\definecolor{lemonchiffon}{RGB}{255,250,205}
+\definecolor{syntax}{RGB}{127,0,85}
+\definecolor{comments}{RGB}{63,127,95}
+\definecolor{strings}{RGB}{42,0,255}
+
+\lstdefinestyle{mycpp} {
+    language=C, % choose the language of the code
+    alsolanguage=C++,
+    basicstyle=\linespread{0.9}\fontfamily{lmtt}\selectfont\small\color{black},
+    keywordstyle={\bfseries\color{syntax}}, % style for keywords
+    emph={int,char,double,float,unsigned,printf,getchar,putchar,
+sprintf,scanf,fopen,fscanf,fprintf,fclose,pthread_self,pthread_create,sleep,exit,pthread_t,
+pthread_exit,pthread_cancel,pthread_join,pthread_attr_init,pthread_attr_setdetachstate,pthread_attr_destroy,
+pthread_attr_getdetachstate,pthread_attr_setdetachstate,pthread_attr_getinheritsched,pthread_attr_setinheritsched,
+pthread_attr_getschedpolicy,pthread_attr_setschedpolicy,pthread_attr_getschedparam,pthread_attr_setschedparam,
+pthread_attr_getscope,pthread_attr_setscope,pthread_attr_getstacksize,pthread_attr_getstackaddr,pthread_attr_setstacksize,
+pthread_attr_setstackaddr,pthread_attr_t,srand,time,rand,pthread_mutex_init,pthread_mutex_t,pthread_mutex_destroy,
+pthread_mutex_lock,pthread_mutex_timedlock,time_t,pthread_mutex_trylock,pthread_mutex_unlock,
+pthread_cond_init,pthread_cond_destroy,pthread_cond_wait,pthread_cond_timedwait,pthread_cond_signal,pthread_cond_broadcast,
+pthread_barrier_init, pthread_barrier_t,pthread_barrierattr_t,pthread_barrier_wait,pthread_barrier_destroy,
+pthread_cond_t,pthread_mutexattr_t,pthread_condattr_t,ChannelCreate,ChannelCreate_r,
+ChannelDestroy,ChannelDestroy_r,ChannelAttach,ChannelDetach,MsgReceive,MsgReply,MsgSend,strerror,ConnectAttach,ConnectAttach_r,
+pid_t,uint32_t,ConnectDetach,ConnectDetach_r,MsgSend_r,MsgReceive_r,name_attach,name_detach,name_open,name_close,
+open,MsgReply_r,atoi,strcpy,_uint16,_int8,_uint8,_int32,MsgSendPulse,MsgReceivePulse,clock_gettime,perror,
+clock_getres,clock_settime,ctime,nanosleep,delay,select,alarm,nanospin,timer_create,timer_settime,timer_gettime,timer_delete,
+getpid},
+    emphstyle={\bfseries\color{syntax}},
+    stringstyle=\color{strings},
+    commentstyle={\fontfamily{lmtt}\selectfont\color{comments}},
+    numbers=left, % where to put the line-numbers
+    numberstyle=\tiny, % the size of the fonts that are used for the line-numbers
+    %backgroundcolor=\color{lemonchiffon},
+    backgroundcolor=\color{lightgray},
+    showspaces=false, % show spaces adding particular underscores
+    showstringspaces=false, % underline spaces within strings
+    showtabs=false, % show tabs within strings adding particular underscores
+    frame=single, % adds a frame around the code
+    tabsize=2, % sets default tabsize to 2 spaces
+    rulesepcolor=\color{gray},
+    rulecolor=\color{black},
+    captionpos=t, % sets the caption-position to bottom
+    breaklines=true, % sets automatic line breaking
+    breakatwhitespace=false,
+    xleftmargin=20pt,
+    xrightmargin=20pt,
+    aboveskip=12pt,
+    belowskip=12pt,
+    escapeinside={(*@}{@*)},
+%   frameround=tttt,
+   framexleftmargin=5mm,
+   frame=shadowbox,
+   rulesepcolor=\color{lightgray},
+   extendedchars=\true,
+   inputencoding=utf8,
+}
+
+\renewcommand*\lstlistingname{Kod źródłowy}
+
+% font sizes
+\renewcommand*{\tiny}{\fontsize{4}{5}\selectfont}
+\renewcommand*{\scriptsize}{\fontsize{6}{7.2}\selectfont}
+\renewcommand*{\footnotesize}{\fontsize{8}{9.6}\selectfont}
+\renewcommand*{\small}{\fontsize{8}{9.6}\selectfont}
+\renewcommand*{\normalsize}{\fontsize{10}{12}\selectfont}
+\renewcommand*{\large}{\fontsize{11}{13.3}\selectfont}
+\renewcommand*{\Large}{\fontsize{12}{14.4}\selectfont}
+\renewcommand*{\LARGE}{\fontsize{14}{16.8}\selectfont}
+\renewcommand*{\huge}{\fontsize{17}{20.4}\selectfont}
+\renewcommand*{\Huge}{\fontsize{20}{34}\selectfont}
+
+\date{19.01.2021}
+\title{Optymalizajca: Metoda optymalizacji rojem cząstek (PSO) i poszukiwań losowych (Monte Carlo)}
+\institute{Politechnika Warszawska}
+
+\usepackage{mathtools}
+\usepackage{cases}
+\usepackage{siunitx}
+
+\apptocmd{\frame}{}{\justifying}{}
+
+\usepackage{bm}
+\newcommand{\matr}[1]{\mathbf{#1}}
+\newcommand{\vect}[1]{\bm{\mathbf{#1}}}
+\newcommand{\integrand}[1]{\left(#1\right)}
+\DeclareRobustCommand*{\drv}{\mathop{}\!\mathrm{d}}
+\DeclareRobustCommand*{\intdt}{\mathop{}\!\mathrm{dt}}
+
+
+%\renewcommand{\raggedright}{\justifying}
+\usefonttheme{professionalfonts} % Naprawia problem z capital greek Phi
+\addtobeamertemplate{frametitle}{\vskip-0.8ex}{}
+\setbeamercolor{frametitle}{fg=black}
+
+\usepackage{animate}
+\usepackage{caption}
+\captionsetup[figure]{font=scriptsize,labelfont=scriptsize}
+\setbeamerfont{caption}{size=\tiny}
+
+\setlength{\belowdisplayskip}{0pt}
+\newcommand{\lenitem}[2][.4\linewidth]{\parbox[t]{#1}{\strut #2\strut}}
+
+\begin{document}
+
+
+\begin{frame}
+
+
+\begin{center}
+\vspace{.3cm}
+Optymalizacja \\
+
+\vspace{.3cm}
+{\LARGE \textbf{Metoda optymalizacji rojem cząstek (PSO) \\ i poszukiwań losowych (Monte Carlo)}}
+
+\vspace{.8cm}
+{\Large Doświadczenia z implementacji} \\
+\vspace{.2cm}
+{\Large OpenMP, MPI, CUDA} \\
+
+\vspace{1.2cm}
+{\small Programowanie równoległe i rozproszone \\ sem. zimowy 2020/2021}
+\end{center}
+
+
+\end{frame}
+
+
+
+
+\section{Wstęp teoretyczny}
+\begin{frame}[fragile]{Tytuł slajdu}
+
+
+\vspace{-.8cm}
+
+\begin{lstlisting}[style=mycpp, caption={Definicja i użycie struktury}]
+struct Wektor {
+	double x, y, z;
+};
+
+int main(int argc, char* argv[]) {
+	struct Wektor wektor_a = {1, 0, 0};
+	struct Wektor wektor_b;
+	wektor_b.x = 0;
+	return 0;
+}
+\end{lstlisting}
+
+\vspace{-.8cm}
+
+\begin{lstlisting}[style=mycpp, caption={Deklaracja z użyciem \textit{typedef}}]
+typedef struct {
+	double x, y, z;
+} Wektor;
+
+int main(int argc, char* argv[]) {
+	Wektor wektor_a = {1, 0, 0};
+	Wektor wektor_b;
+	wektor_b.x = 0;
+	return 0;
+}
+\end{lstlisting}
+
+
+\end{frame}
+
+
+
+
+\begin{frame}{Tytuł slajdu}
+
+
+\begin{itemize}
+\item item 1
+\item item 2\footnote{\href{https://stackoverflow.com/questions/15601155/does-linux-schedule-a-process-or-a-thread}{Scheduler sorting schedulable tasks}}
+\item item 3 \lstinline[style=mycpp]{pthread}
+\item item 4
+\end{itemize}
+
+\begin{columns}
+\begin{column}[t]{0.5\textwidth}
+
+\begin{center}
+Kolumna 1
+\end{center}
+
+\begin{itemize}
+\item przestrzeń adresowa
+\begin{itemize}
+\item \textbf{Sterta}
+\item Zmienne statyczne
+\end{itemize}
+\item Pliki i urządzenia I/O
+\item Kanały, kolejki i połączenia
+\end{itemize}
+
+\end{column}
+\begin{column}[t]{0.5\textwidth}
+
+\begin{center}
+Kolumna 2
+\end{center}
+
+\begin{itemize}
+\item Identyfikator (TID)
+\item Priorytet
+\item \textbf{Stos}
+\item Lokalne zmienne TLS
+\item Atrybuty dot. szeregowania
+\item Maska sygnałów
+\item Procedura zakończenia wątku
+\end{itemize}
+
+\end{column}
+\end{columns}
+
+
+\end{frame}
+
+
+
+
+\section{Implementacje}
+\subsection{Sekwencyjnie}
+\begin{frame}{Tytuł slajdu}
+\end{frame}
+
+
+
+
+\subsection{OpenMP}
+\begin{frame}{Tytuł slajdu}
+\end{frame}
+
+
+
+
+\subsection{MPI}
+\begin{frame}{Tytuł slajdu}
+\end{frame}
+
+
+
+
+\subsection{CUDA}
+\begin{frame}{Tytuł slajdu}
+\end{frame}
+
+
+
+\section{Cząsteczki na wykresach}
+\begin{frame}{Tytuł slajdu}
+\begin{figure}[t]
+\includegraphics[width=0.65\textwidth]{grafiki/MPI_ MC_T1_trajectory_id15.png}
+\end{figure}
+\end{frame}
+
+
+
+
+\section{Wnioski}
+\begin{frame}{Tytuł slajdu}
+\end{frame}
+
+\end{document}
