@@ -252,49 +252,47 @@ int main(int argc, char* argv[]) {
 
 
 
-\begin{frame}{Tytuł slajdu}
+\begin{frame}{Zadania optymalizacji}
 
-
-\begin{itemize}
-\item item 1
-\item item 2\footnote{\href{https://stackoverflow.com/questions/15601155/does-linux-schedule-a-process-or-a-thread}{Scheduler sorting schedulable tasks}}
-\item item 3 \lstinline[style=mycpp]{pthread}
-\item item 4
-\end{itemize}
-
+\vspace{-.7cm}
 \begin{columns}
 \begin{column}[t]{0.5\textwidth}
 
-\begin{center}
-Kolumna 1
-\end{center}
+\begin{tiny}
+\begin{equation}
+\min_{x} \left(f_{1}\left(\vect{x}\right) = \frac{1}{40} \sum_{i=1}^{n}\left(x_{i}\right)^{2} + 1 - \prod_{i =1}^{n} \cos\left(\frac{x_{i}}{i}\right)\right)
+\end{equation}
+\begin{equation}
+-40 \leq x_{i} \leq 40 \quad i = 1, \ ..., \ n,
+\end{equation}
+\end{tiny}
 
-\begin{itemize}
-\item przestrzeń adresowa
-\begin{itemize}
-\item \textbf{Sterta}
-\item Zmienne statyczne
-\end{itemize}
-\item Pliki i urządzenia I/O
-\item Kanały, kolejki i połączenia
-\end{itemize}
+
+\vspace{-.3cm}
+
+\begin{figure}[t]
+\includegraphics[width=0.9\textwidth]{grafiki/zad_1.pdf}
+\captionof{figure}{Zadania 1. (pełna dziedzina).}
+\end{figure}
 
 \end{column}
 \begin{column}[t]{0.5\textwidth}
 
-\begin{center}
-Kolumna 2
-\end{center}
+\begin{tiny}
+\begin{equation}
+\min_{x} \left(f_{2}\left(\vect{x}\right) = \sum_{i=1}^{n-1}\left(100\left(x_{i+1}-x_{i}^{2}\right)^{2} + \left(1-x_{i}\right)^{2} \right) \right)
+\end{equation}
+\begin{equation}
+-40 \leq x_{i} \leq 40 \quad i = 1, \ ..., \ n,
+\end{equation}
+\end{tiny}
 
-\begin{itemize}
-\item Identyfikator (TID)
-\item Priorytet
-\item \textbf{Stos}
-\item Lokalne zmienne TLS
-\item Atrybuty dot. szeregowania
-\item Maska sygnałów
-\item Procedura zakończenia wątku
-\end{itemize}
+\vspace{-.3cm}
+
+\begin{figure}[t]
+\includegraphics[width=0.9\textwidth]{grafiki/zad_2.pdf}
+\captionof{figure}{Zadanie 2. (ograniczona dziedzina).}
+\end{figure}
 
 \end{column}
 \end{columns}
