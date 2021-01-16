@@ -213,45 +213,22 @@ Optymalizacja \\
 
 
 \section{Wstęp teoretyczny}
-\begin{frame}[fragile]{Tytuł slajdu}
+\subsection{Rój cząstek (PSO)}
+\begin{frame}{Rój cząstek (PSO)}
+\end{frame}
 
-
-\vspace{-.8cm}
-
-\begin{lstlisting}[style=mycpp, caption={Definicja i użycie struktury}]
-struct Wektor {
-	double x, y, z;
-};
-
-int main(int argc, char* argv[]) {
-	struct Wektor wektor_a = {1, 0, 0};
-	struct Wektor wektor_b;
-	wektor_b.x = 0;
-	return 0;
-}
-\end{lstlisting}
-
-\vspace{-.8cm}
-
-\begin{lstlisting}[style=mycpp, caption={Deklaracja z użyciem \textit{typedef}}]
-typedef struct {
-	double x, y, z;
-} Wektor;
-
-int main(int argc, char* argv[]) {
-	Wektor wektor_a = {1, 0, 0};
-	Wektor wektor_b;
-	wektor_b.x = 0;
-	return 0;
-}
-\end{lstlisting}
-
-
+\subsection{Monte Carlo}
+\begin{frame}{Monte Carlo}
 \end{frame}
 
 
 
 
+
+
+
+
+\subsection{Zadania optymalizacji}
 \begin{frame}{Zadania optymalizacji}
 
 \vspace{-.7cm}
@@ -301,6 +278,44 @@ int main(int argc, char* argv[]) {
 \end{frame}
 
 
+
+
+
+\begin{frame}[fragile]{Tytuł slajdu}
+
+
+\vspace{-.8cm}
+
+\begin{lstlisting}[style=mycpp, caption={Definicja i użycie struktury}]
+struct Wektor {
+	double x, y, z;
+};
+
+int main(int argc, char* argv[]) {
+	struct Wektor wektor_a = {1, 0, 0};
+	struct Wektor wektor_b;
+	wektor_b.x = 0;
+	return 0;
+}
+\end{lstlisting}
+
+\vspace{-.8cm}
+
+\begin{lstlisting}[style=mycpp, caption={Deklaracja z użyciem \textit{typedef}}]
+typedef struct {
+	double x, y, z;
+} Wektor;
+
+int main(int argc, char* argv[]) {
+	Wektor wektor_a = {1, 0, 0};
+	Wektor wektor_b;
+	wektor_b.x = 0;
+	return 0;
+}
+\end{lstlisting}
+
+
+\end{frame}
 
 
 \section{Implementacje}
