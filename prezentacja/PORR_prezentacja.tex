@@ -198,7 +198,7 @@ Optymalizacja \\
 {\LARGE \textbf{Metoda optymalizacji rojem cząstek (PSO) \\ i poszukiwań losowych (Monte Carlo)}}
 
 \vspace{.8cm}
-{\Large Doświadczenia z implementacji} \\
+{\Large Doświadczenia z implementacji C++} \\
 \vspace{.2cm}
 {\Large OpenMP, MPI, CUDA} \\
 
@@ -262,10 +262,6 @@ z < e^{-\frac{f\left(\vect{\overline{x}}_{i + 1, j}\right) - f\left(\vect{x}_{i,
 \end{equation}
 to nowe położenie, pomimo większej wartości funkcji celu, zostanie zaakceptowane ($T$ to parametr). Jeżeli nierówność (\ref{eq:mc_nie}) nie będzie spełniona, to cząstka w danej generacji nie zmieni swojego położenia $\vect{x}_{i + 1, j} = \vect{x}_{i, j}$. 
 \end{frame}
-
-
-
-
 
 
 
@@ -523,15 +519,80 @@ while (!stop)
 \end{lstlisting}
 \end{frame}
 
+\begin{frame}{Algorytm symulacji}
+\begin{figure}[t]
+\includegraphics[width=0.4\textwidth]{grafiki/alg_ogolny.pdf}
+\end{figure}
+\end{frame}
+
+\begin{frame}{Algorytm sekwencyjnie}
+\begin{figure}[t]
+\includegraphics[width=1\textwidth]{grafiki/alg_szczegolowy.pdf}
+\end{figure}
+\end{frame}
+
 
 
 \subsection{OpenMP}
-\begin{frame}{Tytuł slajdu}
+\begin{frame}{Implementacja PSO w OpenMP}
+\begin{figure}[t]
+\includegraphics[width=0.9\textwidth]{grafiki/alg_OpenMP_PSO.pdf}
+\end{figure}
+\end{frame}
+
+\begin{frame}{Implementacja PSO w OpenMP}
+\begin{figure}[t]
+\includegraphics[width=0.9\textwidth]{grafiki/alg_OpenMP_synchronizacja.pdf}
+\end{figure}
+\end{frame}
+
+\begin{frame}{Implementacja Monte Carlo w OpenMP}
+\begin{figure}[t]
+\includegraphics[width=0.9\textwidth]{grafiki/alg_OpenMP_MC.pdf}
+\end{figure}
+\end{frame}
+
+\begin{frame}{Podsumowanie OpenMP}
+\begin{itemize}
+\item Brak synchronizacji w Monte Carlo skutkuje lepszymi przyspieszeniami.
+\item Niezdefiniowany wynik paralelizacji pętli w funkcjach wywołanych z zrównoleglonej pętli w OpenMP.
+\item Zarządzanie pamięcią może być trudne, np. generator PRNG.
+\end{itemize}
+\begin{figure}[h]
+\includegraphics[width=0.4\textwidth]{grafiki/tabela_zad1_przyspieszenie.pdf}
+\captionof{figure}{Przyspieszenie obliczeń (6 rdzeni, 6 wątków).}
+\end{figure}
 \end{frame}
 
 
 \subsection{CUDA}
-\begin{frame}{Tytuł slajdu}
+\begin{frame}{Implementacja PSO w CUDA}
+\begin{figure}[t]
+\includegraphics[width=0.9\textwidth]{grafiki/alg_CUDA_PSO.pdf}
+\end{figure}
+\end{frame}
+
+\begin{frame}{Implementacja Monte Carlo w CUDA}
+\begin{figure}[t]
+\includegraphics[width=0.9\textwidth]{grafiki/alg_CUDA_MC.pdf}
+\end{figure}
+\end{frame}
+
+\begin{frame}{Podsumowanie CUDA}
+\begin{itemize}
+\item Porównywalne lub gorsze od implementacji CPU czasy obliczeń dla małej liczby cząsteczek.
+\item Zadanie o $n \ = \ 200$ wymiarach z $1 \ 000 \ 000$ cząsteczek -- około $7 \ s$.
+\item Zaprojektowanie optymalnej implementacji kodu to sztuka.
+\begin{itemize}
+\item Optymalne wykorzystanie mocy obliczeniowej przy 400 operacjach arytmetycznych \textit{float32} na jedną operację na pamięci.
+\item Zaproponowana implementacja wykorzystuje $85\% $ przepustowości pamięci.
+\item Subtelne zmiany mogą znacznie wpłynąć na czas obliczeń, np. \textit{blockSize}.
+\end{itemize}
+\end{itemize}
+\begin{figure}[t]
+\includegraphics[width=0.8\textwidth]{grafiki/blocksizeplot.pdf}
+\captionof{figure}{Czas obliczeń w zależności od \textit{blockSize}.}
+\end{figure}
 \end{frame}
 
 
