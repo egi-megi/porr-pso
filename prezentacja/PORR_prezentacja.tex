@@ -215,10 +215,52 @@ Optymalizacja \\
 \section{Wstęp teoretyczny}
 \subsection{Rój cząstek (PSO)}
 \begin{frame}{Rój cząstek (PSO)}
+
+\vspace{-.7cm}
+\begin{columns}
+\begin{column}[t]{0.5\textwidth}
+
+\begin{figure}[t]
+\includegraphics[width=0.9\textwidth]{grafiki/lawicaRyb.jpg}
+\captionof{figure}{Ławica ryb (Photo by Dorothea OLDANI on Unsplash)}
+\end{figure}
+
+\end{column}
+\begin{column}[t]{0.5\textwidth}
+
+\begin{figure}[t]
+\includegraphics[width=0.9\textwidth]{grafiki/kluczPtakow.jpg}
+\captionof{figure}{Klucz ptaków (Photo by Inu Etc on Unsplash)}
+\end{figure}
+
+\end{column}
+\end{columns}
+
+Matematycznie, zachowanie $j$-tej cząstki w $k$-elementowej populacji:
+\begin{equation}
+\begin{cases}
+\vect{v}_{i + 1, j} = \omega \vect{v}_{i, j} + c_{1} \epsilon_{1} \left(\vect{p}_{i, j} - \vect{x}_{i, j}\right) + c_{2} \epsilon_{2} \left(\vect{q}_{i} - \vect{x}_{i, j}\right) \\
+\vect{x}_{i + 1, j} = \vect{x}_{i, j} + \vect{v}_{i + 1, j},
+\end{cases}
+\end{equation}
+gdzie $\vect{x}_{i, j}$ i $\vect{v}_{i, j}$ to odpowiednio wektory położenia i prędkości w generacji $i$, zmienne skalarne $\omega$, $c_1$, $c_2$ to wagi, a $\epsilon_{1}$ i  $\epsilon_{2}$ to pewne zmienne losowe.
+
+
 \end{frame}
 
 \subsection{Monte Carlo}
 \begin{frame}{Monte Carlo}
+Położenia cząstki w kolejnych generacjach w tym algorytmie można opisać zgodnie z następującym schematem
+\begin{equation}
+\vect{\overline{x}}_{i + 1, j} = \vect{x}_{i, j} + \sigma\vect{\xi},
+\end{equation}
+gdzie $\sigma$ to waga, a $\vect{\xi}$ to $n$-wymiarowa zmienna o rozkładzie jednostajnym. Zmienna $\vect{\overline{x}}_{i + 1, j}$ zostanie zaakceptowana jako nowa współrzędna cząstki $\vect{x}_{i + 1, j} = \vect{\overline{x}}_{i + 1, j}$, jeżeli funkcja celu $f\left(\vect{\overline{x}}_{i + 1, j}\right) < f\left(\vect{x}_{i, j}\right)$. W przeciwnym wypadku rozpatrywane są dwie możliwości.
+
+Dodatkowo losowana jest zmienna $z$ o jednostajnym rozkładzie na przedziale $\left[0, \ 1 \right]$. Jeżeli spełniony będzie warunek
+\begin{equation} \label{eq:mc_nie}
+z < e^{-\frac{f\left(\vect{\overline{x}}_{i + 1, j}\right) - f\left(\vect{x}_{i, j}\right)}{T}},
+\end{equation}
+to nowe położenie, pomimo większej wartości funkcji celu, zostanie zaakceptowane ($T$ to parametr). Jeżeli nierówność (\ref{eq:mc_nie}) nie będzie spełniona, to cząstka w danej generacji nie zmieni swojego położenia $\vect{x}_{i + 1, j} = \vect{x}_{i, j}$. 
 \end{frame}
 
 
@@ -273,71 +315,219 @@ Optymalizacja \\
 
 \end{column}
 \end{columns}
-
-
 \end{frame}
 
 
-
-
-
-\begin{frame}[fragile]{Tytuł slajdu}
-
-
-\vspace{-.8cm}
-
-\begin{lstlisting}[style=mycpp, caption={Definicja i użycie struktury}]
-struct Wektor {
-	double x, y, z;
-};
-
-int main(int argc, char* argv[]) {
-	struct Wektor wektor_a = {1, 0, 0};
-	struct Wektor wektor_b;
-	wektor_b.x = 0;
-	return 0;
-}
-\end{lstlisting}
-
-\vspace{-.8cm}
-
-\begin{lstlisting}[style=mycpp, caption={Deklaracja z użyciem \textit{typedef}}]
-typedef struct {
-	double x, y, z;
-} Wektor;
-
-int main(int argc, char* argv[]) {
-	Wektor wektor_a = {1, 0, 0};
-	Wektor wektor_b;
-	wektor_b.x = 0;
-	return 0;
-}
-\end{lstlisting}
-
-
-\end{frame}
 
 
 \section{Implementacje}
 \subsection{Sekwencyjnie}
-\begin{frame}{Tytuł slajdu}
+\begin{frame}[fragile]{Sekwencyjna implementacja PSO}
+\vspace{-.8cm}
+
+\begin{lstlisting}[style=mycpp, label=code:pso_before, caption={Optymalizacja PSO - kod sekwencyjny.}]
+std::default_random_engine randEngine;
+rand_engine.seed(time(NULL));
+
+int iterationNumber = 0;
+while (configStop->computeStopCriterion(criterionStopValue,
+	globalBestParticle))
+{
+    for (auto &singleParticle : particles)
+    {
+        singleParticle.computePosition(&rand_engine);
+        updateBestParticle(&singleParticle);
+    }
+    iterationNumber++;
+}
+\end{lstlisting}
+
 \end{frame}
 
+
+\begin{frame}[fragile]{Sekwencyjna implementacja Monte Carlo}
+\vspace{-.8cm}
+
+\begin{lstlisting}[style=mycpp, label=code:mc_before, caption={Optymalizacja Monte Carlo - kod sekwencyjny.}]
+std::default_random_engine randEngine;
+rand_engine.seed(time(NULL));
+
+int iterationNumber = 0;
+while (configStop->computeStopCriterion(criterionStopValue,
+    globalBestParticle))
+{
+    for (auto &particle : particles)
+    {
+        particle.computePosition(randEngine);
+         updateBestParticle(&particle);
+    }
+    iterationNumber++;
+}
+\end{lstlisting}
+
+\end{frame}
+
+
+
+\subsection{MPI}
+\begin{frame}[fragile]{Implementacja PSO z użyciem MPI}
+
+\vspace{-.8cm}
+
+\begin{lstlisting}[style=mycpp, caption={MPI -- PSO \textit{typedef}}]
+// Compute new positions 
+...
+// Receive local best positions
+double *receivedBestPositions = NULL;
+if (processRank == ROOT)
+    receivedBestPositions = new double[numberOfProcesses * dimensions];
+MPI_Gather((void *)localBestPosition, dimensions, MPI_DOUBLE, (void *)receivedBestPositions, dimensions, MPI_DOUBLE, ROOT, MPI_COMM_WORLD);
+// Compute cost for all received localBestPosition and compute computedGlobalBestPosition
+if (processRank == ROOT)
+{
+    for (int i = 0; i < numberOfProcesses * dimensions; i = i + dimensions)
+    {
+        std::vector<double> positionVectors(receivedBestPositions + i, receivedBestPositions + i + dimensions);
+        double cCost;
+        if ((cCost = config->computeCostFunctionValue(positionVectors)) < globalBestPosCost)
+        {
+            globalBestPosCost = cCost;
+            std::copy_n(receivedBestPositions + i, dimensions, computedGlobalBestPosition);
+        }
+    }
+    // Compute stop criterion
+    if (globalBestPosCost < stopCriterionValue)
+        stop = true;
+    for (int i = 0; i < dimensions; i++)
+    {
+    }
+}
+\end{lstlisting}
+\end{frame}
+
+
+\begin{frame}[fragile]{Implementacja PSO z użyciem MPI cd.}
+
+\vspace{-.8cm}
+
+\begin{lstlisting}[style=mycpp, caption={MPI -- PSO cd. \textit{typedef}}]
+// Broadcast global best position and stop condition
+MPI_Bcast((void *)computedGlobalBestPosition, dimensions, MPI_DOUBLE, ROOT,
+          MPI_COMM_WORLD);
+MPI_Bcast((void *)&stop, 1, MPI_CXX_BOOL, ROOT,
+          MPI_COMM_WORLD);
+for (psoParticle *ps : particles)
+{
+    ps->globalBestPosition = computedGlobalBestPosition;
+}
+
+iteration++;
+
+// Clean just to allocate again in next iteration
+delete localBestPosition, receivedBestPositions;
+MPI_Barrier(MPI_COMM_WORLD);
+}
+
+\end{lstlisting}
+\end{frame}
+
+
+\begin{frame}[fragile]{Implementacja Monte Carlo z użyciem MPI}
+
+\vspace{-.8cm}
+
+\begin{lstlisting}[style=mycpp, label=code:pso_before, caption={MPI -- Monte Carlo.}]
+while (!stop)
+{
+    // Compute new positions 
+...
+    if (processRank == ROOT)
+    {
+        // If stop criterion is met, save it and compare with other potential solutions
+        if (false)
+        {
+            stop = true;
+            solutionSource = processRank;
+        }
+        MPI_Status solutionMessageStatus;
+        int solutionReceived = 0;
+        MPI_Iprobe(MPI_ANY_SOURCE, communicationType::BEST_SOLUTION, MPI_COMM_WORLD, &solutionReceived,
+                   &solutionMessageStatus);
+        std::vector<bool> ranksFoundSolution(numberOfProcesses, false);
+        double *potentialSolution = new double[dimensions];
+        while (solutionReceived)
+        {
+            stop = true;
+            ranksFoundSolution[solutionMessageStatus.MPI_SOURCE] = true;
+            MPI_Recv(potentialSolution, dimensions, MPI_DOUBLE, solutionMessageStatus.MPI_SOURCE,
+                     communicationType::BEST_SOLUTION, MPI_COMM_WORLD, &solutionMessageStatus);
+            // If potential best solution is better, save it
+            if (true)
+            {
+                solutionSource = solutionMessageStatus.MPI_SOURCE;
+            }
+            // Check for more received solutions
+            solutionReceived = 0;
+            MPI_Iprobe(MPI_ANY_SOURCE, communicationType::BEST_SOLUTION, MPI_COMM_WORLD,
+                       &solutionReceived, &solutionMessageStatus);
+        }
+        // If any solution is found, send a proper message and join processes
+        if (stop)
+        {
+            for (int dest = 1; dest < numberOfProcesses; dest++)
+            {
+                if (ranksFoundSolution[dest])
+                    continue;
+                // Content of the message doesn't matter
+                MPI_Send(&iteration, 1, MPI_INT, dest, communicationType::STOP, MPI_COMM_WORLD);
+            }
+            delete localBestPosition, potentialSolution;
+            break;
+        }
+    }
+    \end{lstlisting}
+\end{frame}
+
+\begin{frame}[fragile]{Implementacja Monte Carlo z użyciem MPI cd.}
+
+\vspace{-.8cm}
+
+\begin{lstlisting}[style=mycpp, label=code:pso_before, caption={MPI -- Monte Carlo cd.}]
+    else
+    {
+        // If stop criterion is met, send the best solution to the root
+        if (processRank == 1 && iteration == 1000)
+        {
+            MPI_Send(localBestPosition, dimensions, MPI_DOUBLE, ROOT, communicationType::BEST_SOLUTION,
+                     MPI_COMM_WORLD);
+            delete localBestPosition;
+            break;
+        }
+
+        // Check if solution is already found
+        MPI_Status stopMessageStatus;
+        int stopReceived = 0;
+        MPI_Iprobe(ROOT, communicationType::STOP, MPI_COMM_WORLD, &stopReceived, &stopMessageStatus);
+        if (stopReceived)
+        {
+            int stopMessage;
+            MPI_Recv(&stopMessage, 1, MPI_INT, ROOT, communicationType::STOP, MPI_COMM_WORLD,
+                     &stopMessageStatus);
+            delete localBestPosition;
+            break;
+        }
+    }
+
+    iteration++;
+}
+\end{lstlisting}
+\end{frame}
 
 
 
 \subsection{OpenMP}
 \begin{frame}{Tytuł slajdu}
 \end{frame}
-
-
-
-
-\subsection{MPI}
-\begin{frame}{Tytuł slajdu}
-\end{frame}
-
-
 
 
 \subsection{CUDA}
