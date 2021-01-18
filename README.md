@@ -15,6 +15,18 @@ This repository contains sequential and parallel implementation made with **Open
 <img src ="https://latex.codecogs.com/gif.latex?\min_{x}&space;\left&space;(&space;f_1(x)=\sum_{i=1}^{n-1}&space;\left&space;[&space;100(x_{i&plus;1}-x_i^2)^2&space;&plus;&space;(1-x_i)^2)&space;\right&space;]&space;\right&space;),&space;-40\leq&space;x_i\leq&space;40">
 </p>
 
+## 2d cross sections of with heat map 
+###  Task 1
+<p align="center">
+<img src = "https://github.com/egi-megi/porr-pso/blob/master/sprawozdanie/sprawozdanie_1/grafiki/Wykresy2d/Zad1_2d_heatmap.png">
+</p>
+
+## Task 2
+
+<p align="center">
+https://github.com/egi-megi/porr-pso/blob/master/sprawozdanie/sprawozdanie_1/grafiki/Wykresy2d/Zad1_2d_heatmap.png
+</p>
+
 ## Exemplary results
 ### Task 1 - PSO
 <p align="center">
