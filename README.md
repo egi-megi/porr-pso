@@ -59,7 +59,18 @@ This repository contains sequential and parallel implementation made with **Open
 
 ## Trajectories
 
-### Generated with MPI Monete carlo version for Task 1
+### Monte carlo Task 1
+<p align="center">
+<img src = "https://github.com/egi-megi/porr-pso/blob/master/sprawozdanie/sprawozdanie_1/grafiki/Wykresy2d/Zad1_MC_plot_5.png">
+</p>
+
+
+### PSO Task 1
+<p align="center">
+<img src = "https://github.com/egi-megi/porr-pso/blob/master/sprawozdanie/sprawozdanie_1/grafiki/Wykresy2d/zad1_pso_plot_5.png">
+</p>
+
+### Generated with MPI Monte carlo version for Task 1
 
 <p align="center">
 <img src = "https://github.com/egi-megi/porr-pso/blob/plottingTrajectories/Wykresy%20PORR%20_%20GPU/MPI_MC_T1/MPI_%20MC_T1_trajectory_id15.png">
