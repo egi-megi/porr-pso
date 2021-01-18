@@ -24,7 +24,7 @@ This repository contains sequential and parallel implementation made with **Open
 ## Task 2
 
 <p align="center">
-<img src = https://github.com/egi-megi/porr-pso/blob/master/sprawozdanie/sprawozdanie_1/grafiki/Wykresy2d/Zad1_2d_heatmap.png">
+<img src = "https://github.com/egi-megi/porr-pso/blob/master/sprawozdanie/sprawozdanie_1/grafiki/Wykresy2d/Zad1_2d_heatmap.png">
 </p>
 
 ## Exemplary results
