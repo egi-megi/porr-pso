@@ -43,10 +43,28 @@ This repository contains sequential and parallel implementation made with **Open
 <img src = "https://github.com/egi-megi/rojCzastek_Szczepanski_Jurkiewicz_Pikulinski/blob/plottingTrajectories/PSO_zad2_ANIM.gif">
 </p>
 
-### Task 2 - Monte Carlo<p align="center">
+### Task 2 - Monte Carlo
+
 <p align="center">
 <img src = "https://github.com/egi-megi/rojCzastek_Szczepanski_Jurkiewicz_Pikulinski/blob/plottingTrajectories/MC_zad2_ANIM.gif">
 </p>
+
+### Task 2
+
+### Generated with MPI Monetecarlo version for Task 2
+
+<p align="center">
+<img src = "https://github.com/egi-megi/porr-pso/blob/plottingTrajectories/Wykresy%20PORR%20_%20GPU/MPI_MC_T2/MPI_MC_T2.gif>
+</p>
+
+## Trajectories
+
+### Generated with MPI Monetecarlo version for Task 1
+
+<p align="center">
+<img src = "https://github.com/egi-megi/porr-pso/blob/plottingTrajectories/Wykresy%20PORR%20_%20GPU/MPI_MC_T1/MPI_%20MC_T1_trajectory_id15.png>
+</p>
+            
 
 ### Task 1 - Isolines of cost function 
 <p align="center">
