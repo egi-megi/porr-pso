@@ -519,6 +519,44 @@ while (!stop)
 \end{lstlisting}
 \end{frame}
 
+\begin{frame}{Implementacja PSO w MPI}
+\begin{figure}[t]
+\includegraphics[width=0.9\textwidth]{grafiki/alg_MPI_PSO.pdf}
+\end{figure}
+\end{frame}
+
+\begin{frame}{Implementacja Monte Carlo w MPI}
+\begin{figure}[t]
+\includegraphics[width=0.9\textwidth]{grafiki/alg_MPI_MC.pdf}
+\end{figure}
+\end{frame}
+
+\begin{frame}{Podsumowanie MPI}
+\begin{itemize}
+\item item 1.
+\item item 2.
+\item item 3.
+\end{itemize}
+\begin{columns}
+\begin{column}[t]{0.5\textwidth}
+
+\begin{figure}[t]
+\includegraphics[width=0.9\textwidth]{grafiki/przyspieszenieMPI1.pdf}
+\captionof{figure}{Przyspieszenie (6 rdzeni, 6 procesów, zad. 1.)}
+\end{figure}
+
+\end{column}
+\begin{column}[t]{0.5\textwidth}
+
+\begin{figure}[t]
+\includegraphics[width=0.9\textwidth]{grafiki/przyspieszenieMPI2.pdf}
+\captionof{figure}{Przyspieszenie (6 rdzeni, 6 procesów, zad. 2.)}
+\end{figure}
+
+\end{column}
+\end{columns}
+\end{frame}
+
 \begin{frame}{Algorytm symulacji}
 \begin{figure}[t]
 \includegraphics[width=0.4\textwidth]{grafiki/alg_ogolny.pdf}
@@ -530,8 +568,6 @@ while (!stop)
 \includegraphics[width=1\textwidth]{grafiki/alg_szczegolowy.pdf}
 \end{figure}
 \end{frame}
-
-
 
 \subsection{OpenMP}
 \begin{frame}{Implementacja PSO w OpenMP}
@@ -558,10 +594,24 @@ while (!stop)
 \item Niezdefiniowany wynik paralelizacji pętli w funkcjach wywołanych z zrównoleglonej pętli w OpenMP.
 \item Zarządzanie pamięcią może być trudne, np. generator PRNG.
 \end{itemize}
-\begin{figure}[h]
-\includegraphics[width=0.4\textwidth]{grafiki/tabela_zad1_przyspieszenie.pdf}
-\captionof{figure}{Przyspieszenie obliczeń (6 rdzeni, 6 wątków).}
+\begin{columns}
+\begin{column}[t]{0.5\textwidth}
+
+\begin{figure}[t]
+\includegraphics[width=0.9\textwidth]{grafiki/tabela_zad1_przyspieszenie.pdf}
+\captionof{figure}{Przyspieszenie (6 rdzeni, 6 wątków, zad. 1.)}
 \end{figure}
+
+\end{column}
+\begin{column}[t]{0.5\textwidth}
+
+\begin{figure}[t]
+\includegraphics[width=0.9\textwidth]{grafiki/tabela_zad2_przyspieszenie.pdf}
+\captionof{figure}{Przyspieszenie (6 rdzeni, 6 wątków, zad. 2.)}
+\end{figure}
+
+\end{column}
+\end{columns}
 \end{frame}
 
 
