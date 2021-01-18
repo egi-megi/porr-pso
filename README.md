@@ -82,6 +82,7 @@ This repository contains sequential and parallel implementation made with **Open
 <img src = "https://github.com/egi-megi/porr-pso/blob/plottingTrajectories/Wykresy%20PORR%20_%20GPU/MPI_PSO_T1/MPI_PSO_T1_trajectory_id1.png">
 </p>       
             
+## Plots with isolines
 
 ### Task 1 - Isolines of cost function 
 <p align="center">
