@@ -54,7 +54,7 @@ This repository contains sequential and parallel implementation made with **Open
 ### Generated with MPI Monetecarlo version for Task 2
 
 <p align="center">
-<img src = "https://github.com/egi-megi/porr-pso/blob/plottingTrajectories/Wykresy%20PORR%20_%20GPU/MPI_MC_T2/MPI_MC_T2.gif>
+<img src = "https://github.com/egi-megi/porr-pso/blob/plottingTrajectories/Wykresy%20PORR%20_%20GPU/MPI_MC_T2/MPI_MC_T2.gif">
 </p>
 
 ## Trajectories
@@ -62,7 +62,7 @@ This repository contains sequential and parallel implementation made with **Open
 ### Generated with MPI Monetecarlo version for Task 1
 
 <p align="center">
-<img src = "https://github.com/egi-megi/porr-pso/blob/plottingTrajectories/Wykresy%20PORR%20_%20GPU/MPI_MC_T1/MPI_%20MC_T1_trajectory_id15.png>
+<img src = "https://github.com/egi-megi/porr-pso/blob/plottingTrajectories/Wykresy%20PORR%20_%20GPU/MPI_MC_T1/MPI_%20MC_T1_trajectory_id15.png">
 </p>
             
 
