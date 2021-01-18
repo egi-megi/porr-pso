@@ -58,7 +58,7 @@ This repository contains sequential and parallel implementation made with **Open
 </p>
 
 <p align="center">
-<img src = "https://en.wikipedia.org/wiki/Rosenbrock_function#/media/File:Rosenbrock_function.svg">
+<img src = "https://github.com/egi-megi/porr-pso/blob/plottingTrajectories/Rosenbrock_function.svg">
 </p>
             
 ## Trajectories
