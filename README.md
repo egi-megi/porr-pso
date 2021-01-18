@@ -59,11 +59,17 @@ This repository contains sequential and parallel implementation made with **Open
 
 ## Trajectories
 
-### Generated with MPI Monetecarlo version for Task 1
+### Generated with MPI Monete carlo version for Task 1
 
 <p align="center">
 <img src = "https://github.com/egi-megi/porr-pso/blob/plottingTrajectories/Wykresy%20PORR%20_%20GPU/MPI_MC_T1/MPI_%20MC_T1_trajectory_id15.png">
 </p>
+
+### Generated with MPI PSO version for Task 2
+
+<p align="center">
+<img src = "https://github.com/egi-megi/porr-pso/blob/plottingTrajectories/Wykresy%20PORR%20_%20GPU/MPI_PSO_T1/MPI_PSO_T1_trajectory_id1.png">
+</p>       
             
 
 ### Task 1 - Isolines of cost function 
