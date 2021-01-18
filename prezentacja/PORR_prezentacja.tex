@@ -318,206 +318,14 @@ to nowe położenie, pomimo większej wartości funkcji celu, zostanie zaakcepto
 
 \section{Implementacje}
 \subsection{Sekwencyjnie}
-\begin{frame}[fragile]{Sekwencyjna implementacja PSO}
-\vspace{-.8cm}
 
-\begin{lstlisting}[style=mycpp, label=code:pso_before, caption={Optymalizacja PSO - kod sekwencyjny.}]
-std::default_random_engine randEngine;
-rand_engine.seed(time(NULL));
-
-int iterationNumber = 0;
-while (configStop->computeStopCriterion(criterionStopValue,
-	globalBestParticle))
-{
-    for (auto &singleParticle : particles)
-    {
-        singleParticle.computePosition(&rand_engine);
-        updateBestParticle(&singleParticle);
-    }
-    iterationNumber++;
-}
-\end{lstlisting}
-
+\begin{frame}{Algorytm sekwencyjnie}
+\begin{figure}[t]
+\includegraphics[width=1\textwidth]{grafiki/alg_szczegolowy.pdf}
+\end{figure}
 \end{frame}
-
-
-\begin{frame}[fragile]{Sekwencyjna implementacja Monte Carlo}
-\vspace{-.8cm}
-
-\begin{lstlisting}[style=mycpp, label=code:mc_before, caption={Optymalizacja Monte Carlo - kod sekwencyjny.}]
-std::default_random_engine randEngine;
-rand_engine.seed(time(NULL));
-
-int iterationNumber = 0;
-while (configStop->computeStopCriterion(criterionStopValue,
-    globalBestParticle))
-{
-    for (auto &particle : particles)
-    {
-        particle.computePosition(randEngine);
-         updateBestParticle(&particle);
-    }
-    iterationNumber++;
-}
-\end{lstlisting}
-
-\end{frame}
-
-
 
 \subsection{MPI}
-\begin{frame}[fragile]{Implementacja PSO z użyciem MPI}
-
-\vspace{-.8cm}
-
-\begin{lstlisting}[style=mycpp, caption={MPI -- PSO \textit{typedef}}]
-// Compute new positions 
-...
-// Receive local best positions
-double *receivedBestPositions = NULL;
-if (processRank == ROOT)
-    receivedBestPositions = new double[numberOfProcesses * dimensions];
-MPI_Gather((void *)localBestPosition, dimensions, MPI_DOUBLE, (void *)receivedBestPositions, dimensions, MPI_DOUBLE, ROOT, MPI_COMM_WORLD);
-// Compute cost for all received localBestPosition and compute computedGlobalBestPosition
-if (processRank == ROOT)
-{
-    for (int i = 0; i < numberOfProcesses * dimensions; i = i + dimensions)
-    {
-        std::vector<double> positionVectors(receivedBestPositions + i, receivedBestPositions + i + dimensions);
-        double cCost;
-        if ((cCost = config->computeCostFunctionValue(positionVectors)) < globalBestPosCost)
-        {
-            globalBestPosCost = cCost;
-            std::copy_n(receivedBestPositions + i, dimensions, computedGlobalBestPosition);
-        }
-    }
-    // Compute stop criterion
-    if (globalBestPosCost < stopCriterionValue)
-        stop = true;
-    for (int i = 0; i < dimensions; i++)
-    {
-    }
-}
-\end{lstlisting}
-\end{frame}
-
-
-\begin{frame}[fragile]{Implementacja PSO z użyciem MPI cd.}
-
-\vspace{-.8cm}
-
-\begin{lstlisting}[style=mycpp, caption={MPI -- PSO cd. \textit{typedef}}]
-// Broadcast global best position and stop condition
-MPI_Bcast((void *)computedGlobalBestPosition, dimensions, MPI_DOUBLE, ROOT,
-          MPI_COMM_WORLD);
-MPI_Bcast((void *)&stop, 1, MPI_CXX_BOOL, ROOT,
-          MPI_COMM_WORLD);
-for (psoParticle *ps : particles)
-{
-    ps->globalBestPosition = computedGlobalBestPosition;
-}
-
-iteration++;
-
-// Clean just to allocate again in next iteration
-delete localBestPosition, receivedBestPositions;
-MPI_Barrier(MPI_COMM_WORLD);
-}
-
-\end{lstlisting}
-\end{frame}
-
-
-\begin{frame}[fragile]{Implementacja Monte Carlo z użyciem MPI}
-
-\vspace{-.8cm}
-
-\begin{lstlisting}[style=mycpp, label=code:pso_before, caption={MPI -- Monte Carlo.}]
-while (!stop)
-{
-    // Compute new positions 
-...
-    if (processRank == ROOT)
-    {
-        // If stop criterion is met, save it and compare with other potential solutions
-        if (false)
-        {
-            stop = true;
-            solutionSource = processRank;
-        }
-        MPI_Status solutionMessageStatus;
-        int solutionReceived = 0;
-        MPI_Iprobe(MPI_ANY_SOURCE, communicationType::BEST_SOLUTION, MPI_COMM_WORLD, &solutionReceived,
-                   &solutionMessageStatus);
-        std::vector<bool> ranksFoundSolution(numberOfProcesses, false);
-        double *potentialSolution = new double[dimensions];
-        while (solutionReceived)
-        {
-            stop = true;
-            ranksFoundSolution[solutionMessageStatus.MPI_SOURCE] = true;
-            MPI_Recv(potentialSolution, dimensions, MPI_DOUBLE, solutionMessageStatus.MPI_SOURCE,
-                     communicationType::BEST_SOLUTION, MPI_COMM_WORLD, &solutionMessageStatus);
-            // If potential best solution is better, save it
-            if (true)
-            {
-                solutionSource = solutionMessageStatus.MPI_SOURCE;
-            }
-            // Check for more received solutions
-            solutionReceived = 0;
-            MPI_Iprobe(MPI_ANY_SOURCE, communicationType::BEST_SOLUTION, MPI_COMM_WORLD,
-                       &solutionReceived, &solutionMessageStatus);
-        }
-        // If any solution is found, send a proper message and join processes
-        if (stop)
-        {
-            for (int dest = 1; dest < numberOfProcesses; dest++)
-            {
-                if (ranksFoundSolution[dest])
-                    continue;
-                // Content of the message doesn't matter
-                MPI_Send(&iteration, 1, MPI_INT, dest, communicationType::STOP, MPI_COMM_WORLD);
-            }
-            delete localBestPosition, potentialSolution;
-            break;
-        }
-    }
-    \end{lstlisting}
-\end{frame}
-
-\begin{frame}[fragile]{Implementacja Monte Carlo z użyciem MPI cd.}
-
-\vspace{-.8cm}
-
-\begin{lstlisting}[style=mycpp, label=code:pso_before, caption={MPI -- Monte Carlo cd.}]
-    else
-    {
-        // If stop criterion is met, send the best solution to the root
-        if (processRank == 1 && iteration == 1000)
-        {
-            MPI_Send(localBestPosition, dimensions, MPI_DOUBLE, ROOT, communicationType::BEST_SOLUTION,
-                     MPI_COMM_WORLD);
-            delete localBestPosition;
-            break;
-        }
-
-        // Check if solution is already found
-        MPI_Status stopMessageStatus;
-        int stopReceived = 0;
-        MPI_Iprobe(ROOT, communicationType::STOP, MPI_COMM_WORLD, &stopReceived, &stopMessageStatus);
-        if (stopReceived)
-        {
-            int stopMessage;
-            MPI_Recv(&stopMessage, 1, MPI_INT, ROOT, communicationType::STOP, MPI_COMM_WORLD,
-                     &stopMessageStatus);
-            delete localBestPosition;
-            break;
-        }
-    }
-
-    iteration++;
-}
-\end{lstlisting}
-\end{frame}
 
 \begin{frame}{Implementacja PSO w MPI}
 \begin{figure}[t]
@@ -533,10 +341,11 @@ while (!stop)
 
 \begin{frame}{Podsumowanie MPI}
 \begin{itemize}
-\item item 1.
-\item item 2.
-\item item 3.
+\item Przyspieszenie dla PSO jest znacznie mniejsze niż  dla Monte Carlo.
+\item Zmodyfikowane Monte Carlo z odpowiednio dobranymi parametrami prowadzi cząsteczkę do min. lokalnego bez nadmiernego „skakania” po przestrzeni zadania. Pozbawia go możliwości wyjścia z minimów lokalnych.
+\item Procesy nie startują jednocześnie (opóźnienia spowodowane komunikacją) -> różnice w liczbie iteracji w każdym z procesów.
 \end{itemize}
+\vspace{-.6cm}
 \begin{columns}
 \begin{column}[t]{0.5\textwidth}
 
@@ -557,17 +366,7 @@ while (!stop)
 \end{columns}
 \end{frame}
 
-\begin{frame}{Algorytm symulacji}
-\begin{figure}[t]
-\includegraphics[width=0.4\textwidth]{grafiki/alg_ogolny.pdf}
-\end{figure}
-\end{frame}
 
-\begin{frame}{Algorytm sekwencyjnie}
-\begin{figure}[t]
-\includegraphics[width=1\textwidth]{grafiki/alg_szczegolowy.pdf}
-\end{figure}
-\end{frame}
 
 \subsection{OpenMP}
 \begin{frame}{Implementacja PSO w OpenMP}
@@ -662,7 +461,13 @@ while (!stop)
 \begin{itemize}
 \item Algorytm PSO charakteryzuje się inteligencją roju i szybciej zbiega do minimum.
 \item Algorytm Monte Carlo jest wolniejszy, lecz może lepiej eksplorować dziedzinę.
-\item (MPI)
+\item W przypadku MPI przyspieszenie algorytmu PSO jest znacznie mniejsze niż przyspieszenie Monte Carlo -- w implementacji PSO dużo czasu poświęcane jest komunikacji międzyprocesowej - w każdej iteracji procesy muszą sprawdzić czy znana jest nowa globalna najlepsza wartość. Metoda Monte Carlo nie używa komunikacji w trakcie obliczeń - wiadomości wysyłane są jedynie po znalezieniu zadowalającego rozwiązania przez jeden z procesów.
+\item Przy zastosowaniu metody MPI zmodyfikowany algorytm Monte Carlo z odpowiednio dobranymi parametrami (T o dużej wartości) prowadzi cząsteczkę do minimum lokalnego bez nadmiernego „skakania” po przestrzeni zadania jak widoczne jest to w niektórych przypadkach działania PSO.
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Wnioski cd.}
+\begin{itemize}
 \item OpenMP jest najbardziej efektywne biorąc pod uwagę ilość włożonej pracy w przerobienie kodu sekwencyjnego do jakości wyników, ale zarządzanie dostępem do pamięci i bardziej skomplikowanymi ścieżkami programu może być trudne.
 \item CUDA daje najlepsze wyniki dla ogromnych liczb cząstek - optymalna implementacja jest trudna i bardzo pracochłonna.
 \end{itemize}
