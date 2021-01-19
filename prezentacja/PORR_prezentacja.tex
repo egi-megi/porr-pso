@@ -47,7 +47,7 @@
   \begin{beamercolorbox}[wd=\paperwidth,ht=.5cm]{footline}
     \begin{columns}
    	\begin{column}{1.0\paperwidth}
-   	\href{https://github.com/egi-megi/rojCzastek_Szczepanski_Jurkiewicz_Pikulinski}{\includegraphics[width=1.0\paperwidth,keepaspectratio]{grafiki/footer}}
+   	\href{https://github.com/egi-megi/porr-pso}{\includegraphics[width=1.0\paperwidth,keepaspectratio]{grafiki/footer}}
 
    	\end{column}
     \end{columns}
@@ -445,12 +445,6 @@ to nowe położenie, pomimo większej wartości funkcji celu, zostanie zaakcepto
 \begin{frame}{Wnioski}
 \begin{itemize}
 \item W przypadku MPI przyspieszenie algorytmu PSO jest znacznie mniejsze niż przyspieszenie Monte Carlo -- w implementacji PSO dużo czasu poświęcane jest komunikacji międzyprocesowej - w każdej iteracji procesy muszą sprawdzić czy znana jest nowa globalna najlepsza wartość. Metoda Monte Carlo nie używa komunikacji w trakcie obliczeń - wiadomości wysyłane są jedynie po znalezieniu zadowalającego rozwiązania przez jeden z procesów.
-\item Przy zastosowaniu metody MPI zmodyfikowany algorytm Monte Carlo z odpowiednio dobranymi parametrami (T o dużej wartości) prowadzi cząsteczkę do minimum lokalnego bez nadmiernego „skakania” po przestrzeni zadania jak widoczne jest to w niektórych przypadkach działania PSO.
-\end{itemize}
-\end{frame}
-
-\begin{frame}{Wnioski cd.}
-\begin{itemize}
 \item OpenMP jest najbardziej efektywne biorąc pod uwagę ilość włożonej pracy, ale zarządzanie bardziej skomplikowanymi ścieżkami programu może być trudne.
 \item CUDA daje najlepsze wyniki dla ogromnych liczb cząstek - optymalna implementacja jest trudna i bardzo pracochłonna.
 \end{itemize}
