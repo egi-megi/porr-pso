@@ -342,10 +342,9 @@ to nowe położenie, pomimo większej wartości funkcji celu, zostanie zaakcepto
 \begin{frame}{Podsumowanie MPI}
 \begin{itemize}
 \item Przyspieszenie dla PSO jest znacznie mniejsze niż  dla Monte Carlo.
-\item Zmodyfikowane Monte Carlo z odpowiednio dobranymi parametrami prowadzi cząsteczkę do min. lokalnego bez nadmiernego „skakania” po przestrzeni zadania. Pozbawia go możliwości wyjścia z minimów lokalnych.
-\item Procesy nie startują jednocześnie (opóźnienia spowodowane komunikacją) -> różnice w liczbie iteracji w każdym z procesów.
+\item Nie zawsze w każdym z procesów jest wykonana taka sama liczba iteracji -- procesy te nie startują jednocześnie, ponieważ mają opóźnienia spowodowane koniecznością komunikacji.
 \end{itemize}
-\vspace{-.6cm}
+\vspace{-.3cm}
 \begin{columns}
 \begin{column}[t]{0.5\textwidth}
 
