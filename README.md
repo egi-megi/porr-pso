@@ -43,10 +43,50 @@ This repository contains sequential and parallel implementation made with **Open
 <img src = "https://github.com/egi-megi/rojCzastek_Szczepanski_Jurkiewicz_Pikulinski/blob/plottingTrajectories/PSO_zad2_ANIM.gif">
 </p>
 
-### Task 2 - Monte Carlo<p align="center">
+### Task 2 - Monte Carlo
+
 <p align="center">
 <img src = "https://github.com/egi-megi/rojCzastek_Szczepanski_Jurkiewicz_Pikulinski/blob/plottingTrajectories/MC_zad2_ANIM.gif">
 </p>
+
+### Task 2
+
+### Generated with MPI Monte carlo version for Task 2 - Valley/Banana function
+
+<p align="center">
+<img src = "https://github.com/egi-megi/porr-pso/blob/plottingTrajectories/Wykresy%20PORR%20_%20GPU/MPI_MC_T2/MPI_MC_T2.gif">
+</p>
+
+<p align="center">
+<img src = "https://github.com/egi-megi/porr-pso/blob/plottingTrajectories/Rosenbrock_function.svg">
+</p>
+            
+## Trajectories
+
+### Monte carlo Task 1
+<p align="center">
+<img src = "https://github.com/egi-megi/porr-pso/blob/master/sprawozdanie/sprawozdanie_1/grafiki/Wykresy2d/Zad1_MC_plot_5.png">
+</p>
+
+
+### PSO Task 1
+<p align="center">
+<img src = "https://github.com/egi-megi/porr-pso/blob/master/sprawozdanie/sprawozdanie_1/grafiki/Wykresy2d/zad1_pso_plot_5.png">
+</p>
+
+### Generated with MPI Monte carlo version for Task 1
+
+<p align="center">
+<img src = "https://github.com/egi-megi/porr-pso/blob/plottingTrajectories/Wykresy%20PORR%20_%20GPU/MPI_MC_T1/MPI_%20MC_T1_trajectory_id15.png">
+</p>
+
+### Generated with MPI PSO version for Task 1
+
+<p align="center">
+<img src = "https://github.com/egi-megi/porr-pso/blob/plottingTrajectories/Wykresy%20PORR%20_%20GPU/MPI_PSO_T1/MPI_PSO_T1_trajectory_id1.png">
+</p>       
+            
+## Plots with isolines
 
 ### Task 1 - Isolines of cost function 
 <p align="center">
